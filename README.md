@@ -3,7 +3,7 @@
 <!-- EDIT ME-->
 
 [![](https://ci.appveyor.com/api/projects/status/github/ajshastri/chocolatey-packages?svg=true)](https://ci.appveyor.com/project/ajshastri/chocolatey-packages)
-[Update status](https://gist.github.com/ajshastri/YOUR_GIST_ID_GOES_HERE)
+[Update status](https://gist.github.com/ajshastri/ce2e7cf5452f8b690b1e84912f7c08f1)
 <!-- [![chocolatey/Aditya](https://img.shields.io/badge/Chocolatey-Aditya-blue?style=for-the-badge)](https://chocolatey.org/profiles/linearreg) -->
 
 <!-- REMOVE THE squiggles "~" surrounding this (this should not be a code block) -->
