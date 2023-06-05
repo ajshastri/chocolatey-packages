@@ -13,7 +13,7 @@
 $ErrorActionPreference = 'Stop' # stop on all errors
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
-  softwareName  = 'zulu-8*'  #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
+  softwareName  = 'Zulu 8*'  #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
   fileType      = 'MSI' #only one of these: MSI or EXE (ignore MSU for now)
   # MSI
   silentArgs    = "/x"

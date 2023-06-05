@@ -2,11 +2,11 @@
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>zulu-11</id>
-    <version>11.0.19</version>
+    <id>zulu11</id>
+    <version>11.64.19.0</version>
 	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-11</packageSourceUrl>
     <owners>Aditya</owners>
-    <title>Zulu-11</title>
+    <title>Zulu 11</title>
     <authors>Azul Systems</authors>
     <projectUrl>https://www.azul.com/products/zulu-enterprise/</projectUrl>
     <iconUrl>https://www.azul.com/wp-content/themes/azul/dist/img/logo.svg</iconUrl>
