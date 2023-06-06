@@ -1,7 +1,7 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
-  softwareName  = 'Zulu 8*'
+  softwareName  = 'Zulu 17*'
   fileType      = 'MSI'
   silentArgs    = "/x"
   validExitCodes= @(0, 3010, 1605, 1614, 1641)
