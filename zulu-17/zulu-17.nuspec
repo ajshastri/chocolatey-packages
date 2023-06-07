@@ -4,12 +4,12 @@
   <metadata>
     <id>zulu17</id>
     <version>17.42.19.0</version>
-	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-8</packageSourceUrl>
+	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-17</packageSourceUrl>
     <owners>Aditya</owners>
     <title>Zulu 17</title>
     <authors>Azul Systems</authors>
     <projectUrl>https://www.azul.com/products/zulu-enterprise/</projectUrl>
-    <iconUrl>https://www.azul.com/wp-content/themes/azul/dist/img/logo.svg</iconUrl>
+    <iconUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/icons/logo.svg</iconUrl>
     <copyright>Azul 2023. All rights reserved.</copyright>
     <licenseUrl>https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
