@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>FreeDownloadManager</id>
+    <version>6.19.1</version>
+    <title>Free Download Manager</title>
+    <authors>FreeDownloadManager.org</authors>
+    <owners>hadron</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.freedownloadmanager.org/</projectUrl>
+    <description>It's a powerful modern download accelerator and organizer for Windows, macOS, Android, and Linux.</description>
+    <summary>Free Download Manager</summary>
+    <tags>free-download-manager download manager free web files speed ftp bittorrent</tags>
+  </metadata>
+  <files>
+    <file src="tools\chocolateyinstall.ps1" target="tools\chocolateyinstall.ps1" />
+    <file src="tools\chocolateyuninstall.ps1" target="tools\chocolateyuninstall.ps1" />
+    <file src="update.ps1" target="update.ps1" />
+  </files>
+</package>
