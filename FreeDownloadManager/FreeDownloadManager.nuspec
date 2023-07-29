@@ -3,8 +3,10 @@
   <metadata>
     <id>FreeDownloadManager</id>
     <version>6.19.1</version>
+	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/FreeDownloadManager</packageSourceUrl>
     <title>Free Download Manager</title>
     <authors>FreeDownloadManager.org</authors>
+	<copyright>© 2004 - 2023 Free Download Manager.ORG. All rights reserved.</copyright>
     <owners>hadron</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.freedownloadmanager.org/</projectUrl>
