@@ -19,8 +19,8 @@ jobs:
           ./scripts/zulu-sync.sh >> $GITHUB_OUTPUT
         id: zulu_sync
       - name: repo update
+        id: repo_update
         shell: bash
-	id: repo_update
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
