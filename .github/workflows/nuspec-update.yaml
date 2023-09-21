@@ -4,14 +4,7 @@ name: Zulu nuspec updater
 
 on:
   schedule:
-<<<<<<< HEAD
     - cron: "34 0 * * *"
-  push:
-    branches:
-      - master
-=======
-    - cron: "30 0 * * *"
->>>>>>> 86fc7b2 (Fixed the workflow 2)
 jobs:
   build:
     runs-on: ubuntu-latest
