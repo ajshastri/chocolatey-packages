@@ -4,7 +4,7 @@ name: Zulu nuspec updater
 
 on:
   schedule:
-    - cron: "34 0 * * *"
+    - cron: "37 0 * * *"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +23,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          # git commit -m "${{join(steps.zulu_sync.outputs.*, '\n')}}"
 	  git commit -m "$(date)"
           git push
 
