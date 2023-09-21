@@ -4,10 +4,10 @@ name: Zulu nuspec updater
 
 on:
   schedule:
-    - cron: "19 0 * * *"
+    - cron: "20 0 * * *"
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
