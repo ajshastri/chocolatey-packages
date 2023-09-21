@@ -16,7 +16,8 @@ jobs:
       - id: zulu_sync
         shell: bash
         run: |
-          ./scripts/zulu-sync.sh >> $GITHUB_OUTPUT
+          # ./scripts/zulu-sync.sh >> $GITHUB_OUTPUT
+          ./scripts/zulu-sync.sh
       - id: repo_update
         shell: bash
         run: |
