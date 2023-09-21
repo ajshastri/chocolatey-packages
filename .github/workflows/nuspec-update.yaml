@@ -4,10 +4,14 @@ name: Zulu nuspec updater
 
 on:
   schedule:
-    - cron: "20 0 * * *"
+<<<<<<< HEAD
+    - cron: "34 0 * * *"
   push:
     branches:
       - master
+=======
+    - cron: "30 0 * * *"
+>>>>>>> 86fc7b2 (Fixed the workflow 2)
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,6 +30,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "${{join(steps.zulu_sync.outputs.*, '\n')}}"
+          # git commit -m "${{join(steps.zulu_sync.outputs.*, '\n')}}"
+	  git commit -m "$(date)"
           git push
 
