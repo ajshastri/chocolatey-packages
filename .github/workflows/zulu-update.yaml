@@ -16,12 +16,11 @@ jobs:
       - id: zulu_sync
         shell: bash
         run: |
-          # ./scripts/zulu-sync.sh >> $GITHUB_OUTPUT
           ./scripts/zulu-sync.sh
       - id: repo_update
         shell: bash
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -a -m "$(date)" && git push || echo "No changes"
+          git commit -a -m "Zulu version update on $(date)" && git push || echo "No changes"
           
