@@ -15,8 +15,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <docsUrl>https://docs.azul.com/core/</docsUrl>
     <tags>zulu-8 java java8 jdk jdk8 openjdk zulu zulu8</tags>
-    <summary>Azul® Zulu ® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</summary>
-    <description>Azul® Zulu ® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</description>
+    <summary>Azul® Zulu® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</summary>
+    <description>Azul® Zulu® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</description>
     <releaseNotes>https://docs.azul.com/core/zulu-openjdk/release-notes.html</releaseNotes>
   </metadata>
   <files>
