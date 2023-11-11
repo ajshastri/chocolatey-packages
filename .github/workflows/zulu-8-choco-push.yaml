@@ -1,0 +1,23 @@
+# This file pushes the choco package for zulu-8
+
+name: Zulu-8 choco push workflow
+
+on:
+  push:
+    paths:
+    - 'zulu-8/zulu-8.nuspec'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: ultimate
+        shell: powershell
+        run: |
+          cd zulu-8
+          choco pack
+          choco push --source https://push.chocolatey.org/ -k $env:CHOCO_KEY
+        env:
+          CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
