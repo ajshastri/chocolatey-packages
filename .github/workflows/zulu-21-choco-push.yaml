@@ -1,0 +1,25 @@
+# This file pushes the choco package for zulu-21
+
+name: Zulu-21 choco push workflow
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+    - 'zulu-21/zulu-21.nuspec'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: zulu-21 
+        shell: powershell
+        run: |
+          cd zulu-21
+          choco pack
+          choco upgrade zulu21 --source .
+          choco push --source https://push.chocolatey.org/ -k $env:CHOCO_KEY
+        env:
+          CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
