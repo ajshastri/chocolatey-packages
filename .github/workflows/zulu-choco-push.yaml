@@ -3,6 +3,7 @@
 name: Zulu choco push workflow
 
 on:
+  workflow_dispatch:
   push:
     paths:
     - 'zulu/zulu.nuspec'
