@@ -18,7 +18,7 @@ jobs:
         run: |
           cd zulu-8
           choco pack
-	  choco upgrade zulu8 --source .
+          choco upgrade zulu8 --source .
           choco push --source https://push.chocolatey.org/ -k $env:CHOCO_KEY
         env:
           CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
