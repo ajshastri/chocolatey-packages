@@ -1,11 +1,11 @@
-# This file pushes the choco package for zulu-8
+# This file pushes the choco package for zulu
 
-name: Zulu-8 choco push workflow
+name: Zulu choco push workflow
 
 on:
   push:
     paths:
-    - 'zulu-8/zulu-8.nuspec'
+    - 'zulu/zulu.nuspec'
 
 jobs:
   build:
@@ -16,9 +16,9 @@ jobs:
       - name: ultimate
         shell: powershell
         run: |
-          cd zulu-8
+          cd zulu
           choco pack
-	  choco upgrade zulu8 --source .
+	  choco upgrade zulu --source .
           choco push --source https://push.chocolatey.org/ -k $env:CHOCO_KEY
         env:
           CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
