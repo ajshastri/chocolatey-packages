@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: ultimate
+      - name: zulu 
         shell: powershell
         run: |
           cd zulu

@@ -3,6 +3,7 @@
 name: Zulu-8 choco push workflow
 
 on:
+  workflow_dispatch:
   push:
     paths:
     - 'zulu-8/zulu-8.nuspec'
@@ -13,7 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: ultimate
+      - name: zulu-8 
         shell: powershell
         run: |
           cd zulu-8
