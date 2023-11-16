@@ -3,6 +3,7 @@
 name: Zulu nuspec updater
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/45 */19 * * *'
 jobs:
