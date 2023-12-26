@@ -3,7 +3,7 @@
   <metadata>
     <id>corretto21jdk</id>
     <version>21.0.1</version>
-    <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/Corretto21JDK</packageSourceUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jdk-21</packageSourceUrl>
     <title>Corretto JDK</title>
     <authors>Amazon</authors>
     <owners>JohanJanssen</owners>

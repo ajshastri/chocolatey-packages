@@ -3,7 +3,7 @@
   <metadata>
     <id>corretto8jre</id>
     <version>8.392</version>
-    <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/Corretto8JDK</packageSourceUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jre-8</packageSourceUrl>
     <title>Corretto 8 JRE</title>
     <authors>Amazon</authors>
     <owners>JohanJanssen</owners>
