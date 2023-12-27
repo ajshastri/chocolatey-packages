@@ -1,0 +1,27 @@
+# This file updates the NUSPEC(s) in the repo checking the Amazon Corrtto API
+
+name: Corretto nuspec updater
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/55 */19 * * *'
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT || github.token }}
+      - id: corretto_sync
+        shell: bash
+        run: |
+          ./scripts/corretto-sync.sh
+      - id: repo_update
+        shell: bash
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -a -m "Zulu version update on $(date)" && git push || echo "No changes"
+          
