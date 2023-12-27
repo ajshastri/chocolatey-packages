@@ -1,0 +1,25 @@
+# This file pushes the choco package for Corretto-17
+
+name: Corretto-17 choco push workflow
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+    - 'corretto-jdk-17/corretto17jdk.nuspec'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: corretto-jdk-17 
+        shell: powershell
+        run: |
+          cd corretto-jdk-17
+          choco pack
+          choco upgrade corretto17jdk --source .
+          choco push --source https://push.chocolatey.org/ -k $env:CHOCO_KEY
+        env:
+          CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
