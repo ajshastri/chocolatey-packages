@@ -25,7 +25,7 @@ JAVATYPE=jdkfull
 # JVERSION=21
 for JVERSION in {11,17,21}
 do
-    # Liberica regular full
+    # Liberica JDK full
     DLDEETS=$(dljdkfileinfofull $JVERSION liberica)
     VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
     JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
@@ -58,3 +58,154 @@ do
         MAILVAL=true
     fi
 done  
+
+#JAVATYPE is JDK regular
+# JVERSION=21
+JAVATYPE=jdk
+for JVERSION in {8,11,17,21}
+do
+    # Liberica regular full
+    DLDEETS=$(dljdkfileinforeg $JVERSION liberica)
+    VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
+    JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
+    JAVAFILE=$(echo $JAVADEETS | jq -r .result[].filename)
+    CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
+    DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
+    LIBERFOLDNAME=liberica-${JVERSION}-${JAVATYPE}
+    
+    SHA1NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
+    
+    SHA1ORIG=$(grep -i checksum64 ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec)
+    URLORIG=$(grep -i "url64" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    
+    echo "$JVERSION $JAVATYPE has SHA1ORIG $SHA1ORIG and SHA1NEW $SHA1NEW"
+    if [[ "$SHA1NEW" != "$SHA1ORIG" ]]
+    then
+        # COMMITYES=TRUE
+        echo "$SHA1NEW is not the same as $SHA1ORIG for $VERSIONNEW"
+        sed -i "s@$SHA1ORIG@$SHA1NEW@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec
+        sed -i "s@$URLORIG@$DLURL@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        if [[ "$JVERSION" == "21" ]]
+        then
+            sed -i "s@$SHA1ORIG@$SHA1NEW@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica${JAVATYPE}.nuspec
+            sed -i "s@$URLORIG@$DLURL@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+        fi
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA1NEW $SHA1NEW for $VERSIONNEW"
+        MAILVAL=true
+    fi
+done
+
+JAVATYPE=jdklite
+for JVERSION in {17,21}
+do
+    # Liberica JDK lite
+    DLDEETS=$(dljdkfileinfolite $JVERSION liberica)
+    VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
+    JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
+    JAVAFILE=$(echo $JAVADEETS | jq -r .result[].filename)
+    CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
+    DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
+    LIBERFOLDNAME=liberica-${JVERSION}-${JAVATYPE}
+    
+    SHA1NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
+    
+    SHA1ORIG=$(grep -i checksum64 ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec)
+    URLORIG=$(grep -i "url64" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    
+    echo "$JVERSION $JAVATYPE has SHA1ORIG $SHA1ORIG and SHA1NEW $SHA1NEW"
+    if [[ "$SHA1NEW" != "$SHA1ORIG" ]]
+    then
+        # COMMITYES=TRUE
+        echo "$SHA1NEW is not the same as $SHA1ORIG for $VERSIONNEW"
+        sed -i "s@$SHA1ORIG@$SHA1NEW@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec
+        sed -i "s@$URLORIG@$DLURL@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        if [[ "$JVERSION" == "21" ]]
+        then
+            sed -i "s@$SHA1ORIG@$SHA1NEW@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica${JAVATYPE}.nuspec
+            sed -i "s@$URLORIG@$DLURL@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+        fi
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA1NEW $SHA1NEW for $VERSIONNEW"
+        MAILVAL=true
+    fi
+done
+
+
+JAVATYPE=jre
+for JVERSION in {8,11,17,21}
+do
+    # Liberica JRE regular
+    DLDEETS=$(dljrefileinfo $JVERSION liberica)
+    VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
+    JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
+    JAVAFILE=$(echo $JAVADEETS | jq -r .result[].filename)
+    CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
+    DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
+    LIBERFOLDNAME=liberica-${JVERSION}-${JAVATYPE}
+    
+    SHA1NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
+    
+    SHA1ORIG=$(grep -i checksum64 ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec)
+    URLORIG=$(grep -i "url64" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    
+    echo "$JVERSION $JAVATYPE has SHA1ORIG $SHA1ORIG and SHA1NEW $SHA1NEW"
+    if [[ "$SHA1NEW" != "$SHA1ORIG" ]]
+    then
+        # COMMITYES=TRUE
+        echo "$SHA1NEW is not the same as $SHA1ORIG for $VERSIONNEW"
+        sed -i "s@$SHA1ORIG@$SHA1NEW@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec
+        sed -i "s@$URLORIG@$DLURL@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        if [[ "$JVERSION" == "21" ]]
+        then
+            sed -i "s@$SHA1ORIG@$SHA1NEW@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica${JAVATYPE}.nuspec
+            sed -i "s@$URLORIG@$DLURL@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+        fi
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA1NEW $SHA1NEW for $VERSIONNEW"
+        MAILVAL=true
+    fi
+done
+
+JAVATYPE=jrefull
+for JVERSION in {11,17,21}
+do
+    # Liberica JRE full
+    DLDEETS=$(dljrefileinfofull $JVERSION liberica)
+    VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
+    JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
+    JAVAFILE=$(echo $JAVADEETS | jq -r .result[].filename)
+    CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
+    DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
+    LIBERFOLDNAME=liberica-${JVERSION}-${JAVATYPE}
+    
+    SHA1NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
+    
+    SHA1ORIG=$(grep -i checksum64 ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec)
+    URLORIG=$(grep -i "url64" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    
+    echo "$JVERSION $JAVATYPE has SHA1ORIG $SHA1ORIG and SHA1NEW $SHA1NEW"
+    if [[ "$SHA1NEW" != "$SHA1ORIG" ]]
+    then
+        # COMMITYES=TRUE
+        echo "$SHA1NEW is not the same as $SHA1ORIG for $VERSIONNEW"
+        sed -i "s@$SHA1ORIG@$SHA1NEW@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec
+        sed -i "s@$URLORIG@$DLURL@g" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1
+        if [[ "$JVERSION" == "21" ]]
+        then
+            sed -i "s@$SHA1ORIG@$SHA1NEW@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica${JAVATYPE}.nuspec
+            sed -i "s@$URLORIG@$DLURL@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
+        fi
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA1NEW $SHA1NEW for $VERSIONNEW"
+        MAILVAL=true
+    fi
+done
