@@ -21,9 +21,10 @@ function dljrefileinfofull() {
   curl -s -L -X 'GET' "https://api.foojay.io/disco/v3.0/packages/jres?version=${1}&distribution=${2}&architecture=amd64&archive_type=msi&operating_system=windows&latest=available" -H 'accept: application/json' | jq -r '.result[] | select(.filename | contains ("full"))';
 }
 
-
-JVERSION=11
 JAVATYPE=jdkfull
+# JVERSION=21
+for JVERSION in {11,17,21}
+do
     # Liberica regular full
     DLDEETS=$(dljdkfileinfofull $JVERSION liberica)
     VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
@@ -39,6 +40,7 @@ JAVATYPE=jdkfull
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${LIBERFOLDNAME}/liberica${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${LIBERFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
     
+    echo "$JVERSION $JAVATYPE has SHA1ORIG $SHA1ORIG and SHA1NEW $SHA1NEW"
     if [[ "$SHA1NEW" != "$SHA1ORIG" ]]
     then
         # COMMITYES=TRUE
@@ -49,10 +51,10 @@ JAVATYPE=jdkfull
         if [[ "$JVERSION" == "21" ]]
         then
             sed -i "s@$SHA1ORIG@$SHA1NEW@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
-            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica.nuspec
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" liberica-${JAVATYPE}/liberica${JAVATYPE}.nuspec
             sed -i "s@$URLORIG@$DLURL@g" liberica-${JAVATYPE}/tools/chocolateyinstall.ps1
         fi
         echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA1NEW $SHA1NEW for $VERSIONNEW"
         MAILVAL=true
     fi
-    
+done  
