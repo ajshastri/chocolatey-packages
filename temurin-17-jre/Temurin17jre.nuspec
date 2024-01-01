@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/adoptium/jdk17/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://adoptium.net/</projectUrl>
-    <iconUrl>https://adoptium.net/images/temurin-light.png</iconUrl>
+    <iconUrl>https://github.com/ajshastri/chocolatey-packages/blob/266841efd2047b3a49b5de199b5e7b465f591104/icons/temurin-light.png</iconUrl>
     <description>## Temurin
  
  The Temurin17jre package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
