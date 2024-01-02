@@ -26,6 +26,45 @@ do
     SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
     
     SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/temurin${JVERSION}.nuspec)
+    URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    
+    echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
+    if [[ "$SHA256NEW" != "$SHA256ORIG" ]]
+    then
+        # COMMITYES=TRUE
+        echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
+        sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${TEMFOLDNAME}/temurin${JVERSION}.nuspec
+        sed -i "s@$URLORIG@$DLURL@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
+        if [[ "$JVERSION" == "21" ]]
+        then
+            sed -i "s@$SHA256ORIG@$SHA256NEW@g" temurin-${JAVATYPE}/tools/chocolateyinstall.ps1
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" temurin-${JAVATYPE}/temurin.nuspec
+            sed -i "s@$URLORIG@$DLURL@g" temurin-${JAVATYPE}/tools/chocolateyinstall.ps1
+        fi
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA256NEW $SHA256NEW for $VERSIONNEW from orig version $VERSIONORIG"
+        MAILVAL=true
+    fi
+done
+
+#JAVATYPE is JRE regular
+# JVERSION=21
+JAVATYPE=jre
+for JVERSION in {8,11,17,21}
+do
+    # temurin regular full
+    DLDEETS=$(dljrefileinfo $JVERSION temurin)
+    VERSIONNEW=$(echo $DLDEETS | jq -r '.java_version' | tr '+' '.')
+    JAVADEETS=$(curl -s -L -X 'GET' $(echo $DLDEETS | jq -r '.links.pkg_info_uri'))
+    JAVAFILE=$(echo $JAVADEETS | jq -r .result[].filename)
+    CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
+    DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
+    TEMFOLDNAME=temurin-${JVERSION}-${JAVATYPE}
+    
+    SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
+    
+    SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/temurin${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
     
@@ -43,7 +82,7 @@ do
             sed -i "s@$VERSIONORIG@$VERSIONNEW@g" temurin-${JAVATYPE}/temurin${JAVATYPE}.nuspec
             sed -i "s@$URLORIG@$DLURL@g" temurin-${JAVATYPE}/tools/chocolateyinstall.ps1
         fi
-        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA256NEW $SHA256NEW for $VERSIONNEW"
+        echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA256NEW $SHA256NEW for $VERSIONNEW from orig version $VERSIONORIG"
         MAILVAL=true
     fi
 done
