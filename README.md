@@ -12,4 +12,8 @@
 ## Sync Workflows
 | Package Name | Github Workflow Status |
 | --- | :---: |
+| Corretto Sync | [![WorkFlow](https://img.shields.io/github/actions/workflow/status/ajshastri/chocolatey-packages/corretto-update.yaml?logo=githubactions)](https://github.com/ajshastri/chocolatey-packages) |
+| Liberica Sync | [![WorkFlow](https://img.shields.io/github/actions/workflow/status/ajshastri/chocolatey-packages/liberica-update.yaml?logo=githubactions)](https://github.com/ajshastri/chocolatey-packages) |
+| SAPMachine Sync | [![WorkFlow](https://img.shields.io/github/actions/workflow/status/ajshastri/chocolatey-packages/sapmachine-update.yaml?logo=githubactions)](https://github.com/ajshastri/chocolatey-packages) |
+| Temurin Sync | [![WorkFlow](https://img.shields.io/github/actions/workflow/status/ajshastri/chocolatey-packages/temurin-update.yaml?logo=githubactions)](https://github.com/ajshastri/chocolatey-packages) |
 | Zulu Sync | [![WorkFlow](https://img.shields.io/github/actions/workflow/status/ajshastri/chocolatey-packages/zulu-update.yaml?logo=githubactions)](https://github.com/ajshastri/chocolatey-packages) |
