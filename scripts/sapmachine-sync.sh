@@ -12,7 +12,7 @@ function dljrefileinfo() {
 # JVERSION=21
 JAVATYPE=jdk
 DIST=sapmachine
-for JVERSION in {8,11,17,21}
+for JVERSION in {11,17,21}
 do
     # ${DIST} regular full
     DLDEETS=$(dljdkfileinfo $JVERSION ${DIST})
