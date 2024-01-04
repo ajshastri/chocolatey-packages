@@ -66,7 +66,7 @@ do
     SHA256NEW=$(curl -L -s $(echo "${DLURL}.sha256.txt") | awk '{print $1}')
     
     SHA256ORIG=$(grep -i checksum64 ${SAPFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
-    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${SAPFOLDNAME}/${DIST}${JVERSION}.nuspec)
+    VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${SAPFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${SAPFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
     
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
@@ -75,13 +75,13 @@ do
         # COMMITYES=TRUE
         echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${SAPFOLDNAME}/tools/chocolateyinstall.ps1
-        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${SAPFOLDNAME}/${DIST}${JVERSION}.nuspec
+        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${SAPFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec
         sed -i "s@$URLORIG@$DLURL@g" ${SAPFOLDNAME}/tools/chocolateyinstall.ps1
 
         if [[ "$JVERSION" == "21" ]]
         then
             sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${DIST}-${JAVATYPE}/tools/chocolateyinstall.ps1
-            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${DIST}-${JAVATYPE}/${DIST}.nuspec
+            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${DIST}-${JAVATYPE}/${DIST}${JAVATYPE}.nuspec
             sed -i "s@$URLORIG@$DLURL@g" ${DIST}-${JAVATYPE}/tools/chocolateyinstall.ps1
         fi
         echo "Latest file of ${JVERSION} is ${JAVAFILE} with SHA256NEW $SHA256NEW for $VERSIONNEW from orig version $VERSIONORIG"
