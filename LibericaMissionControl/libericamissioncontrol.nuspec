@@ -4,6 +4,7 @@
     <id>liberica-mission-control</id>
     <version>8.3.0</version>
     <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/LibericaMissionControl</packageSourceUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/bell_sw_logo.png</iconUrl>
     <title>Liberica Mission Control 64 bit only</title>
     <authors>BellSoft</authors>
     <owners>JohanJanssen</owners>

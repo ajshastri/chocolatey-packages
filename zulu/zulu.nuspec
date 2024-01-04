@@ -9,7 +9,7 @@
     <title>Zulu</title>
     <authors>Azul Systems</authors>
     <projectUrl>https://www.azul.com/products/zulu-enterprise/</projectUrl>
-    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/fdc8f815b0a5cf2beb5322aa027800c545826f7c/icons/azul-logo.svg</iconUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/azul-logo.png</iconUrl>
     <copyright>Azul 2023. All rights reserved.</copyright>
     <licenseUrl>https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

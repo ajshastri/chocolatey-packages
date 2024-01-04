@@ -3,7 +3,8 @@
   <metadata>
     <id>sapmachine21</id>
     <version>21.0.1</version>
-    <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/SapMachine21</packageSourceUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/sapmachine.png</iconUrl>
     <title>SapMachine JDK</title>
     <authors>SAP</authors>
     <owners>JohanJanssen</owners>

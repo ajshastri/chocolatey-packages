@@ -3,13 +3,13 @@
   <metadata>
     <id>Temurin17jre</id>
     <version>17.0.9.900</version>
-    <title>Temurin jre17 hotspot 17.0.9.9</title>
+    <title>Temurin jre17 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/adoptium/jdk17/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://adoptium.net/</projectUrl>
-    <iconUrl>https://github.com/ajshastri/chocolatey-packages/blob/266841efd2047b3a49b5de199b5e7b465f591104/icons/temurin-light.png</iconUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/temurin-light.png</iconUrl>
     <description>## Temurin
  
  The Temurin17jre package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
@@ -48,6 +48,6 @@ This will install both the 32 bit and 64 bit versions of the desired package by 
 Example: `choco install Temurin17jre --params="/both"`</description>
     <summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
     <tags>openjdk java jvm</tags>
-    <packageSourceUrl>https://github.com/johanjanssen/TemurinChocolateyPackages</packageSourceUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
   </metadata>
 </package>

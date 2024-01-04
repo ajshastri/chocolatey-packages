@@ -4,7 +4,7 @@
     <id>corretto17jdk</id>
     <version>17.0.9</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jdk-17</packageSourceUrl>
-    <iconUrl>https://github.com/ajshastri/chocolatey-packages/blob/f9378c711fe408139f2fbd470e0b51f7d34eb5a0/icons/aws-corretto.jpg</iconUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/aws-corretto.png</iconUrl>
     <title>Corretto 17 JDK</title>
     <authors>Amazon</authors>
     <owners>JohanJanssen</owners>
