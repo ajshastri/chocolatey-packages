@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>wildfly</id>
+    <version>30.0.1</version>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/WildFly</packageSourceUrl>
+    <title>WildFly</title>
+    <authors>Red Hat</authors>
+    <owners>linearreg</owners>
+    <licenseUrl>https://github.com/wildfly/wildfly/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://wildfly.org/</projectUrl>
+    <docsUrl>https://docs.wildfly.org/</docsUrl>
+    <mailingListUrl>https://lists.jboss.org/mailman/listinfo/wildfly-dev</mailingListUrl>
+    <bugTrackerUrl>https://issues.jboss.org/projects/WFLY</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/wildfly/wildfly</projectSourceUrl>
+    <tags>wildfly java jvm</tags>
+    <summary>WildFly is an open source Java EE application server provided by Red Hat</summary>
+    <description>WildFly is an open source Java EE application server provided by Red Hat</description>
+  </metadata>
+</package>
