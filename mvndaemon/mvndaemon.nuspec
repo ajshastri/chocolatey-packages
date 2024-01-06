@@ -5,7 +5,7 @@
     <version>0.9.0</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/mvndaemon</packageSourceUrl>
     <title>Maven Daemon</title>
-    <authors>Apache</authors>
+    <authors>Apache Software Foundation</authors>
     <owners>linearreg</owners>
     <licenseUrl>https://github.com/mvndaemon/mvnd/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/mvndaemon/mvnd</projectUrl>
