@@ -17,7 +17,7 @@ jobs:
       - id: corretto_sync
         shell: bash
         run: |
-          ./scripts/corretto-sync.sh
+          bash ./scripts/corretto-sync.sh
       - id: repo_update
         shell: bash
         run: |
