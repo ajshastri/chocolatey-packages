@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 
 $packageName = 'nexus-oss'
 $url         = 'https://sonatype-download.global.ssl.fastly.net/nexus/oss/nexus-2.13.0-01-bundle.zip'

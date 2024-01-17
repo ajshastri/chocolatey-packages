@@ -1,4 +1,4 @@
-﻿# Path to the folder where the script is executing
+# Path to the folder where the script is executing
 $toolsDir = (Split-Path -parent $MyInvocation.MyCommand.Definition)
 
 $packageArgs = @{

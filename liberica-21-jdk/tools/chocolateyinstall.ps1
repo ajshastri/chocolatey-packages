@@ -1,4 +1,4 @@
-﻿$packageArgs = @{
+$packageArgs = @{
   PackageName = $env:ChocolateyPackageName
   Url64bit = 'https://github.com/bell-sw/Liberica/releases/download/21.0.1+12/bellsoft-jdk21.0.1+12-windows-amd64.msi'
   Checksum64 = '3ef92759bc21bb25c66ae53a78653f8be6998531'

@@ -1,4 +1,4 @@
-﻿$registryKeyName = 'Git_is1'
+$registryKeyName = 'Git_is1'
 $packageId = '{{PackageName}}'
 $fileType = 'exe'
 $fileArgs = $(

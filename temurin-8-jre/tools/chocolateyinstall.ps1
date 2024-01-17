@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference  = 'Stop'
+$ErrorActionPreference  = 'Stop'
  if(!$PSScriptRoot){ $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
 . "$PSScriptRoot\helper.ps1"
 

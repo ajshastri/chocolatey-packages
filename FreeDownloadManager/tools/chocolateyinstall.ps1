@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url        = 'https://dn3.freedownloadmanager.org/6/latest/fdm_x86_setup.exe'
 $url64      = 'https://dn3.freedownloadmanager.org/6/latest/fdm_x64_setup.exe'

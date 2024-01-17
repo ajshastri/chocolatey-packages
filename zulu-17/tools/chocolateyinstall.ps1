@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 $url64      = 'https://cdn.azul.com/zulu/bin/zulu17.46.19-ca-fx-jdk17.0.9-win_x64.msi'

@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 
 $packageName = 'html-tidy'
 $url32       = 'https://github.com/htacg/tidy-html5/releases/download/5.2.0/tidy-5.2.0-win32.zip'
