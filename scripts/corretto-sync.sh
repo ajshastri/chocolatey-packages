@@ -18,7 +18,7 @@ function correttodl {
 
     MD5ORIG=$(grep -i checksum64 corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec)
-    URLORIG=$(grep -i "\$url64" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
+    URLORIG=$(grep -i "url64" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
     echo "{MD5ORIG} is ${MD5ORIG}"
     if [[ "${MD5NEW}" != "${MD5ORIG}" ]]
