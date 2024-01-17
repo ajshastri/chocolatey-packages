@@ -9,7 +9,7 @@ MAILVAL=false
 function correttodl {
     JVERSION="$1"
     PACKAGE="$2"
-    VERSIONNEW=$(curl -s -L https://api.github.com/repos/corretto/corretto-${JVERSION}/releases/latest | jq -r '.tag_name')
+    VERSIONNEW=$(curl -s -L https://api.github.com/repos/corretto/corretto-${JVERSION}/releases/latest | jq -r '.tag_name' | awk -F. '{print $1"."$2"."$3"."$4$5}')
     MD5NEW=$(curl -L -s https://corretto.aws/downloads/latest_checksum/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi)
     # DLURL="https://corretto.aws/downloads/latest/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi"
     DLURL="https://corretto.aws/downloads/resources/${VERSIONNEW}/amazon-corretto-${VERSIONNEW}-windows-x64-${PACKAGE}.msi"
