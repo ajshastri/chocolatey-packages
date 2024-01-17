@@ -5,7 +5,7 @@ name: Corretto nuspec updater
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/55 */19 * * *'
+    - cron: '*/55 */10 * * *'
 jobs:
   build:
     runs-on: windows-latest
@@ -23,5 +23,5 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -a -m "Zulu version update on $(date)" && git push || echo "No changes"
+          git commit -a -m "Corretto version update on $(date)" && git push || echo "No changes"
           
