@@ -24,15 +24,21 @@ function correttodl {
     then
         # COMMITYES=TRUE
         echo "$MD5NEW is not the same as $MD5ORIG for $VERSIONNEW"
+        echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new MD5"
         sed -i "s@$MD5ORIG@$MD5NEW@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
+        echo "Updating file corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec with the new version"
         sed -i "s@$VERSIONORIG@$VERSIONNEW@g" corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec
+        echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new URL"
         sed -i "s@$URLORIG@$DLURL@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
 
         # Section for corretto-${PACKAGE}
         if [[ "$JVERSION" == "$BAREVERSION" ]]
         then
+            echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new MD5"
             sed -i "s@$MD5ORIG@$MD5NEW@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
+            echo "Updating file corretto-${PACKAGE}/corretto${PACKAGE}.nuspec with the new version"
             sed -i "s@$VERSIONORIG@$VERSIONNEW@g" corretto-${PACKAGE}/corretto${PACKAGE}.nuspec
+            echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new URL"
             sed -i "s@$URLORIG@$DLURL@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
         fi
 
