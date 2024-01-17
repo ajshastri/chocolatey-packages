@@ -27,9 +27,9 @@ function correttodl {
         echo "${MD5NEW} is not the same as ${MD5ORIG} for ${VERSIONNEW}"
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new MD5"
         ${SED} -i "s@${MD5ORIG}@${MD5NEW}@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
-        echo "Updating file corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec with the new version"
+        echo "Updating file corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec with the new version - ${VERSIONORIG} to ${VERSIONNEW}"
         ${SED} -i "s@${VERSIONORIG}@${VERSIONNEW}@g" corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec
-        echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new URL"
+        echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new URL - ${URLORIG} to ${DLURL}"
         ${SED} -i "s@${URLORIG}@${DLURL}@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
 
         # Section for corretto-${PACKAGE}
@@ -37,9 +37,9 @@ function correttodl {
         then
             echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new MD5"
             ${SED} -i "s@${MD5ORIG}@${MD5NEW}@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
-            echo "Updating file corretto-${PACKAGE}/corretto${PACKAGE}.nuspec with the new version"
+            echo "Updating file corretto-${PACKAGE}/corretto${PACKAGE}.nuspec with the new version - ${VERSIONORIG} to ${VERSIONNEW}"
             ${SED} -i "s@${VERSIONORIG}@${VERSIONNEW}@g" corretto-${PACKAGE}/corretto${PACKAGE}.nuspec
-            echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new URL"
+            echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new URL - ${URLORIG} to ${DLURL}"
             ${SED} -i "s@${URLORIG}@${DLURL}@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
         fi
 
