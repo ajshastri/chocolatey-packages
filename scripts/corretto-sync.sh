@@ -4,6 +4,7 @@ COMMITYES=false
 BAREVERSION=21
 MAILVAL=false
 
+[[ -f /usr/bin/sed ]] && export SED="/usr/bin/sed" || export SED="/bin/sed"
 
 function correttodl {
     JVERSION="$1"
@@ -13,43 +14,43 @@ function correttodl {
     # DLURL="https://corretto.aws/downloads/latest/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi"
     DLURL="https://corretto.aws/downloads/resources/${VERSIONNEW}/amazon-corretto-${VERSIONNEW}-windows-x64-${PACKAGE}.msi"
     DLFILE="amazon-corretto-${VERSIONNEW}-windows-x64-${PACKAGE}.msi"
-    echo "Latest file of ${JVERSION} is ${DLFILE} with MD5NEW $MD5NEW for $VERSIONNEW"
+    echo "Latest file of ${JVERSION} is ${DLFILE} with {MD5NEW} ${MD5NEW} for ${VERSIONNEW}"
 
     MD5ORIG=$(grep -i checksum64 corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec)
     URLORIG=$(grep -i "\$url64" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
-    echo "MD5ORIG is $MD5ORIG"
-    if [[ "$MD5NEW" != "$MD5ORIG" ]]
+    echo "{MD5ORIG} is ${MD5ORIG}"
+    if [[ "${MD5NEW}" != "${MD5ORIG}" ]]
     then
         # COMMITYES=TRUE
-        echo "$MD5NEW is not the same as $MD5ORIG for $VERSIONNEW"
+        echo "${MD5NEW} is not the same as ${MD5ORIG} for ${VERSIONNEW}"
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new MD5"
-        sed -i "s@$MD5ORIG@$MD5NEW@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
+        ${SED} -i "s@${MD5ORIG}@${MD5NEW}@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec with the new version"
-        sed -i "s@$VERSIONORIG@$VERSIONNEW@g" corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec
+        ${SED} -i "s@${VERSIONORIG}@${VERSIONNEW}@g" corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new URL"
-        sed -i "s@$URLORIG@$DLURL@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
+        ${SED} -i "s@${URLORIG}@${DLURL}@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
 
         # Section for corretto-${PACKAGE}
         if [[ "$JVERSION" == "$BAREVERSION" ]]
         then
             echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new MD5"
-            sed -i "s@$MD5ORIG@$MD5NEW@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
+            ${SED} -i "s@${MD5ORIG}@${MD5NEW}@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
             echo "Updating file corretto-${PACKAGE}/corretto${PACKAGE}.nuspec with the new version"
-            sed -i "s@$VERSIONORIG@$VERSIONNEW@g" corretto-${PACKAGE}/corretto${PACKAGE}.nuspec
+            ${SED} -i "s@${VERSIONORIG}@${VERSIONNEW}@g" corretto-${PACKAGE}/corretto${PACKAGE}.nuspec
             echo "Updating file corretto-${PACKAGE}/tools/chocolateyinstall.ps1 with the new URL"
-            sed -i "s@$URLORIG@$DLURL@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
+            ${SED} -i "s@${URLORIG}@${DLURL}@g" corretto-${PACKAGE}/tools/chocolateyinstall.ps1
         fi
 
-        echo "Latest file of ${JVERSION} is ${DLFILE} with MD5NEW $MD5NEW for $VERSIONNEW"
+        echo "Latest file of ${JVERSION} is ${DLFILE} with {MD5NEW} ${MD5NEW} for ${VERSIONNEW}"
         MAILVAL=true
     fi
 }
 
 for JVERSION in {8,11,17,21}
 do
-    correttodl $JVERSION jdk
+    correttodl ${JVERSION} jdk
 done
 
 correttodl 8 jre
