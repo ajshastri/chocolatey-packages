@@ -14,7 +14,7 @@ function correttodl {
 
     MD5NEW=$(curl -L -s https://corretto.aws/downloads/latest_checksum/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi)
     # DLURL="https://corretto.aws/downloads/latest/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi"
-    [[ if $JVERSION == "8" ]]
+    if [[  $JVERSION == "8" ]]
     then
         DLURL="https://corretto.aws/downloads/resources/${DLVERSIONNEW}/amazon-corretto-${DLVERSIONNEW}-windows-x64-${PACKAGE}.msi"
     else
