@@ -14,7 +14,12 @@ function correttodl {
 
     MD5NEW=$(curl -L -s https://corretto.aws/downloads/latest_checksum/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi)
     # DLURL="https://corretto.aws/downloads/latest/amazon-corretto-${JVERSION}-x64-windows-${PACKAGE}.msi"
-    DLURL="https://corretto.aws/downloads/resources/${DLVERSIONNEW}/amazon-corretto-${DLVERSIONNEW}-windows-x64-${PACKAGE}.msi"
+    [[ if $JVERSION == "8" ]]
+    then
+        DLURL="https://corretto.aws/downloads/resources/${DLVERSIONNEW}/amazon-corretto-${DLVERSIONNEW}-windows-x64-${PACKAGE}.msi"
+    else
+        DLURL="https://corretto.aws/downloads/resources/${DLVERSIONNEW}/amazon-corretto-${DLVERSIONNEW}-windows-x64.msi"
+    fi
     DLFILE="amazon-corretto-${DLVERSIONNEW}-windows-x64-${PACKAGE}.msi"
     echo "Latest file of ${JVERSION} is ${DLFILE} with {MD5NEW} ${MD5NEW} for ${VERSIONNEW}"
 
