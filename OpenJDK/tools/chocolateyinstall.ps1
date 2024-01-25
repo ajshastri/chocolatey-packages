@@ -4,12 +4,12 @@ $installDir = "$programFiles\OpenJDK"
 $packageArgs = @{
     PackageName      = $env:ChocolateyPackageName
     UnzipLocation    = $targetDir = $installDir
-    Url64            = 'https://download.java.net/java/GA/jdk21.0.1/415e3f918a1f4062a0074a2794853d0d/12/GPL/openjdk-21.0.1_windows-x64_bin.zip'
-    Checksum64       = '77ea464f4fa7cbcbffe0124af44707e8e5ad8c1ce2373f1d94a64d9b20ba0c69'
+    Url64            = 'https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_windows-x64_bin.zip'
+    Checksum64       = 'b6c17e747ae78cdd6de4d7532b3164b277daee97c007d3eaa2b39cca99882664'
     ChecksumType64   = 'sha256'
 }
 
 Install-ChocolateyZipPackage @packageArgs
-Install-ChocolateyEnvironmentVariable 'JAVA_HOME' $targetDir\jdk-21.0.1 'Machine'
+Install-ChocolateyEnvironmentVariable 'JAVA_HOME' $targetDir\jdk-21.0.2 'Machine'
 # The full path instead of the %JAVA_HOME% is needed so it can be removed with the Chocolatey Uninstall
-Install-ChocolateyPath $targetDir\jdk-21.0.1\bin -PathType 'Machine'
+Install-ChocolateyPath $targetDir\jdk-21.0.2\bin -PathType 'Machine'
