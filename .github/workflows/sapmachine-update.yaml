@@ -17,7 +17,7 @@ jobs:
       - id: sapmachine_sync
         shell: bash
         run: |
-          ./scripts/sapmachine-sync.sh
+          bash ./scripts/sapmachine-sync.sh
       - id: repo_update
         shell: bash
         run: |
