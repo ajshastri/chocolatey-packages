@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>sapmachine21</id>
-    <version>21.0.1</version>
+    <version>21.0.2</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
     <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/sapmachine.png</iconUrl>
     <title>SapMachine JDK</title>
