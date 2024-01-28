@@ -33,7 +33,7 @@ do
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" zulu-${JVERSION}/tools/chocolateyinstall.ps1
         sed -i "s@$ZVERSIONORIG@$ZVERSIONNEW@g" zulu-${JVERSION}/zulu-${JVERSION}.nuspec
         sed -i "s@$URLORIG@$DLURL@g" zulu-${JVERSION}/tools/chocolateyinstall.ps1
-        if [[ "$ZBAREVERSION" == "17" ]]
+        if [[ "$ZBAREVERSION" == "21" ]]
         then
             sed -i "s@$SHA256ORIG@$SHA256NEW@g" zulu/tools/chocolateyinstall.ps1
             sed -i "s@$ZVERSIONORIG@$ZVERSIONNEW@g" zulu/zulu.nuspec
