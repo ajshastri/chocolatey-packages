@@ -1,3 +1,4 @@
+$ErrorActionPreference = 'Stop'
 # Path to the folder where the script is executing
 $toolsDir = (Split-Path -parent $MyInvocation.MyCommand.Definition)
 

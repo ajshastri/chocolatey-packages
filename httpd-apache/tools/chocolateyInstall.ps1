@@ -1,4 +1,5 @@
-﻿$toolsDir = Split-Path -parent $MyInvocation.MyCommand.Definition
+﻿$ErrorActionPreference = 'Stop'
+$toolsDir = Split-Path -parent $MyInvocation.MyCommand.Definition
 . "$toolsDir\helpers.ps1"
 
 $pp = Get-PackageParameters
