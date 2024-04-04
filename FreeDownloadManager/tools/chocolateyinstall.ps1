@@ -10,9 +10,9 @@ $packageArgs = @{
   url           = $url
   url64bit      = $url64
   softwareName  = 'FreeDownloadManager*'
-  checksum      = 'aca9718dc2d77224dcf9f8e530162d51150865d49e5a2b1b7da1bee515dc2eed'
+  checksum      = '4af36a3093cf0bf8ad7bb3258d882b295303a60f95439ed15194d3fd38ab2f1a'
   checksumType  = 'sha256'
-  checksum64    = '0c4950be3e7d765fad2a533a75ee0b4a6541a35220624aadbee3d6ac5434cd36'
+  checksum64    = 'eeabadf6a6cb772f3356f4e4eebaeabe204a57e0946d26a904dc8cc79cbdc328'
   checksumType64= 'sha256'
   
   validExitCodes= @(0, 3010, 1641)
