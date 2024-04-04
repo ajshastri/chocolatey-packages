@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FreeDownloadManager</id>
-    <version>6.20.0</version>
+    <version>6.21.0</version>
 	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/FreeDownloadManager</packageSourceUrl>
     <title>Free Download Manager</title>
     <authors>FreeDownloadManager.org</authors>
