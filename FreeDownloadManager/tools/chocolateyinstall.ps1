@@ -12,7 +12,7 @@ $packageArgs = @{
   softwareName  = 'FreeDownloadManager*'
   checksum      = '4af36a3093cf0bf8ad7bb3258d882b295303a60f95439ed15194d3fd38ab2f1a'
   checksumType  = 'sha256'
-  checksum64    = 'eeabadf6a6cb772f3356f4e4eebaeabe204a57e0946d26a904dc8cc79cbdc328'
+  checksum64    = 'cbc661c7a1e108919e58e882e1f9df2819ca4a2c5035f2b089420d96aa37d8e1'
   checksumType64= 'sha256'
   
   validExitCodes= @(0, 3010, 1641)
