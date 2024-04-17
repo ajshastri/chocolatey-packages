@@ -1,8 +1,8 @@
 $ErrorActionPreference  = 'Stop'
 $packageArgs = @{
   PackageName = $env:ChocolateyPackageName
-  Url64bit = 'https://github.com/bell-sw/Liberica/releases/download/11.0.22+12/bellsoft-jre11.0.22+12-windows-amd64.msi'
-  Checksum64 = '373bb6c10a05a75e2145f4f3c38eb698b089f82f'
+  Url64bit = 'https://github.com/bell-sw/Liberica/releases/download/11.0.23+10/bellsoft-jre11.0.23+10-windows-amd64.msi'
+  Checksum64 = '0d82b798f7614d2501a7da5ccd24461b055ab6ce'
   ChecksumType64 = 'sha1'
   fileType      = 'msi'
   silentArgs    = "INSTALLLEVEL=3 /quiet"
