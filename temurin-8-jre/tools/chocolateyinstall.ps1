@@ -9,10 +9,10 @@ $packageArgs = @{
   PackageName     = 'Temurin8jre'
   fileType        = 'msi'
   Url             = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u402-b06/OpenJDK8U-jre_x86-32_windows_hotspot_8u402b06.msi'
-  Url64bit        = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u402-b06/OpenJDK8U-jre_x64_windows_hotspot_8u402b06.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u412-b08/OpenJDK8U-jre_x64_windows_hotspot_8u412b08.msi'
   Checksum        = 'bb0cb0f7d86a5b7220fceb28af5edc63e510904919e2a1e476ea24fe6ed461db'
   ChecksumType    = 'sha256'
-  Checksum64      = '62bbfefc1e5f587b79974d679e7b91de7eae67b8d6a5895f82269a84dab85cae'
+  Checksum64      = 'd6ab48ee1a4f4fa7f2d64e2ecffd2548b7116f7857f1d6352520ed1bb5fbc8f7'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
