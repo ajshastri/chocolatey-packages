@@ -3,8 +3,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zulu</id>
-    <version>17.48.15.0</version>
-	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-17</packageSourceUrl>
+    <version>21.34.19.0</version>
+	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-21</packageSourceUrl>
     <owners>Aditya</owners>
     <title>Zulu</title>
     <authors>Azul Systems</authors>
