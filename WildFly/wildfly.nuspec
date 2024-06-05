@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>wildfly</id>
-    <version>30.0.1</version>
+    <version>32.0.1</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/WildFly</packageSourceUrl>
     <title>WildFly</title>
     <authors>Red Hat</authors>
