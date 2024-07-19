@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$url64      = 'https://cdn.azul.com/zulu/bin/zulu11.72.19-ca-fx-jdk11.0.23-win_x64.msi'
+$url64      = 'https://cdn.azul.com/zulu/bin/zulu11.74.15-ca-fx-jdk11.0.24-win_x64.msi'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -11,7 +11,7 @@ $packageArgs = @{
   url64bit      = $url64
 
   softwareName  = 'Zulu 11*'
-  checksum64    = '655333e3474d61eee4e4330aaa282d9f63286a5fe9315bfab1c917eca8e483f7'
+  checksum64    = 'b554014a6641f5c4c67c2f829971265c5f22d2ca7ee2b582bfa2344f117d2bc4'
   checksumType64= 'sha256'
 
   silentArgs    = "ADDLOCAL=ZuluInstallation,FeatureEnvironment /qn /norestart"
