@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>jmc</id>
-    <version>8.3.1</version>
-    <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/JMC</packageSourceUrl>
+    <version>9.0.0</version>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/JMC</packageSourceUrl>
     <title>JDK Mission Control (JMC) 64 bit only</title>
     <authors>Oracle</authors>
-    <owners>JohanJanssen</owners>
+    <owners>linearreg</owners>
     <licenseUrl>https://github.com/openjdk/jmc/blob/master/license/LICENSE.txt</licenseUrl>
     <projectUrl>https://wiki.openjdk.java.net/display/jmc/Main</projectUrl>
     <bugTrackerUrl>https://github.com/JDKMissionControl/jmc/issues</bugTrackerUrl>
