@@ -1,7 +1,7 @@
 #!/bin/bash
 
 COMMITYES=false
-ZBAREVERSION=17
+ZBAREVERSION=21
 OSTYPE=windows #linux
 ARCHIVETYPE=msi #tar.gz
 ARCHTYPE=x64
