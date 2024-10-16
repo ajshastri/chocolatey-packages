@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>libericajdk</id>
-    <version>21.0.4.9</version>
+    <version>21.0.5.11</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
     <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/bell_sw_logo.png</iconUrl>
     <title>Liberica JDK</title>
