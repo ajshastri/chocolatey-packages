@@ -8,11 +8,11 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 $packageArgs = @{
   PackageName     = 'Temurin8'
   fileType        = 'msi'
-  Url             = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u422-b05/OpenJDK8U-jdk_x86-32_windows_hotspot_8u422b05.msi'
-  Url64bit        = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u432-b06/OpenJDK8U-jdk_x64_windows_hotspot_8u432b06.msi'
-  Checksum        = '98674d696cb2966f237ccd297fd3d924d0e39e902fe5739fb67a873f3c5e3fa4'
+  Url             = ''
+  Url64bit        = ''
+  Checksum        = ''
   ChecksumType    = 'sha256'
-  Checksum64      = 'c9280205858928756374d930d4b539c59b1cb470425d2cf300b943c56efe4d86'
+  Checksum64      = ''
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
