@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>corretto17jdk</id>
-    <version>17.0.13.111</version>
+    <version>17.0.14.71</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jdk-17</packageSourceUrl>
     <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/aws-corretto.png</iconUrl>
     <title>Corretto 17 JDK</title>
     <authors>Amazon</authors>
     <owners>JohanJanssen</owners>
-    <licenseUrl>https://github.com/corretto/corretto-11/blob/develop/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/corretto/corretto-17/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://aws.amazon.com/corretto/</projectUrl>
     <docsUrl>https://docs.aws.amazon.com/corretto/</docsUrl>
     <mailingListUrl>https://aws.amazon.com/corretto/</mailingListUrl>
