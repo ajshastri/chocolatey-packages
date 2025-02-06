@@ -28,10 +28,11 @@ function correttodl {
     URLORIG=$(grep -i "url64" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
     echo "{MD5ORIG} is ${MD5ORIG}"
-    if [[ "${MD5NEW}" != "${MD5ORIG}" ]]
+    echo "{VERSIONORIG} is ${VERSIONORIG}"
+    if [[ "${MD5NEW}" != "${MD5ORIG}" || "${VERSIONNEW}" != "${VERSIONORIG}" ]]
     then
         # COMMITYES=TRUE
-        echo "${MD5NEW} is not the same as ${MD5ORIG} for ${DLVERSIONNEW}"
+        echo "${MD5NEW} is not the same as ${MD5ORIG} or ${VERSIONNEW} is not the same as ${VERSIONORIG} for ${DLVERSIONNEW}"
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1 with the new MD5"
         ${SED} -i "s@${MD5ORIG}@${MD5NEW}@g" corretto-${PACKAGE}-${JVERSION}/tools/chocolateyinstall.ps1
         echo "Updating file corretto-${PACKAGE}-${JVERSION}/corretto${JVERSION}${PACKAGE}.nuspec with the new version - ${VERSIONORIG} to ${VERSIONNEW}"
