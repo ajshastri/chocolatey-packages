@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $packageArgs = @{
   PackageName = $env:ChocolateyPackageName
-  Url64bit = 'https://corretto.aws/downloads/resources/null/amazon-corretto-null-windows-x64.msi'
+  Url64bit = 'https://corretto.aws/downloads/resources/17.0.14.7.1/amazon-corretto-17.0.14.7.1-windows-x64.msi'
   Checksum64 = 'a263fa6274d694d5ca018a9c673ce684'
   ChecksumType64 = 'md5'
   fileType      = 'msi'
