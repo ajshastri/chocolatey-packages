@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin21</id>
-    <version>21.0.5.11</version>
+    <version>21.0.6.7</version>
     <title>Temurin jdk21 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
