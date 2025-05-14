@@ -2,13 +2,13 @@ $ErrorActionPreference = 'Stop'
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\OpenJDK"
 
-$version = "22.0.2"
+$version = "24.0.1"
 
 $packageArgs = @{
     PackageName      = $env:ChocolateyPackageName
     UnzipLocation    = $targetDir = $installDir
-    Url64            = 'https://download.java.net/java/GA/jdk22.0.2/c9ecb94cd31b495da20a27d4581645e8/9/GPL/openjdk-22.0.2_windows-x64_bin.zip'
-    Checksum64       = 'f2a9b9ab944e71a64637fcdc6b13a1188cf02d4eb9ecf71dc927e98b3e45f5dc'
+    Url64            = 'https://download.java.net/java/GA/jdk24.0.1/24a58e0e276943138bf3e963e6291ac2/9/GPL/openjdk-24.0.1_windows-x64_bin.zip'
+    Checksum64       = '5b842493b454ac3e816bdc3398716d93239b980db977a63685b0c8cd7b15e315'
     ChecksumType64   = 'sha256'
 }
 
