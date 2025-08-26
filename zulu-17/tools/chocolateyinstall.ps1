@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-
-$url64      = 'https://cdn.azul.com/zulu/bin/zulu17.58.21-ca-fx-jdk17.0.15-win_x64.msi'
+               
+$url64      = 'https://cdn.azul.com/zulu/bin/zulu17.60.17-ca-fx-jdk17.0.16-win_x64.msi'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -19,3 +19,4 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+
