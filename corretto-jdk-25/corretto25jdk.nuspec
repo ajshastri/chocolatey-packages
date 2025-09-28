@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>corretto25jdk</id>
+    <version>25.0.0.362 </version>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jdk-25</packageSourceUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/aws-corretto.png</iconUrl>
+    <title>Corretto 25 JDK</title>
+    <authors>Amazon</authors>
+    <owners>linearreg</owners>
+    <licenseUrl>https://github.com/corretto/corretto-25/blob/develop/LICENSE</licenseUrl>
+    <projectUrl>https://aws.amazon.com/corretto/</projectUrl>
+    <docsUrl>https://docs.aws.amazon.com/corretto/</docsUrl>
+    <mailingListUrl>https://aws.amazon.com/corretto/</mailingListUrl>
+    <bugTrackerUrl>https://github.com/corretto</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/corretto</projectSourceUrl>
+    <tags>corretto java jvm corretto25</tags>
+    <summary>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</summary>
+    <description>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</description>
+  </metadata>
+</package>
