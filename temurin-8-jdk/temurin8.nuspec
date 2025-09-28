@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin8</id>
-    <version></version>
+    <version>8.462.8</version>
     <title>Temurin jdk8 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
