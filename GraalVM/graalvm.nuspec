@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>graalvm</id>
-    <version>22.3.5</version>
+    <version>25.0.0</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/GraalVM</packageSourceUrl>
-    <title>GraalVM Community Latest Java Version Now Java 22</title>
+    <title>GraalVM Community Latest Java Version Now Java 25</title>
     <authors>Oracle</authors>
     <owners>linearreg</owners>
     <licenseUrl>https://github.com/oracle/graal/blob/master/LICENSE</licenseUrl>
