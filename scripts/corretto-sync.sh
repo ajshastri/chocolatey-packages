@@ -55,7 +55,7 @@ function correttodl {
     fi
 }
 
-for JVERSION in {8,11,17,21}
+for JVERSION in {8,11,17,21,25}
 do
     correttodl ${JVERSION} jdk
 done
