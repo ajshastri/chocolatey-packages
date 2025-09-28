@@ -12,7 +12,7 @@ FXVAL=true
 
 echo "Newest versions and DL files are:"
 
-for JVERSION in {8,11,17,21}
+for JVERSION in {8,11,17,21,25}
 do
     echo "CRAC value for ${JVERSION} is ${CRACV}"
     UUID=$(curl -s -X GET "https://api.azul.com/metadata/v1/zulu/packages/?java_version=${JVERSION}&os=${OSTYPE}&arch=${ARCHTYPE}&archive_type=${ARCHIVETYPE}&java_package_type=${ZPACK}&javafx_bundled=${FXVAL}&latest=true&distro_version=${JVERSION}&release_status=ga&crac_supported=${CRACV}&availability_types=CA&certifications=tck&page=1&page_size=1" -H "accept: application/json" | jq -r .[0].package_uuid)
