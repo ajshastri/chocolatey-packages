@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $packageArgs = @{
   PackageName = $env:ChocolateyPackageName
-  Url64bit = 'https://corretto.aws/downloads/resources/8.462.08.1/amazon-corretto-8.462.08.1-windows-x64-jdk.msi'
-  Checksum64 = 'a5997cf8d9d016824a883e926d2f873c'
+  Url64bit = 'https://corretto.aws/downloads/resources/8.472.08.1/amazon-corretto-8.472.08.1-windows-x64-jdk.msi'
+  Checksum64 = 'af8d5f6358cdb98f9de2148103718a08'
   ChecksumType64 = 'md5'
   fileType      = 'msi'
   silentArgs    = "INSTALLLEVEL=3 /quiet"
