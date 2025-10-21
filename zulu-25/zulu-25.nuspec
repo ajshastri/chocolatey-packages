@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zulu25</id>
-    <version>25.28.85.0</version>
+    <version>25.30.17.0</version>
 	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-25</packageSourceUrl>
     <owners>linearreg</owners>
     <title>Zulu 25</title>
