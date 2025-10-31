@@ -9,10 +9,10 @@ $packageArgs = @{
   PackageName     = 'Temurin17'
   fileType        = 'msi'
   Url             = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.16%2B8/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.16_8.msi'
-  Url64bit        = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.16%2B8/OpenJDK17U-jdk_x64_windows_hotspot_17.0.16_8.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.17%2B10/OpenJDK17U-jdk_x64_windows_hotspot_17.0.17_10.msi'
   Checksum        = '3e3516535d75af5fa14471300980ca86be209ed7fbf31a3c24c6f5c5c96ffc50'
   ChecksumType    = 'sha256'
-  Checksum64      = '1c3701f074d75036650731bcf6b08d69b1e3567bfa853f0ddd7aaba44da5b595'
+  Checksum64      = 'df491b4dbad46dcb77fcba22a0edac4c53a89448f699b33a5cdd5349bd5865dd'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
