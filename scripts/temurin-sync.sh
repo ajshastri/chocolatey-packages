@@ -21,7 +21,7 @@ function dljrefileinfo32() {
 # JVERSION=21
 JAVATYPE=jdk
 DIST=temurin
-for JVERSION in {8,11,17,21}
+for JVERSION in {8,11,17,21,25}
 do
     # ${DIST} regular full
     DLDEETS=$(dljdkfileinfo $JVERSION ${DIST})
@@ -38,7 +38,7 @@ do
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
-    if [[ "${JVERSION}" != "21" ]]
+    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljdkfileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
@@ -81,7 +81,7 @@ done
 #JAVATYPE is JRE regular
 # JVERSION=21
 JAVATYPE=jre
-for JVERSION in {8,11,17,21}
+for JVERSION in {8,11,17,21,25}
 do
     # ${DIST} regular full
     DLDEETS=$(dljrefileinfo $JVERSION ${DIST})
@@ -98,7 +98,7 @@ do
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
     
-    if [[ "${JVERSION}" != "21" ]]
+    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljrefileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
