@@ -9,10 +9,10 @@ $packageArgs = @{
   PackageName     = 'Temurin11'
   fileType        = 'msi'
   Url             = 'https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.28%2B6/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.28_6.msi'
-  Url64bit        = 'https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.28%2B6/OpenJDK11U-jdk_x64_windows_hotspot_11.0.28_6.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.29%2B7/OpenJDK11U-jdk_x64_windows_hotspot_11.0.29_7.msi'
   Checksum        = '2d8fd994e252b0bafebb4d86b564b7552a67c824397e52b1a3c221a56325c5c3'
   ChecksumType    = 'sha256'
-  Checksum64      = '5063082c0f8a35e2d033ae1ca64eea7ab02222cf04ec97b8318426443f9e1cb0'
+  Checksum64      = '219e88a862ccdde521c42d8ebc001cc711279cdef79157b568ec2ae16b3abde0'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
