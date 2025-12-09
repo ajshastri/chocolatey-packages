@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin17</id>
-    <version>17.0.17.10</version>
+    <version></version>
     <title>Temurin jdk17 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
