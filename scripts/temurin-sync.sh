@@ -31,27 +31,27 @@ do
     CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
     DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
     TEMFOLDNAME=${DIST}-${JVERSION}-${JAVATYPE}
-    
+
     SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
-    
+
     SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
-    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
+    if [[ "${JVERSION}" != "21" ]] && [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljdkfileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
         JAVAFILE32=$(echo $JAVADEETS32 | jq -r .result[].filename)
         CHECKSUMTYPE32=$(echo $JAVADEETS32 | jq -r .result[].checksum_type)
         DLURL32=$(echo $JAVADEETS32 | jq -r ".result[].direct_download_uri")
-    
+
         SHA256NEW32=$(echo $JAVADEETS32 | jq -r .result[].checksum)
-    
+
         SHA256ORIG32=$(grep -iv "checksumtype\|checksum64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i checksum | awk -F\' '{print $2}')
         URLORIG32=$(grep -i "url" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i -v "url64" | head -1 | awk -F\' '{print $2}')
     fi
-    
+
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
     if [[ "${SHA256NEW,,}" != "${SHA256ORIG,,}" ]]
     then
@@ -91,23 +91,23 @@ do
     CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
     DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
     TEMFOLDNAME=${DIST}-${JVERSION}-${JAVATYPE}
-    
+
     SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
-    
+
     SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
-    
-    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
+
+    if [[ "${JVERSION}" != "21" ]] && [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljrefileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
         JAVAFILE32=$(echo $JAVADEETS32 | jq -r .result[].filename)
         CHECKSUMTYPE32=$(echo $JAVADEETS32 | jq -r .result[].checksum_type)
         DLURL32=$(echo $JAVADEETS32 | jq -r ".result[].direct_download_uri")
-    
+
         SHA256NEW32=$(echo $JAVADEETS32 | jq -r .result[].checksum)
-    
+
         SHA256ORIG32=$(grep -iv "checksumtype\|checksum64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i checksum | awk -F\' '{print $2}')
         URLORIG32=$(grep -i "url" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i -v "url64" | head -1 | awk -F\' '{print $2}')
     fi
