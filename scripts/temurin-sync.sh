@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function dljdkfileinfo() {
   curl -s -L -X 'GET' "https://api.foojay.io/disco/v3.0/packages/jdks?version=${1}&distribution=${2}&architecture=amd64&archive_type=msi&operating_system=windows&latest=available" -H 'accept: application/json' | jq -r '.result[] | select(.filename |  contains ("full") | not) | select(.filename |  contains ("lite") | not)';
