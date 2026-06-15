@@ -55,6 +55,9 @@ do
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
     if [[ "${SHA256NEW,,}" != "${SHA256ORIG,,}" ]]
     then
+        if [[ -z "$SHA256NEW" ]]; then ( echo "ERROR: SHA256NEW is not set"; exit 1 ) fi
+        if [[ -z "$VERSIONNEW" ]]; then ( echo "ERROR: VERSIONNEW is not set"; exit 1 ) fi
+        if [[ -z "$DLURL" ]]; then ( echo "ERROR: DLURL is not set"; exit 1 ) fi
         # COMMITYES=TRUE
         echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
@@ -63,6 +66,8 @@ do
 
         if [[ "${JVERSION}" != "21" ]]
         then
+            if [[ -z "$SHA256NEW32" ]]; then ( echo "ERROR: SHA256NEW32 is not set"; exit 1 ) fi
+            if [[ -z "$DLURL32" ]]; then ( echo "ERROR: DLURL32 is not set"; exit 1 ) fi
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi
@@ -115,6 +120,9 @@ do
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
     if [[ "${SHA256NEW,,}" != "${SHA256ORIG,,}" ]]
     then
+        if [[ -z "$SHA256NEW" ]]; then ( echo "ERROR: SHA256NEW is not set"; exit 1 ) fi
+        if [[ -z "$VERSIONNEW" ]]; then ( echo "ERROR: VERSIONNEW is not set"; exit 1 ) fi
+        if [[ -z "$DLURL" ]]; then ( echo "ERROR: DLURL is not set"; exit 1 ) fi
         # COMMITYES=TRUE
         echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
@@ -123,6 +131,8 @@ do
 
         if [[ "${JVERSION}" != "21" ]]
         then
+            if [[ -z "$SHA256NEW32" ]]; then ( echo "ERROR: SHA256NEW32 is not set"; exit 1 ) fi
+            if [[ -z "$DLURL32" ]]; then ( echo "ERROR: DLURL32 is not set"; exit 1 ) fi
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi
