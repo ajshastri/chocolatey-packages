@@ -8,11 +8,11 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 $packageArgs = @{
   PackageName     = 'Temurin17jre'
   fileType        = 'msi'
-  Url             = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.16%2B8/OpenJDK17U-jre_x86-32_windows_hotspot_17.0.16_8.msi'
-  Url64bit        = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.17%2B10/OpenJDK17U-jre_x64_windows_hotspot_17.0.17_10.msi'
-  Checksum        = '47ac8df108d911103a053880a401fc18302b4b9a098814436716deba86cdfb76'
+  Url             = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.17%2B10/OpenJDK17U-jre_x86-32_windows_hotspot_17.0.17_10.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.19%2B10/OpenJDK17U-jre_x64_windows_hotspot_17.0.19_10.msi'
+  Checksum        = '7aa6462a0d258f21d1bf324a80a2eb5ab8fa7707fd520b875f5c129d45c3ac92'
   ChecksumType    = 'sha256'
-  Checksum64      = '23eea3080b9545915b5af64807fd310ee7227688a179b33859530912cca4c1e6'
+  Checksum64      = 'ead2ed434bee9493b08ba68c8778775e18fa050bb9a8a2ae72498e4efb75e95f'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
