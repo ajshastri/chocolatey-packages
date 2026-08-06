@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function dljdkfileinfo() {
   curl -s -L -X 'GET' "https://api.foojay.io/disco/v3.0/packages/jdks?version=${1}&distribution=${2}&architecture=amd64&archive_type=msi&operating_system=windows&latest=available" -H 'accept: application/json' | jq -r '.result[] | select(.filename |  contains ("full") | not) | select(.filename |  contains ("lite") | not)';
@@ -31,30 +32,33 @@ do
     CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
     DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
     TEMFOLDNAME=${DIST}-${JVERSION}-${JAVATYPE}
-    
+
     SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
-    
+
     SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
 
-    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
+    if [[ "${JVERSION}" != "21" ]] && [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljdkfileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
         JAVAFILE32=$(echo $JAVADEETS32 | jq -r .result[].filename)
         CHECKSUMTYPE32=$(echo $JAVADEETS32 | jq -r .result[].checksum_type)
         DLURL32=$(echo $JAVADEETS32 | jq -r ".result[].direct_download_uri")
-    
+
         SHA256NEW32=$(echo $JAVADEETS32 | jq -r .result[].checksum)
-    
+
         SHA256ORIG32=$(grep -iv "checksumtype\|checksum64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i checksum | awk -F\' '{print $2}')
         URLORIG32=$(grep -i "url" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i -v "url64" | head -1 | awk -F\' '{print $2}')
     fi
-    
+
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
     if [[ "${SHA256NEW,,}" != "${SHA256ORIG,,}" ]]
     then
+        if [[ -z "$SHA256NEW" ]]; then ( echo "ERROR: SHA256NEW is not set"; exit 1 ) fi
+        if [[ -z "$VERSIONNEW" ]]; then ( echo "ERROR: VERSIONNEW is not set"; exit 1 ) fi
+        if [[ -z "$DLURL" ]]; then ( echo "ERROR: DLURL is not set"; exit 1 ) fi
         # COMMITYES=TRUE
         echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
@@ -63,6 +67,8 @@ do
 
         if [[ "${JVERSION}" != "21" ]]
         then
+            if [[ -z "$SHA256NEW32" ]]; then ( echo "ERROR: SHA256NEW32 is not set"; exit 1 ) fi
+            if [[ -z "$DLURL32" ]]; then ( echo "ERROR: DLURL32 is not set"; exit 1 ) fi
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi
@@ -91,23 +97,23 @@ do
     CHECKSUMTYPE=$(echo $JAVADEETS | jq -r .result[].checksum_type)
     DLURL=$(echo $JAVADEETS | jq -r ".result[].direct_download_uri")
     TEMFOLDNAME=${DIST}-${JVERSION}-${JAVATYPE}
-    
+
     SHA256NEW=$(echo $JAVADEETS | jq -r .result[].checksum)
-    
+
     SHA256ORIG=$(grep -i checksum64 ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | awk -F\' '{print $2}')
     VERSIONORIG=$(grep -i -o -P '(?<=<version>).*(?=</version>)' ${TEMFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec)
     URLORIG=$(grep -i "url64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | head -1 | awk -F\' '{print $2}')
-    
-    if [[ "${JVERSION}" != "21" ]] || [[ "${JVERSION}" != "25" ]]
+
+    if [[ "${JVERSION}" != "21" ]] && [[ "${JVERSION}" != "25" ]]
     then
         DLDEETS32=$(dljrefileinfo32 $JVERSION ${DIST})
         JAVADEETS32=$(curl -s -L -X 'GET' $(echo $DLDEETS32 | jq -r '.links.pkg_info_uri' | head -1))
         JAVAFILE32=$(echo $JAVADEETS32 | jq -r .result[].filename)
         CHECKSUMTYPE32=$(echo $JAVADEETS32 | jq -r .result[].checksum_type)
         DLURL32=$(echo $JAVADEETS32 | jq -r ".result[].direct_download_uri")
-    
+
         SHA256NEW32=$(echo $JAVADEETS32 | jq -r .result[].checksum)
-    
+
         SHA256ORIG32=$(grep -iv "checksumtype\|checksum64" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i checksum | awk -F\' '{print $2}')
         URLORIG32=$(grep -i "url" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1 | grep -i -v "url64" | head -1 | awk -F\' '{print $2}')
     fi
@@ -115,6 +121,9 @@ do
     echo "$JVERSION $JAVATYPE has SHA256ORIG $SHA256ORIG and SHA256NEW $SHA256NEW"
     if [[ "${SHA256NEW,,}" != "${SHA256ORIG,,}" ]]
     then
+        if [[ -z "$SHA256NEW" ]]; then ( echo "ERROR: SHA256NEW is not set"; exit 1 ) fi
+        if [[ -z "$VERSIONNEW" ]]; then ( echo "ERROR: VERSIONNEW is not set"; exit 1 ) fi
+        if [[ -z "$DLURL" ]]; then ( echo "ERROR: DLURL is not set"; exit 1 ) fi
         # COMMITYES=TRUE
         echo "$SHA256NEW is not the same as $SHA256ORIG for $VERSIONNEW"
         sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
@@ -123,6 +132,8 @@ do
 
         if [[ "${JVERSION}" != "21" ]]
         then
+            if [[ -z "$SHA256NEW32" ]]; then ( echo "ERROR: SHA256NEW32 is not set"; exit 1 ) fi
+            if [[ -z "$DLURL32" ]]; then ( echo "ERROR: DLURL32 is not set"; exit 1 ) fi
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi

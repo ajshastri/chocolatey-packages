@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           token: ${{ secrets.GH_PAT || github.token }}
       - id: temurin_sync
@@ -24,4 +24,3 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git commit -a -m "Temurin version update on $(date)" && git push || echo "No changes"
-          
