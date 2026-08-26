@@ -1,13 +1,13 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\GraalVM"
-$version = "25.0.1+8.1"
+$version = "25.0.2+10.1"
 
 $packageArgs = @{
     PackageName = $env:ChocolateyPackageName
     UnzipLocation = $targetDir = $installDir
-    Url64bit = 'https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.1/graalvm-community-jdk-25.0.1_windows-x64_bin.zip'
-    Checksum64 = 'fde83c5ceec2c75560c747ccd9f314f90e4cf5c5287416e67c4ce442e344ca27'
+    Url64bit = 'https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_windows-x64_bin.zip'
+    Checksum64 = '72edc27ce2dd3c156332144a339c97995745cae291205ed2f9b5cc26aa9cb422'
     ChecksumType64 = 'sha256'
 }
 

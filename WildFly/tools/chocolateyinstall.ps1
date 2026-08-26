@@ -5,8 +5,8 @@ $installDir = "$programFiles\WildFly"
 $packageArgs = @{
     PackageName = $env:ChocolateyPackageName
     UnzipLocation = $targetDir = $installDir
-    Url = 'https://github.com/wildfly/wildfly/releases/download/37.0.1.Final/wildfly-37.0.1.Final.zip'
-    Checksum = 'bbb9722f7d55e07f034f02ec08f9902c5262eb6ce2bb61bc929cba3cf08c054c'
+    Url = 'https://github.com/wildfly/wildfly/releases/download/41.0.0.Final/wildfly-41.0.0.Final.zip'
+    Checksum = '85768d52743935dba403b03170a00434f8e145bc9920c8fb7b441ea726d30147'
     ChecksumType = 'sha256'
 }
 
