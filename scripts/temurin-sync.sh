@@ -61,13 +61,13 @@ do
         sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${TEMFOLDNAME}/${DIST}${JVERSION}.nuspec
         sed -i "s@$URLORIG@$DLURL@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
 
-        if [[ "${JVERSION}" != "21" ]]
+        if [[ "${JVERSION}" != "25" ]]
         then
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi
 
-        if [[ "$JVERSION" == "21" ]]
+        if [[ "$JVERSION" == "25" ]]
         then
             sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${DIST}-${JAVATYPE}/tools/chocolateyinstall.ps1
             sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${DIST}-${JAVATYPE}/${DIST}.nuspec
@@ -121,13 +121,13 @@ do
         sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${TEMFOLDNAME}/${DIST}${JVERSION}${JAVATYPE}.nuspec
         sed -i "s@$URLORIG@$DLURL@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
 
-        if [[ "${JVERSION}" != "21" ]]
+        if [[ "${JVERSION}" != "25" ]]
         then
             sed -i "s@$SHA256ORIG32@$SHA256NEW32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
             sed -i "s@$URLORIG32@$DLURL32@g" ${TEMFOLDNAME}/tools/chocolateyinstall.ps1
         fi
 
-        if [[ "$JVERSION" == "21" ]]
+        if [[ "$JVERSION" == "25" ]]
         then
             sed -i "s@$SHA256ORIG@$SHA256NEW@g" ${DIST}-${JAVATYPE}/tools/chocolateyinstall.ps1
             sed -i "s@$VERSIONORIG@$VERSIONNEW@g" ${DIST}-${JAVATYPE}/${DIST}${JAVATYPE}.nuspec

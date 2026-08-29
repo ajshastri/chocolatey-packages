@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurinjre</id>
-    <version></version>
+    <version>25.0.4.1</version>
     <title>Temurin jre21 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -51,3 +51,6 @@ Example: `choco install Temurinjre --params="/both"`</description>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
   </metadata>
 </package>
+
+
+

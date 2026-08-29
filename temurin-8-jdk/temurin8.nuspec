@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin8</id>
-    <version></version>
+    <version>8.0.504</version>
     <title>Temurin jdk8 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -51,3 +51,5 @@ Example: `choco install Temurin8 --params="/both"`</description>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
   </metadata>
 </package>
+
+

@@ -17,9 +17,10 @@
     <tags>zulu-11 java java11 jdk jdk11 openjdk zulu zulu11</tags>
     <summary>Azul® Zulu ® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</summary>
     <description>Azul® Zulu ® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</description>
-    <releaseNotes>https://docs.azul.com/core/zulu-openjdk/release-notes.html</releaseNotes>
+    <releaseNotes>https://docs.azul.com/core/release-notes</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
   </files>
 </package>
+

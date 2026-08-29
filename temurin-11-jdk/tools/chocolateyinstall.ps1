@@ -8,11 +8,11 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 $packageArgs = @{
   PackageName     = 'Temurin11'
   fileType        = 'msi'
-  Url             = ''
-  Url64bit        = ''
-  Checksum        = ''
+  Url             = 'https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_x64_windows_hotspot_11.0.32.1_1.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_x64_windows_hotspot_11.0.32.1_1.msi'
+  Checksum        = '253989adc3097a52f81560e32986d829bdec6b949b4595a3489220f74d801cdb'
   ChecksumType    = 'sha256'
-  Checksum64      = ''
+  Checksum64      = '253989adc3097a52f81560e32986d829bdec6b949b4595a3489220f74d801cdb'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
@@ -26,3 +26,7 @@ Install-ChocolateyPackage $packageArgs.packageName $packageArgs.fileType $packag
 write-warning "Installing only Get-OSArchitectureWidth"
 Install-ChocolateyPackage @packageArgs
 }
+
+
+
+

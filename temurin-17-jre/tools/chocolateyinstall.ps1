@@ -8,11 +8,11 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 $packageArgs = @{
   PackageName     = 'Temurin17jre'
   fileType        = 'msi'
-  Url             = ''
-  Url64bit        = ''
-  Checksum        = ''
+  Url             = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_windows_hotspot_17.0.20.1_1.msi'
+  Url64bit        = 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_windows_hotspot_17.0.20.1_1.msi'
+  Checksum        = 'fd45e1710b0fe80c08a5141109cc0128e45cefe8c15c3639ce13c564df634031'
   ChecksumType    = 'sha256'
-  Checksum64      = ''
+  Checksum64      = 'fd45e1710b0fe80c08a5141109cc0128e45cefe8c15c3639ce13c564df634031'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
@@ -26,3 +26,7 @@ Install-ChocolateyPackage $packageArgs.packageName $packageArgs.fileType $packag
 write-warning "Installing only Get-OSArchitectureWidth"
 Install-ChocolateyPackage @packageArgs
 }
+
+
+
+
