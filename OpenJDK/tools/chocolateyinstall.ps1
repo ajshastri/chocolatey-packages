@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\OpenJDK"
 
-$version = "26"
+$version = "26.0.2.1"
 
 $packageArgs = @{
     PackageName      = $env:ChocolateyPackageName
