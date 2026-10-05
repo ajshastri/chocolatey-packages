@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="https://community.chocolatey.org/api/v2/">
+  <title type="text">FindPackagesById</title>
+  <id>https://community.chocolatey.org/api/v2/FindPackagesById</id>
+  <updated>2026-10-05T03:38:10Z</updated>
+  <author>
+    <name />
+  </author>
+  <link rel="self" title="FindPackagesById" href="FindPackagesById" />
+</feed>

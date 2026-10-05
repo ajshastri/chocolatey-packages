@@ -1,0 +1,212 @@
+[
+ {
+  "name": "9.1.2-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.1.2-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.1.2-ga",
+  "commit": {
+   "sha": "5118c45c1028f10cb562f254bcfdb657c8ecd744",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/5118c45c1028f10cb562f254bcfdb657c8ecd744"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjEuMi1nYQ=="
+ },
+ {
+  "name": "9.1.1-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.1.1-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.1.1-rc",
+  "commit": {
+   "sha": "3d5214841c2a78f85f64a234031239a3335f1257",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/3d5214841c2a78f85f64a234031239a3335f1257"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjEuMS1yYw=="
+ },
+ {
+  "name": "9.1.1-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.1.1-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.1.1-ga",
+  "commit": {
+   "sha": "3d5214841c2a78f85f64a234031239a3335f1257",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/3d5214841c2a78f85f64a234031239a3335f1257"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjEuMS1nYQ=="
+ },
+ {
+  "name": "9.1.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.1.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.1.0-rc",
+  "commit": {
+   "sha": "d6e6631763fdb1f1a3a31a6625080564023ca4fd",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/d6e6631763fdb1f1a3a31a6625080564023ca4fd"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjEuMC1yYw=="
+ },
+ {
+  "name": "9.1.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.1.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.1.0-ga",
+  "commit": {
+   "sha": "6333fd42cef2adadd831a74c9708145c9a0482a4",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/6333fd42cef2adadd831a74c9708145c9a0482a4"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjEuMC1nYQ=="
+ },
+ {
+  "name": "9.0.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.0.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.0.0-rc",
+  "commit": {
+   "sha": "4ee71fe72d117088c40f6bae2fa2e7f7d6f7a004",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/4ee71fe72d117088c40f6bae2fa2e7f7d6f7a004"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjAuMC1yYw=="
+ },
+ {
+  "name": "9.0.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/9.0.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/9.0.0-ga",
+  "commit": {
+   "sha": "4ee71fe72d117088c40f6bae2fa2e7f7d6f7a004",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/4ee71fe72d117088c40f6bae2fa2e7f7d6f7a004"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy85LjAuMC1nYQ=="
+ },
+ {
+  "name": "8.3.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.3.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.3.0-rc",
+  "commit": {
+   "sha": "7097ed26ab4d04a691544aaf02f0ca12dc2db947",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/7097ed26ab4d04a691544aaf02f0ca12dc2db947"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjMuMC1yYw=="
+ },
+ {
+  "name": "8.3.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.3.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.3.0-ga",
+  "commit": {
+   "sha": "7097ed26ab4d04a691544aaf02f0ca12dc2db947",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/7097ed26ab4d04a691544aaf02f0ca12dc2db947"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjMuMC1nYQ=="
+ },
+ {
+  "name": "8.2.1-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.2.1-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.2.1-rc",
+  "commit": {
+   "sha": "bfa2e068986bd10ca05b189fe7146a9d8f09016a",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/bfa2e068986bd10ca05b189fe7146a9d8f09016a"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjIuMS1yYw=="
+ },
+ {
+  "name": "8.2.1-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.2.1-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.2.1-ga",
+  "commit": {
+   "sha": "ed260098c92989d60d1058a53fd74a96fd8f78be",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/ed260098c92989d60d1058a53fd74a96fd8f78be"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjIuMS1nYQ=="
+ },
+ {
+  "name": "8.2.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.2.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.2.0-rc",
+  "commit": {
+   "sha": "559f902d0c739cec0e0199bd40876ea0c8c06773",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/559f902d0c739cec0e0199bd40876ea0c8c06773"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjIuMC1yYw=="
+ },
+ {
+  "name": "8.2.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.2.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.2.0-ga",
+  "commit": {
+   "sha": "66f321886da89fe4cc54a7e8d978b22fb65519ca",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/66f321886da89fe4cc54a7e8d978b22fb65519ca"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjIuMC1nYQ=="
+ },
+ {
+  "name": "8.1.1-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.1.1-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.1.1-rc",
+  "commit": {
+   "sha": "14d2f6ca7a404a71c8aa8676cfd301dcab647093",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/14d2f6ca7a404a71c8aa8676cfd301dcab647093"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjEuMS1yYw=="
+ },
+ {
+  "name": "8.1.1-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.1.1-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.1.1-ga",
+  "commit": {
+   "sha": "14d2f6ca7a404a71c8aa8676cfd301dcab647093",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/14d2f6ca7a404a71c8aa8676cfd301dcab647093"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjEuMS1nYQ=="
+ },
+ {
+  "name": "8.1.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.1.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.1.0-rc",
+  "commit": {
+   "sha": "d0f89f0aa00c1dca2cc89712091d938454a16ff3",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/d0f89f0aa00c1dca2cc89712091d938454a16ff3"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjEuMC1yYw=="
+ },
+ {
+  "name": "8.1.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.1.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.1.0-ga",
+  "commit": {
+   "sha": "d0f89f0aa00c1dca2cc89712091d938454a16ff3",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/d0f89f0aa00c1dca2cc89712091d938454a16ff3"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjEuMC1nYQ=="
+ },
+ {
+  "name": "8.0.1-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.0.1-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.0.1-rc",
+  "commit": {
+   "sha": "699a121bd449fe8a9350221282bd3f809691a766",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/699a121bd449fe8a9350221282bd3f809691a766"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjAuMS1yYw=="
+ },
+ {
+  "name": "8.0.1-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.0.1-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.0.1-ga",
+  "commit": {
+   "sha": "699a121bd449fe8a9350221282bd3f809691a766",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/699a121bd449fe8a9350221282bd3f809691a766"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjAuMS1nYQ=="
+ },
+ {
+  "name": "8.0.0-rc",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.0.0-rc",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.0.0-rc",
+  "commit": {
+   "sha": "50bb587403c5db828c4e5d25bca47b637a0ad75d",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/50bb587403c5db828c4e5d25bca47b637a0ad75d"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjAuMC1yYw=="
+ },
+ {
+  "name": "8.0.0-ga",
+  "zipball_url": "https://api.github.com/repos/openjdk/jmc/zipball/refs/tags/8.0.0-ga",
+  "tarball_url": "https://api.github.com/repos/openjdk/jmc/tarball/refs/tags/8.0.0-ga",
+  "commit": {
+   "sha": "8ab40bfb565c1002e84bb238a620ab81bb64eceb",
+   "url": "https://api.github.com/repos/openjdk/jmc/commits/8ab40bfb565c1002e84bb238a620ab81bb64eceb"
+  },
+  "node_id": "MDM6UmVmMTg2NzY0Njk1OnJlZnMvdGFncy84LjAuMC1nYQ=="
+ }
+]

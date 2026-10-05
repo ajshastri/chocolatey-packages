@@ -32,3 +32,5 @@ Update-AUPackages.md
 scratch/
 .agents/
 out/
+__pycache__/
+*.py[cod]

@@ -1,0 +1,369 @@
+{
+ "tag_name": "17.0.20.1+1",
+ "name": "17.0.20.1+1",
+ "draft": false,
+ "prerelease": false,
+ "published_at": "2026-08-19T08:43:33Z",
+ "assets": [
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-full.msi",
+   "digest": "sha256:d6dbb605f59c1b28e69c2d12d22cd3f26160b219d57a22c8aa1f33aefb101788",
+   "size": 204361728
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-full.msi.json",
+   "digest": "sha256:61f60f12a53f793b8f732de0f26b7e3baf8dae38ca7a6c0ceb9998910c516f1a",
+   "size": 3928
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-full.zip",
+   "digest": "sha256:f4e2ebd50100c220b79ef373e9c040cbd20646c3cbdccbe982a88459c2ed5aab",
+   "size": 206844318
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-full.zip.json",
+   "digest": "sha256:45e8a141f046b39e2ac32e14255c039896e79ea83193d42a91fcc0fdb60d1df4",
+   "size": 3928
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-lite.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-lite.msi",
+   "digest": "sha256:fe6fd55290a00bf3e4096baaeaec41df4ad018fb223013d5a6db9760d3460660",
+   "size": 70762496
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-lite.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-lite.msi.json",
+   "digest": "sha256:0f3a2f881541ab57beac5882f64654e6d1d5a0b12f602e092e4c1746e3994f4b",
+   "size": 3854
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-lite.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-lite.zip",
+   "digest": "sha256:72683a2cac2737e002e931d81f96b9d364a51a1615495ce095579ceaa7b85f58",
+   "size": 69740945
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64-lite.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64-lite.zip.json",
+   "digest": "sha256:8b926916a227e75320bf423a96bbbed97010a6964e9d85fbfc1b4ab9ab84ae1a",
+   "size": 3854
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64.msi",
+   "digest": "sha256:c0b7bd4a77a9003634525fff084fb84d45c10e9c99700fd5bcae7af90d6b5eb4",
+   "size": 181940224
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64.msi.json",
+   "digest": "sha256:d88650273c6374fc0e6ddd8f88cf7be62629c35d034178c446460a3b42045b0f",
+   "size": 3844
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64.zip",
+   "digest": "sha256:f19bfe395d13cf1764bfe35cae7ef05bd3972bfd3c4dac339437857a9dd63ac0",
+   "size": 184052851
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-aarch64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-aarch64.zip.json",
+   "digest": "sha256:cdf6ced2ab8dea663233b1814b75eef8370d5fbbf8f287174b66f32e70c5494e",
+   "size": 3844
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-full.msi",
+   "digest": "sha256:518a70659066353fa6958bbed6f1e88f4bfd758827e17d96f0cfdabbda58290f",
+   "size": 295718912
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-full.msi.json",
+   "digest": "sha256:d34a641bfa76b4dac7e2183d0099f8502a8f139af6684e25b024aa12f3f5ec48",
+   "size": 3804
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-full.zip",
+   "digest": "sha256:0e32cf0de495a712b10c68a5c04703a19ae73574363613c373518b84e5addc19",
+   "size": 298448393
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-full.zip.json",
+   "digest": "sha256:9639487e8778df039ca225022279144a4ce6ee2f95e3180096eb8ca306551a71",
+   "size": 3804
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-lite.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-lite.msi",
+   "digest": "sha256:0c0f4ef917aa2afa4d8eef2d47d8022d82c2fc1ac9e182ee2e6ff3b78c3b4fc5",
+   "size": 72962048
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-lite.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-lite.msi.json",
+   "digest": "sha256:f8ee8882260e2c6b1611384281f7c0b210fd0cc1bb382dd83767b9cc2960c696",
+   "size": 3730
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-lite.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-lite.zip",
+   "digest": "sha256:1e0489670d155ce4b68342ad6e48a66d90f6d175ba24b2ed3b8818c4512a783f",
+   "size": 71940586
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64-lite.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64-lite.zip.json",
+   "digest": "sha256:e8a851fac8147d68a512a9adeff7c3cc459aaf1b9db4787fd66566a973d596b2",
+   "size": 3730
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64.msi",
+   "digest": "sha256:ecdf64ad3454fe774f8e9c59ffe89cb773ab822257e913bf978b2d8ba1aeef62",
+   "size": 201297920
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64.msi.json",
+   "digest": "sha256:4c031a27e012385fdd53585529ad919da6227c965faba5c0daa422fab515a7de",
+   "size": 3720
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64.zip",
+   "digest": "sha256:2848e5bde53c27e03c4e1d8c4663e8f618060adea4b1e68891bef310b2c3f55a",
+   "size": 203502342
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-amd64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-amd64.zip.json",
+   "digest": "sha256:cc8689f083544b63b3fb76faf35291bab4c840b770d5578d194b558c8a7be48e",
+   "size": 3720
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-full.msi",
+   "digest": "sha256:f4e4b286b2bd4c53e0f23239a94e724d38f404d1b74ffba5c7d9372a2a486805",
+   "size": 278355968
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-full.msi.json",
+   "digest": "sha256:e5d515c74a03a9335c7122c95cfd6c8281de5ffe2a02fd76e2e963b900480e25",
+   "size": 3862
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-full.zip",
+   "digest": "sha256:bcff8b38f08a8988cdf5bb54b53981155e13ff2e786dac23980a7fafbf622feb",
+   "size": 281037915
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-full.zip.json",
+   "digest": "sha256:57e10b72028549158a1d3f7809bae185036b1dd902e8c38419c301135009d0f8",
+   "size": 3862
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-lite.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-lite.msi",
+   "digest": "sha256:8e76bc48e0e31a6c55ed9c18da909903d22919727b78a2b4fadd0c74798222c7",
+   "size": 70430720
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-lite.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-lite.msi.json",
+   "digest": "sha256:d21b44dc5a50f538a4589edde1d77fcf9ee89dffaf7092bf59193591f282be73",
+   "size": 3788
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-lite.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-lite.zip",
+   "digest": "sha256:f8c2e1ffb5e3f32f71949bb64eec57b351b523424a038b6fc144ab06f414b426",
+   "size": 69444732
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586-lite.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586-lite.zip.json",
+   "digest": "sha256:d48107c98387baa725d6a5f24b93467c2c334671abfb672c9cadbe593025bdc1",
+   "size": 3788
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586.msi",
+   "digest": "sha256:69187ecd1009892fa3ca46c43036f3aa3975aac3e7e31b03cc249de154807e48",
+   "size": 187035648
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586.msi.json",
+   "digest": "sha256:d100affec8980bc0f324ffa45cf2707e51bf835dc35f42d883af107f1c08f6e9",
+   "size": 3778
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586.zip",
+   "digest": "sha256:c6c4e969607aeb9272d5c46475db2d7ba81f5a24cb945afb604fcbde5b396f97",
+   "size": 189187323
+  },
+  {
+   "name": "bellsoft-jdk17.0.20.1+1-windows-i586.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jdk17.0.20.1%2B1-windows-i586.zip.json",
+   "digest": "sha256:c326f0bce4b737fdaae4b101c671f35f14840fc8304668b9f21e099ab3988c33",
+   "size": 3778
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64-full.msi",
+   "digest": "sha256:fb346d1af4655f1c52c86e96c0e983e94ad5269e16d88f23a461e6a3c209dc10",
+   "size": 44240896
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64-full.msi.json",
+   "digest": "sha256:d3b6278e25b49b05884988849a419688a614e08577d591991ec41f5290805927",
+   "size": 3928
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64-full.zip",
+   "digest": "sha256:73a1d1f02653bed1e285ff6bb1515dccc7f30ad0a14a831a554da5ab1ca70d34",
+   "size": 43477669
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64-full.zip.json",
+   "digest": "sha256:e1b700a4f5e3ece2602653f1de45d7e192363a677e0be113392b8daf3b844ea8",
+   "size": 3928
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64.msi",
+   "digest": "sha256:e6578dad89ddadd7d3f4717d76ad43cd9274b7b23a3cfeb85281d6b1f2fd5d71",
+   "size": 39321600
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64.msi.json",
+   "digest": "sha256:6db7f291897f105a3483b2b0d553dbab614aad01db56e311cdd50a9f098f7515",
+   "size": 3844
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64.zip",
+   "digest": "sha256:1ad80e7c2cba1ab09518bfee6fb66b80cace9070970d08167b4b8690795c8efb",
+   "size": 38533418
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-aarch64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-aarch64.zip.json",
+   "digest": "sha256:7864ee97cdadb27d8972a7fe4ae7c53a0f2411cbbde714e37eb700d1f401b3ba",
+   "size": 3844
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64-full.msi",
+   "digest": "sha256:ae8c1079826e3d7851a57951f19188112c65b6ec5a337e432747892a347ea6ed",
+   "size": 94392320
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64-full.msi.json",
+   "digest": "sha256:f12adf9276c01f78aa93d9eedd136b8336e2061d4af09345a08f74e6c92760e0",
+   "size": 3804
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64-full.zip",
+   "digest": "sha256:80d504d1cc2535f01a5cd5dba861283471c0e3cad8e383f3b9b550dcd76a78fa",
+   "size": 93908681
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64-full.zip.json",
+   "digest": "sha256:463d91a7984f965291dabbf56b168cbbc6efbd64742d84cd45e28ffc1bf21142",
+   "size": 3804
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64.msi",
+   "digest": "sha256:f54c90a6c2f4da7fc072143d1feb0330def7b3757e74eda9986c54446b00d15e",
+   "size": 53379072
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64.msi.json",
+   "digest": "sha256:e9ed607dab3132a7cc4dc0366576acbf060d647b2738a1e3a638043ab1a74999",
+   "size": 3720
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64.zip",
+   "digest": "sha256:912cadb56437f6b6d0327d0979857c87a25d6ec6932491bdb8233b43595deabd",
+   "size": 52704978
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-amd64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-amd64.zip.json",
+   "digest": "sha256:70ffce49faa74e7467093c10c4bf5c39f3fa04b396847de1ed7bf987ef369e03",
+   "size": 3720
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586-full.msi",
+   "digest": "sha256:c5ce760faa4ed591ff6b2ee3fc7fc56ba5853dec09f337a5db9a73321c23c91d",
+   "size": 83787776
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586-full.msi.json",
+   "digest": "sha256:dff9fd4715520bfe53e288d3f250d1efcd092ada209448af74917b55286fcd5f",
+   "size": 3862
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586-full.zip",
+   "digest": "sha256:349483eea215ee995899bf31bbcccfb6e0945086f083ad657263c7ed812593bc",
+   "size": 83283589
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586-full.zip.json",
+   "digest": "sha256:afc0d44fb7f7b07e9d370d35519fbdd24a080a73a591eb5dbd7fd13b74dfd4b8",
+   "size": 3862
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586.msi",
+   "digest": "sha256:0efba35abdb68f453a56cb22968a9232fcb19c541111fecb9fd7017c2ff5f140",
+   "size": 44339200
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586.msi.json",
+   "digest": "sha256:30b2cb98e0bb34a18c48b4b0e8d1786af4fb314ee458e079ed910997f3b7ee03",
+   "size": 3778
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586.zip",
+   "digest": "sha256:a8e0a7cd7cdf942134cf01646d5779cc4348e81cd0eed1c98053937d1402f06f",
+   "size": 43640694
+  },
+  {
+   "name": "bellsoft-jre17.0.20.1+1-windows-i586.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/17.0.20.1%2B1/bellsoft-jre17.0.20.1%2B1-windows-i586.zip.json",
+   "digest": "sha256:bf4ae6d5c0c3b40723fb1943b3760134a3e43b569cb224b843fa2356a78f7aa1",
+   "size": 3778
+  }
+ ]
+}

@@ -1,0 +1,249 @@
+{
+ "tag_name": "8u504+1",
+ "name": "8u504+1",
+ "draft": false,
+ "prerelease": false,
+ "published_at": "2026-08-19T08:42:57Z",
+ "assets": [
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-full.msi",
+   "digest": "sha256:c8f544a6c7f37fcd3a5870135845f8aaa7d9e28be004d558ebbd35d987c7496c",
+   "size": 148758528
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-full.msi.json",
+   "digest": "sha256:ee4f4c5bebf4e4a75d06ef48840f005091aae782b67239c8806cbc6df9d03885",
+   "size": 3303
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-full.zip",
+   "digest": "sha256:ab7dbc98fd8652fc4c9adb37792a398c6134a3e5493093b92cd50a89bbfe0c90",
+   "size": 153217940
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-full.zip.json",
+   "digest": "sha256:133ff46f06caa31f8dae4d7db11a73caff6d37da7248b1369b9b3dd4ca117453",
+   "size": 3303
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-lite.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-lite.msi",
+   "digest": "sha256:4a6bdb923366a6afc9fbd1690026388e5edda0293a9e9e7e15325d31c80ddcc5",
+   "size": 53415936
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-lite.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-lite.msi.json",
+   "digest": "sha256:98d37e594632b57674ae894ea6999f2716fcd5005838ba1b0dd8ba302651b891",
+   "size": 3233
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-lite.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-lite.zip",
+   "digest": "sha256:4ebf6978877f5a43fdee9158d0c63d7964df484a01e7516f945225d356844443",
+   "size": 53909008
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64-lite.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64-lite.zip.json",
+   "digest": "sha256:d63df635bb5fe65a36a5c9a5524bd7707ae9cfa611a185305002f99e7edd85ee",
+   "size": 3233
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64.msi",
+   "digest": "sha256:11ae2dd885eefcde6a55b3941870664c6a57b114614a5f131ead219150e98f16",
+   "size": 104435712
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64.msi.json",
+   "digest": "sha256:f1b6032dc09249274371ea75c917ff002aeb344347f1100919318fcc56f0ba6e",
+   "size": 3223
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64.zip",
+   "digest": "sha256:255930e247984dd6fd48b7d55385c9370a46067281d76102dfe0a8caf8c8b3f7",
+   "size": 108733070
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-amd64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-amd64.zip.json",
+   "digest": "sha256:0d42b70c145664fa71aa473c1e0b1899704b785314e3dd3b68fab9759801f685",
+   "size": 3223
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-full.msi",
+   "digest": "sha256:a15dbcec01166bb2a6d72a2451a2aeaa8e2383de3eea7689e5721a7b6b5356f5",
+   "size": 147894272
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-full.msi.json",
+   "digest": "sha256:ad540b65b470b5286673d208bc6ef48d3e19cc3c7608561505db30fbeab233f2",
+   "size": 3302
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-full.zip",
+   "digest": "sha256:6508fca473f379922df4863a6e331c380d24f08201d854c07aaa890778d1f76b",
+   "size": 152298106
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-full.zip.json",
+   "digest": "sha256:517201c218ce33404da0ae2225a935e580d25ac899f343c4584f8813a4cc35e9",
+   "size": 3302
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-lite.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-lite.msi",
+   "digest": "sha256:92c5c038ea6ce090b955993557547059fd680dad069ced03d4f8714713a8626c",
+   "size": 52498432
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-lite.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-lite.msi.json",
+   "digest": "sha256:34325340b871faf59862e31ab9f69bb2cec2f753f74bd58c85a0678b81dbaf34",
+   "size": 3232
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-lite.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-lite.zip",
+   "digest": "sha256:db7dd00534955ba7d326b444b92153d235f2aa20deedb834f9c2e63d623289d8",
+   "size": 52927650
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586-lite.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586-lite.zip.json",
+   "digest": "sha256:f16e01b2a8428e1cad7c654004355f17fadd5239163b781f09855e28566c505f",
+   "size": 3232
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586.msi",
+   "digest": "sha256:2fecbd9331674a57db986567ee2ee6a740c15d774af87efd7526d13f36a93508",
+   "size": 105267200
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586.msi.json",
+   "digest": "sha256:f6b010cd3d40af57fbc4f11a1ae84baabd9003fa704aceb9142449ab54740ed1",
+   "size": 3222
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586.zip",
+   "digest": "sha256:afe38f09472376d15de55c49ec539ac87b2a5d0aae6fda24d0677514ab324952",
+   "size": 109490308
+  },
+  {
+   "name": "bellsoft-jdk8u504+1-windows-i586.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jdk8u504%2B1-windows-i586.zip.json",
+   "digest": "sha256:122c681c5edaeb3d5aa51e5efd4c0742ee5590df45a3925988bd84e56e183fab",
+   "size": 3222
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64-full.msi",
+   "digest": "sha256:da95d418fb5f3b6379987854b55554ffe378e667ba17a7b5a186f7b363612cc3",
+   "size": 83615744
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64-full.msi.json",
+   "digest": "sha256:f2b7f09d93121722615f82c4219fd46aeeb9c6708e6ca974412c2558704a5b7d",
+   "size": 3303
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64-full.zip",
+   "digest": "sha256:fc2e64a50b87d1b4f91b51b5dc70b374ed05a771337d2722ab872775265484e9",
+   "size": 82910762
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64-full.zip.json",
+   "digest": "sha256:fd9481e8b58f96fcd39fe1397bbb2e55acd51c2114d9f7dfed6c379c1b61b3ba",
+   "size": 3303
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64.msi",
+   "digest": "sha256:b8ccce4b5fecdf5a21710ca273715a8d8f2b575e6242948126ec49466852e546",
+   "size": 40939520
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64.msi.json",
+   "digest": "sha256:a397a46e2ef1ba87d311ef622bb09a945beebae784e2def1bda287661faab01b",
+   "size": 3223
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64.zip",
+   "digest": "sha256:429b3e79a68a326315306f854172933fd671698da64a1cec41d97a45324614d5",
+   "size": 40046017
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-amd64.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-amd64.zip.json",
+   "digest": "sha256:5643d79795f7af40c48657a1778c1a30972822a9a80801e1348f9fc683710782",
+   "size": 3223
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586-full.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586-full.msi",
+   "digest": "sha256:0ad4631e38b8c132d35130c5acb69804bba2bc308917a17014eab9ae5a44fb79",
+   "size": 80355328
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586-full.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586-full.msi.json",
+   "digest": "sha256:dc0617998cc6fd477da06f612d6d3f362dd3bef6134ec7f5db88ad44cacf863d",
+   "size": 3302
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586-full.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586-full.zip",
+   "digest": "sha256:04ce73f57dd9c9cab1a0a65b7ae67f580f2d7a92e0c4c895f7bb9a8f8d0d911c",
+   "size": 79656236
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586-full.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586-full.zip.json",
+   "digest": "sha256:6b84160571d9923bceb23c1a0e6efa6dda8a0e5c4e884d054a326f9750727f28",
+   "size": 3302
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586.msi",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586.msi",
+   "digest": "sha256:25dcff18edc06640d04376f66ed2d4ea72e28481556d62462cf6c59b246fe8cd",
+   "size": 39247872
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586.msi.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586.msi.json",
+   "digest": "sha256:c9ff4d0875abbb036471e93e4637b6719e5825a661ddc2ab865638ec0bf83e66",
+   "size": 3222
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586.zip",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586.zip",
+   "digest": "sha256:0a3245b45cbdd42cce258c38ca21222d4e446a2443b0c4f9915ba704ac879d11",
+   "size": 38378552
+  },
+  {
+   "name": "bellsoft-jre8u504+1-windows-i586.zip.json",
+   "browser_download_url": "https://github.com/bell-sw/Liberica/releases/download/8u504%2B1/bellsoft-jre8u504%2B1-windows-i586.zip.json",
+   "digest": "sha256:79a5ac609f26cae6a521d22dacf39f7a94a4c5ac8b37c75b17951e23040928c0",
+   "size": 3222
+  }
+ ]
+}

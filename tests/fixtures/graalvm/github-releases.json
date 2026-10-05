@@ -1,0 +1,2402 @@
+[
+ {
+  "tag_name": "graal-25.4.4.1.1",
+  "name": "GraalVM Community 25 Innovation 4 (graal 25.4.4.1.1, jdk 25.0.4.1.1)",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-09-22T12:43:35Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip",
+    "digest": "sha256:2733ea1331f1a98b05dd55a768b07347051dad48f030dbbfa191b11a2ccf4144",
+    "size": 344372728
+   },
+   {
+    "name": "graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip.sha256",
+    "digest": "sha256:714fc72fe8a169066212769c91329cba292348eb9bef60f778044656ded67bee",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-25.3.4.1",
+  "name": "GraalVM Community 25 Innovation 3 (graal 25.3.4.1, jdk 25.0.4.1)",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-08-25T15:15:02Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.3.4.1/graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip",
+    "digest": "sha256:770a0d78aba4c19bd40ee410ec82afbbee8e33fdd762e509006ac64e1007b4ce",
+    "size": 347643257
+   },
+   {
+    "name": "graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.3.4.1/graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip.sha256",
+    "digest": "sha256:9b35b8f4a86910a5f350e4796e5aefc71ee83d2c0f4647ac8fbce4a96636217c",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-25.2.4",
+  "name": "GraalVM Community 25 Innovation 2 (graal 25.2.4, jdk 25.0.4)",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-07-28T11:36:51Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25i2-25.0.4_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.2.4/graalvm-community-jdk-25i2-25.0.4_windows-x64_bin.zip",
+    "digest": "sha256:789d2af1c06c3c24f402d2d4a711bdbb19b36f7d8c74afe6a959492fd121ef33",
+    "size": 341299924
+   },
+   {
+    "name": "graalvm-community-jdk-25i2-25.0.4_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.2.4/graalvm-community-jdk-25i2-25.0.4_windows-x64_bin.zip.sha256",
+    "digest": "sha256:645fe1f475da97b930aae5032bba4d362cd2ea695b150fcb734257e378a72911",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-25.1.3",
+  "name": "GraalVM Community 25 Innovation 1 (graal 25.1.3, jdk 25.0.3)",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-06-30T16:41:59Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25i1-25.0.3_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.1.3/graalvm-community-jdk-25i1-25.0.3_windows-x64_bin.zip",
+    "digest": "sha256:96f1e7a9674b5b5751224104ff0c4624f15f9522b190d960a041cab72c381393",
+    "size": 346598596
+   },
+   {
+    "name": "graalvm-community-jdk-25i1-25.0.3_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.1.3/graalvm-community-jdk-25i1-25.0.3_windows-x64_bin.zip.sha256",
+    "digest": "sha256:eaaa4c66aea979d5b723741ae3e2e6af7f81a4dd1f361431dd3f8f835e8ddd60",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-25.0.2",
+  "name": "GraalVM Community 25.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2026-01-20T16:14:27Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_windows-x64_bin.zip",
+    "digest": "sha256:72edc27ce2dd3c156332144a339c97995745cae291205ed2f9b5cc26aa9cb422",
+    "size": 334940614
+   },
+   {
+    "name": "graalvm-community-jdk-25.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_windows-x64_bin.zip.sha256",
+    "digest": "sha256:225b0f7368a4958fdb4d52b3a28255ab7dae732d877ca3d7cb4c5721b9d4cb12",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-25.0.1",
+  "name": "GraalVM Community 25.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-10-21T14:59:55Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.1/graalvm-community-jdk-25.0.1_windows-x64_bin.zip",
+    "digest": "sha256:fde83c5ceec2c75560c747ccd9f314f90e4cf5c5287416e67c4ce442e344ca27",
+    "size": 334868139
+   },
+   {
+    "name": "graalvm-community-jdk-25.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.1/graalvm-community-jdk-25.0.1_windows-x64_bin.zip.sha256",
+    "digest": "sha256:eb7eedc6bc00db98cf603151ab56e806fe372d49d9fb192ff75c967b0ec2cee8",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-25.0.0",
+  "name": "GraalVM Community 25.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-09-16T12:54:43Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-25.0.0_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.0/graalvm-community-jdk-25.0.0_windows-x64_bin.zip",
+    "digest": "sha256:33ef1d186b5c1e95465fcc97e637bc26e72d5f2250a8615b9c5d667ed5c17fd0",
+    "size": 334653023
+   },
+   {
+    "name": "graalvm-community-jdk-25.0.0_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-25.0.0/graalvm-community-jdk-25.0.0_windows-x64_bin.zip.sha256",
+    "digest": "sha256:8bec0ccfc098683d10f050021f7cf2da87c9d5e57f6bffc706672ea339364b2a",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-24.0.2",
+  "name": "GraalVM for JDK 24 Community 24.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-07-15T11:59:01Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-24.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.2/graalvm-community-jdk-24.0.2_windows-x64_bin.zip",
+    "digest": "sha256:c3467af0acfbc4003e30d116bdeeb881071ae4346ccab8886a0439f1eb527794",
+    "size": 327361515
+   },
+   {
+    "name": "graalvm-community-jdk-24.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.2/graalvm-community-jdk-24.0.2_windows-x64_bin.zip.sha256",
+    "digest": "sha256:e465367ab51cb8663553ee24d3ec43cffa55e0aaa5d2fa8bdeae94154916f9ff",
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-24.0.1",
+  "name": "GraalVM for JDK 24 Community 24.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-04-15T13:31:42Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-24.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.1/graalvm-community-jdk-24.0.1_windows-x64_bin.zip",
+    "digest": null,
+    "size": 327185961
+   },
+   {
+    "name": "graalvm-community-jdk-24.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.1/graalvm-community-jdk-24.0.1_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-24.0.0",
+  "name": "GraalVM for JDK 24 Community 24.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-03-18T12:10:55Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-24.0.0_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.0/graalvm-community-jdk-24.0.0_windows-x64_bin.zip",
+    "digest": null,
+    "size": 327014356
+   },
+   {
+    "name": "graalvm-community-jdk-24.0.0_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.0/graalvm-community-jdk-24.0.0_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-23.0.2",
+  "name": "GraalVM for JDK 23 Community 23.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2025-01-21T14:39:43Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-23.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.2/graalvm-community-jdk-23.0.2_windows-x64_bin.zip",
+    "digest": null,
+    "size": 322735925
+   },
+   {
+    "name": "graalvm-community-jdk-23.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.2/graalvm-community-jdk-23.0.2_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-23.0.1",
+  "name": "GraalVM for JDK 23 Community 23.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-10-15T13:04:03Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-23.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_windows-x64_bin.zip",
+    "digest": null,
+    "size": 322691062
+   },
+   {
+    "name": "graalvm-community-jdk-23.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.1/graalvm-community-jdk-23.0.1_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-23.0.0",
+  "name": "GraalVM for JDK 23 Community 23.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-09-17T12:50:19Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-23.0.0_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.0/graalvm-community-jdk-23.0.0_windows-x64_bin.zip",
+    "digest": null,
+    "size": 322580329
+   },
+   {
+    "name": "graalvm-community-jdk-23.0.0_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.0/graalvm-community-jdk-23.0.0_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-22.0.2",
+  "name": "GraalVM for JDK 22 Community 22.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-07-16T13:43:03Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-22.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.2/graalvm-community-jdk-22.0.2_windows-x64_bin.zip",
+    "digest": null,
+    "size": 311750198
+   },
+   {
+    "name": "graalvm-community-jdk-22.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.2/graalvm-community-jdk-22.0.2_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-22.0.1",
+  "name": "GraalVM for JDK 22 Community 22.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-04-16T14:33:26Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-22.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.1/graalvm-community-jdk-22.0.1_windows-x64_bin.zip",
+    "digest": null,
+    "size": 311608265
+   },
+   {
+    "name": "graalvm-community-jdk-22.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.1/graalvm-community-jdk-22.0.1_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-22.0.0",
+  "name": "GraalVM for JDK 22 Community 22.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-03-19T14:59:50Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-22.0.0_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.0/graalvm-community-jdk-22.0.0_windows-x64_bin.zip",
+    "digest": null,
+    "size": 311539641
+   },
+   {
+    "name": "graalvm-community-jdk-22.0.0_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.0/graalvm-community-jdk-22.0.0_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-21.0.2",
+  "name": "GraalVM for JDK 21 Community 21.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2024-01-16T15:04:00Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-21.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip",
+    "digest": null,
+    "size": 294517795
+   },
+   {
+    "name": "graalvm-community-jdk-21.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-21.0.1",
+  "name": "GraalVM for JDK 21 Community 21.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-10-24T16:02:21Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-21.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.1/graalvm-community-jdk-21.0.1_windows-x64_bin.zip",
+    "digest": null,
+    "size": 293363615
+   },
+   {
+    "name": "graalvm-community-jdk-21.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.1/graalvm-community-jdk-21.0.1_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-21.0.0",
+  "name": "GraalVM for JDK 21 Community 21.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-09-19T12:15:11Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-21.0.0_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.0/graalvm-community-jdk-21.0.0_windows-x64_bin.zip",
+    "digest": null,
+    "size": 293284991
+   },
+   {
+    "name": "graalvm-community-jdk-21.0.0_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.0/graalvm-community-jdk-21.0.0_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-17.0.9",
+  "name": "GraalVM for JDK 17 Community 17.0.9",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-10-24T16:00:34Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-17.0.9_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_windows-x64_bin.zip",
+    "digest": null,
+    "size": 292944721
+   },
+   {
+    "name": "graalvm-community-jdk-17.0.9_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-23.0.2",
+  "name": "GraalVM Community Components 23.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-10-24T15:28:37Z",
+  "assets": [
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/icu4j-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "digest": null,
+    "size": 16467685
+   },
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/icu4j-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/llvm-installable-svm-java17-windows-amd64-23.0.2.jar",
+    "digest": null,
+    "size": 68052960
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/llvm-installable-svm-java17-windows-amd64-23.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "digest": null,
+    "size": 393581204
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/regex-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "digest": null,
+    "size": 946855
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/regex-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/visualvm-installable-ce-java17-windows-amd64-23.0.2.jar",
+    "digest": null,
+    "size": 19537340
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.2/visualvm-installable-ce-java17-windows-amd64-23.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-20.0.2",
+  "name": "GraalVM for JDK 20 Community 20.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-07-25T16:35:39Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-20.0.2_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.2/graalvm-community-jdk-20.0.2_windows-x64_bin.zip",
+    "digest": null,
+    "size": 306948706
+   },
+   {
+    "name": "graalvm-community-jdk-20.0.2_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.2/graalvm-community-jdk-20.0.2_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-17.0.8",
+  "name": "GraalVM for JDK 17 Community 17.0.8",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-07-25T16:35:29Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-17.0.8_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.8/graalvm-community-jdk-17.0.8_windows-x64_bin.zip",
+    "digest": null,
+    "size": 292741328
+   },
+   {
+    "name": "graalvm-community-jdk-17.0.8_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.8/graalvm-community-jdk-17.0.8_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-23.0.1",
+  "name": "GraalVM Community Components 23.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-07-25T16:35:12Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/espresso-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 35795843
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/espresso-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/espresso-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 36030540
+   },
+   {
+    "name": "espresso-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/espresso-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/icu4j-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 16467686
+   },
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/icu4j-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "icu4j-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/icu4j-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 16467685
+   },
+   {
+    "name": "icu4j-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/icu4j-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 68027751
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 70736772
+   },
+   {
+    "name": "llvm-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 393581604
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-toolchain-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 393581560
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/llvm-toolchain-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/native-image-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 19889003
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/native-image-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/native-image-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 21507750
+   },
+   {
+    "name": "native-image-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/native-image-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/regex-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 946965
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/regex-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "regex-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/regex-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 947307
+   },
+   {
+    "name": "regex-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/regex-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/visualvm-installable-ce-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 19537435
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/visualvm-installable-ce-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/visualvm-installable-ce-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 19537406
+   },
+   {
+    "name": "visualvm-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/visualvm-installable-ce-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/wasm-installable-svm-java17-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 23475653
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/wasm-installable-svm-java17-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/wasm-installable-svm-java20-windows-amd64-23.0.1.jar",
+    "digest": null,
+    "size": 23976702
+   },
+   {
+    "name": "wasm-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.1/wasm-installable-svm-java20-windows-amd64-23.0.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.3.3",
+  "name": "GraalVM Community Edition 22.3.3",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-07-25T16:34:44Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.3.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-windows-amd64-22.3.3.zip",
+    "digest": null,
+    "size": 249277134
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.3.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java11-windows-amd64-22.3.3.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.3.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java17-windows-amd64-22.3.3.zip",
+    "digest": null,
+    "size": 257159749
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.3.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/graalvm-ce-java17-windows-amd64-22.3.3.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-installable-svm-java11-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 62306441
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-installable-svm-java11-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-installable-svm-java17-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 64599471
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-installable-svm-java17-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-toolchain-installable-java11-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 367506301
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-toolchain-installable-java11-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-toolchain-installable-java17-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 367506278
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/llvm-toolchain-installable-java17-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/native-image-installable-svm-java11-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 36372894
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/native-image-installable-svm-java11-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/native-image-installable-svm-java17-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 44096109
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/native-image-installable-svm-java17-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/visualvm-installable-ce-java11-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 19512531
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/visualvm-installable-ce-java11-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/visualvm-installable-ce-java17-windows-amd64-22.3.3.jar",
+    "digest": null,
+    "size": 19512508
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.3/visualvm-installable-ce-java17-windows-amd64-22.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-20.0.1",
+  "name": "GraalVM for JDK 20 Community 20.0.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-06-13T15:03:33Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-20.0.1_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.1/graalvm-community-jdk-20.0.1_windows-x64_bin.zip",
+    "digest": null,
+    "size": 306711887
+   },
+   {
+    "name": "graalvm-community-jdk-20.0.1_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-20.0.1/graalvm-community-jdk-20.0.1_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "jdk-17.0.7",
+  "name": "GraalVM for JDK 17 Community 17.0.7",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-06-13T15:03:24Z",
+  "assets": [
+   {
+    "name": "graalvm-community-jdk-17.0.7_windows-x64_bin.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.7/graalvm-community-jdk-17.0.7_windows-x64_bin.zip",
+    "digest": null,
+    "size": 292681366
+   },
+   {
+    "name": "graalvm-community-jdk-17.0.7_windows-x64_bin.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.7/graalvm-community-jdk-17.0.7_windows-x64_bin.zip.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "graal-23.0.0",
+  "name": "GraalVM Community Components 23.0.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-06-13T15:03:13Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/espresso-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 35968279
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/espresso-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/espresso-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 36193675
+   },
+   {
+    "name": "espresso-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/espresso-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/icu4j-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 16467682
+   },
+   {
+    "name": "icu4j-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/icu4j-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "icu4j-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/icu4j-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 16467678
+   },
+   {
+    "name": "icu4j-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/icu4j-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 69317200
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 71807017
+   },
+   {
+    "name": "llvm-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 393581566
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 393581553
+   },
+   {
+    "name": "llvm-toolchain-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 393581595
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 393581595
+   },
+   {
+    "name": "llvm-toolchain-installable-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/llvm-toolchain-installable-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/regex-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 946938
+   },
+   {
+    "name": "regex-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/regex-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "regex-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/regex-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 947162
+   },
+   {
+    "name": "regex-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/regex-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/visualvm-installable-ce-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 19537388
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/visualvm-installable-ce-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/visualvm-installable-ce-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 19537387
+   },
+   {
+    "name": "visualvm-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/visualvm-installable-ce-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/wasm-installable-svm-java17-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 23646269
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/wasm-installable-svm-java17-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/wasm-installable-svm-java20-windows-amd64-23.0.0.jar",
+    "digest": null,
+    "size": 24121515
+   },
+   {
+    "name": "wasm-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-23.0.0/wasm-installable-svm-java20-windows-amd64-23.0.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.3.2",
+  "name": "GraalVM Community Edition 22.3.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-04-25T15:55:55Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java11-windows-amd64-22.3.2.zip",
+    "digest": null,
+    "size": 249117132
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java11-windows-amd64-22.3.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip",
+    "digest": null,
+    "size": 256945616
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-installable-svm-java11-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 62266141
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-installable-svm-java11-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-installable-svm-java17-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 64548338
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-installable-svm-java17-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-toolchain-installable-java11-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 367506272
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-toolchain-installable-java11-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-toolchain-installable-java17-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 367506303
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/llvm-toolchain-installable-java17-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/native-image-installable-svm-java11-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 35457495
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/native-image-installable-svm-java11-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/native-image-installable-svm-java17-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 43175471
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/native-image-installable-svm-java17-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/visualvm-installable-ce-java11-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 19512525
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/visualvm-installable-ce-java11-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/visualvm-installable-ce-java17-windows-amd64-22.3.2.jar",
+    "digest": null,
+    "size": 19512514
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/visualvm-installable-ce-java17-windows-amd64-22.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.3.1",
+  "name": "GraalVM Community Edition 22.3.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2023-01-24T16:26:51Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/espresso-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 31398398
+   },
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/espresso-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/espresso-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 32070322
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/espresso-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-windows-amd64-22.3.1.zip",
+    "digest": null,
+    "size": 249082871
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-windows-amd64-22.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java17-windows-amd64-22.3.1.zip",
+    "digest": null,
+    "size": 256895922
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java17-windows-amd64-22.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java19-windows-amd64-22.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java19-windows-amd64-22.3.1.zip",
+    "digest": null,
+    "size": 265026370
+   },
+   {
+    "name": "graalvm-ce-java19-windows-amd64-22.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java19-windows-amd64-22.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 62250091
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 64511691
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 64880404
+   },
+   {
+    "name": "llvm-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 367507351
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 367507355
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java19-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java19-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 367507388
+   },
+   {
+    "name": "llvm-toolchain-installable-java19-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/llvm-toolchain-installable-java19-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 35417333
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 43130469
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 43884658
+   },
+   {
+    "name": "native-image-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/native-image-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 19512783
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 19512772
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java19-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java19-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 19512781
+   },
+   {
+    "name": "visualvm-installable-ce-java19-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/visualvm-installable-ce-java19-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java11-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 19561002
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java11-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java17-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 20567718
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java17-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java19-windows-amd64-22.3.1.jar",
+    "digest": null,
+    "size": 20632023
+   },
+   {
+    "name": "wasm-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/wasm-installable-svm-java19-windows-amd64-22.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.3.0",
+  "name": "GraalVM Community Edition 22.3.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-10-25T13:38:16Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/espresso-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 31391716
+   },
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/espresso-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/espresso-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 31876780
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/espresso-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-windows-amd64-22.3.0.zip",
+    "digest": null,
+    "size": 248973007
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.3.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-windows-amd64-22.3.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-windows-amd64-22.3.0.zip",
+    "digest": null,
+    "size": 256693792
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.3.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-windows-amd64-22.3.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java19-windows-amd64-22.3.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java19-windows-amd64-22.3.0.zip",
+    "digest": null,
+    "size": 264982172
+   },
+   {
+    "name": "graalvm-ce-java19-windows-amd64-22.3.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java19-windows-amd64-22.3.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 62236997
+   },
+   {
+    "name": "llvm-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 64336769
+   },
+   {
+    "name": "llvm-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 64772444
+   },
+   {
+    "name": "llvm-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 367507308
+   },
+   {
+    "name": "llvm-toolchain-installable-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 367507333
+   },
+   {
+    "name": "llvm-toolchain-installable-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "llvm-toolchain-installable-java19-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java19-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 367507302
+   },
+   {
+    "name": "llvm-toolchain-installable-java19-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/llvm-toolchain-installable-java19-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 35375055
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 43028167
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 43817992
+   },
+   {
+    "name": "native-image-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/native-image-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 19512776
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 19512758
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java19-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java19-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 19512773
+   },
+   {
+    "name": "visualvm-installable-ce-java19-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/visualvm-installable-ce-java19-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java11-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 19561834
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java11-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java17-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 20467362
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java17-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java19-windows-amd64-22.3.0.jar",
+    "digest": null,
+    "size": 20637537
+   },
+   {
+    "name": "wasm-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/wasm-installable-svm-java19-windows-amd64-22.3.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.2.0",
+  "name": "GraalVM Community Edition 22.2.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-07-26T11:31:48Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/espresso-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 30594353
+   },
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/espresso-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/espresso-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 30876000
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/espresso-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.2.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java11-windows-amd64-22.2.0.zip",
+    "digest": null,
+    "size": 248275828
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.2.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java11-windows-amd64-22.2.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.2.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-windows-amd64-22.2.0.zip",
+    "digest": null,
+    "size": 255737249
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.2.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-windows-amd64-22.2.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 34120313
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 41242907
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/native-image-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/visualvm-installable-ce-java11-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 19212779
+   },
+   {
+    "name": "visualvm-installable-ce-java11-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/visualvm-installable-ce-java11-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/visualvm-installable-ce-java17-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 19212774
+   },
+   {
+    "name": "visualvm-installable-ce-java17-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/visualvm-installable-ce-java17-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/wasm-installable-svm-java11-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 19504030
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/wasm-installable-svm-java11-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/wasm-installable-svm-java17-windows-amd64-22.2.0.jar",
+    "digest": null,
+    "size": 20344008
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/wasm-installable-svm-java17-windows-amd64-22.2.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-21.3.3.1",
+  "name": "GraalVM Community Edition 21.3.3.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-09-26T16:36:24Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/graalvm-ce-java11-windows-amd64-21.3.3.1.zip",
+    "digest": null,
+    "size": 322470192
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/graalvm-ce-java11-windows-amd64-21.3.3.1.zip.sha256",
+    "digest": null,
+    "size": 65
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/graalvm-ce-java17-windows-amd64-21.3.3.1.zip",
+    "digest": null,
+    "size": 336550268
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/graalvm-ce-java17-windows-amd64-21.3.3.1.zip.sha256",
+    "digest": null,
+    "size": 65
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java11-windows-amd64-21.3.3.1.jar",
+    "digest": null,
+    "size": 14930658
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java11-windows-amd64-21.3.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java17-windows-amd64-21.3.3.1.jar",
+    "digest": null,
+    "size": 16783469
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java17-windows-amd64-21.3.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java8-windows-amd64-21.3.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java8-windows-amd64-21.3.3.1.jar",
+    "digest": null,
+    "size": 9963756
+   },
+   {
+    "name": "native-image-installable-svm-java8-windows-amd64-21.3.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3.1/native-image-installable-svm-java8-windows-amd64-21.3.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-21.3.3",
+  "name": "GraalVM Community Edition 21.3.3",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-07-26T11:31:20Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.3.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/graalvm-ce-java11-windows-amd64-21.3.3.zip",
+    "digest": null,
+    "size": 323779050
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.3.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/graalvm-ce-java11-windows-amd64-21.3.3.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.3.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/graalvm-ce-java17-windows-amd64-21.3.3.zip",
+    "digest": null,
+    "size": 337857476
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.3.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/graalvm-ce-java17-windows-amd64-21.3.3.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/native-image-installable-svm-java11-windows-amd64-21.3.3.jar",
+    "digest": null,
+    "size": 14931015
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/native-image-installable-svm-java11-windows-amd64-21.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.3.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/native-image-installable-svm-java17-windows-amd64-21.3.3.jar",
+    "digest": null,
+    "size": 16782574
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.3.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.3/native-image-installable-svm-java17-windows-amd64-21.3.3.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.1.0",
+  "name": "GraalVM Community Edition 22.1.0",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-04-26T11:57:38Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/espresso-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 27714845
+   },
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/espresso-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/espresso-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 28127965
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/espresso-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.1.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-windows-amd64-22.1.0.zip",
+    "digest": null,
+    "size": 351520689
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.1.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-windows-amd64-22.1.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.1.0.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-windows-amd64-22.1.0.zip",
+    "digest": null,
+    "size": 365611346
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.1.0.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-windows-amd64-22.1.0.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/native-image-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 15628514
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/native-image-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/native-image-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 16808795
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/native-image-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/wasm-installable-svm-java11-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 18858892
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/wasm-installable-svm-java11-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/wasm-installable-svm-java17-windows-amd64-22.1.0.jar",
+    "digest": null,
+    "size": 19733829
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/wasm-installable-svm-java17-windows-amd64-22.1.0.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-21.3.2",
+  "name": "GraalVM Community Edition 21.3.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-04-26T11:57:00Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/graalvm-ce-java11-windows-amd64-21.3.2.zip",
+    "digest": null,
+    "size": 323182549
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/graalvm-ce-java11-windows-amd64-21.3.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/graalvm-ce-java17-windows-amd64-21.3.2.zip",
+    "digest": null,
+    "size": 336960628
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/graalvm-ce-java17-windows-amd64-21.3.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/native-image-installable-svm-java11-windows-amd64-21.3.2.jar",
+    "digest": null,
+    "size": 14919183
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/native-image-installable-svm-java11-windows-amd64-21.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/native-image-installable-svm-java17-windows-amd64-21.3.2.jar",
+    "digest": null,
+    "size": 16777683
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.2/native-image-installable-svm-java17-windows-amd64-21.3.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-20.3.6",
+  "name": "GraalVM Community Edition 20.3.6",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-04-26T11:56:47Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-20.3.6.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.6/graalvm-ce-java11-windows-amd64-20.3.6.zip",
+    "digest": null,
+    "size": 368451374
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-20.3.6.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.6/graalvm-ce-java11-windows-amd64-20.3.6.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-20.3.6.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.6/native-image-installable-svm-java11-windows-amd64-20.3.6.jar",
+    "digest": null,
+    "size": 12428251
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-20.3.6.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.6/native-image-installable-svm-java11-windows-amd64-20.3.6.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-22.0.0.2",
+  "name": "GraalVM Community Edition 22.0.0.2",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-01-25T14:32:52Z",
+  "assets": [
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/espresso-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 26003116
+   },
+   {
+    "name": "espresso-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/espresso-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/espresso-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 26773693
+   },
+   {
+    "name": "espresso-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/espresso-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.0.0.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-windows-amd64-22.0.0.2.zip",
+    "digest": null,
+    "size": 337423372
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-22.0.0.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java11-windows-amd64-22.0.0.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.0.0.2.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-windows-amd64-22.0.0.2.zip",
+    "digest": null,
+    "size": 351333150
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-22.0.0.2.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/graalvm-ce-java17-windows-amd64-22.0.0.2.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 14832465
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 16002414
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/native-image-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java11-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 17497484
+   },
+   {
+    "name": "wasm-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java11-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java17-windows-amd64-22.0.0.2.jar",
+    "digest": null,
+    "size": 18265305
+   },
+   {
+    "name": "wasm-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.0.0.2/wasm-installable-svm-java17-windows-amd64-22.0.0.2.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-21.3.1",
+  "name": "GraalVM Community Edition 21.3.1",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-01-25T14:32:00Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java11-windows-amd64-21.3.1.zip",
+    "digest": null,
+    "size": 322051923
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-21.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java11-windows-amd64-21.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java17-windows-amd64-21.3.1.zip",
+    "digest": null,
+    "size": 335883658
+   },
+   {
+    "name": "graalvm-ce-java17-windows-amd64-21.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java17-windows-amd64-21.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "graalvm-ce-java8-windows-amd64-21.3.1.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java8-windows-amd64-21.3.1.zip",
+    "digest": null,
+    "size": 252817619
+   },
+   {
+    "name": "graalvm-ce-java8-windows-amd64-21.3.1.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/graalvm-ce-java8-windows-amd64-21.3.1.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java11-windows-amd64-21.3.1.jar",
+    "digest": null,
+    "size": 14913367
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-21.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java11-windows-amd64-21.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java17-windows-amd64-21.3.1.jar",
+    "digest": null,
+    "size": 16776378
+   },
+   {
+    "name": "native-image-installable-svm-java17-windows-amd64-21.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java17-windows-amd64-21.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java8-windows-amd64-21.3.1.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java8-windows-amd64-21.3.1.jar",
+    "digest": null,
+    "size": 9952359
+   },
+   {
+    "name": "native-image-installable-svm-java8-windows-amd64-21.3.1.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.1/native-image-installable-svm-java8-windows-amd64-21.3.1.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ },
+ {
+  "tag_name": "vm-20.3.5",
+  "name": "GraalVM Community Edition 20.3.5",
+  "draft": false,
+  "prerelease": false,
+  "published_at": "2022-01-25T14:31:45Z",
+  "assets": [
+   {
+    "name": "graalvm-ce-java11-windows-amd64-20.3.5.zip",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.5/graalvm-ce-java11-windows-amd64-20.3.5.zip",
+    "digest": null,
+    "size": 367984063
+   },
+   {
+    "name": "graalvm-ce-java11-windows-amd64-20.3.5.zip.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.5/graalvm-ce-java11-windows-amd64-20.3.5.zip.sha256",
+    "digest": null,
+    "size": 64
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-20.3.5.jar",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.5/native-image-installable-svm-java11-windows-amd64-20.3.5.jar",
+    "digest": null,
+    "size": 11952773
+   },
+   {
+    "name": "native-image-installable-svm-java11-windows-amd64-20.3.5.jar.sha256",
+    "browser_download_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.5/native-image-installable-svm-java11-windows-amd64-20.3.5.jar.sha256",
+    "digest": null,
+    "size": 64
+   }
+  ]
+ }
+]

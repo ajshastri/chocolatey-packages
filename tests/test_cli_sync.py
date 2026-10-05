@@ -1,0 +1,210 @@
+from pathlib import Path
+
+import pytest
+
+from chocotools import chocolatey, cli, sources
+from chocotools.sources import Release
+from conftest import FakeClient, PKG_FIXTURES, copy_pkg
+
+SHA = "e" * 64
+MANIFEST = """
+[[package]]
+id = "zulu8"
+folder = "zulu-8"
+vendor = "zulu"
+major = 8
+image = "jdk"
+arch = ["x64"]
+
+[[package]]
+id = "openjdk"
+folder = "OpenJDK"
+vendor = "openjdk"
+major = 27
+image = "jdk"
+arch = ["x64"]
+
+[[package]]
+id = "mvndaemon"
+folder = "mvndaemon"
+vendor = "mvnd"
+arch = ["x64"]
+
+[[package]]
+id = "wildfly"
+folder = "WildFly"
+vendor = "wildfly"
+arch = ["neutral"]
+
+[[package]]
+id = "Temurin8"
+folder = "temurin-8-jdk"
+vendor = "temurin"
+major = 8
+image = "jdk"
+arch = ["x64"]
+
+[[package]]
+id = "graalvm-java17"
+folder = "GraalVM-17"
+vendor = "graalvm"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = true
+"""
+
+RELEASES = {
+    "zulu8": Release("8.98.0.1", "8.98.0.1", {"x64": "https://cdn.azul.com/zulu/bin/zulu8.98.0.1-ca-fx-jdk8.0.512-win_x64.msi"},
+                     {"x64": SHA}, "azul sha256_hash"),
+    "openjdk": Release("27.0.0", "27", {"x64": "https://download.java.net/java/GA/jdk27/x/35/GPL/openjdk-27_windows-x64_bin.zip"},
+                       {"x64": SHA}, "jdk.java.net .sha256"),
+    "mvndaemon": Release("1.0.7", "1.0.7", {"x64": "https://github.com/apache/maven-mvnd/releases/download/1.0.7/maven-mvnd-1.0.7-windows-amd64.zip"},
+                         {"x64": SHA}, "github asset digest"),
+    "wildfly": Release("41.0.1", "41.0.1.Final", {"neutral": "https://github.com/wildfly/wildfly/releases/download/41.0.1.Final/wildfly-41.0.1.Final.zip"},
+                       {"neutral": SHA}, "github asset digest"),
+    "Temurin8": Release("8.504.1", "jdk8u504-b01", {"x64": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_x64_windows_hotspot_8u504b01.msi"},
+                        {"x64": "5115720df210f3c98b592ea2cb9981f48ba6b6942a7c40ba7fe4a59c37d5b815"}, "adoptium installer.checksum"),
+}
+EXTRAS = {"openjdk": "27", "mvndaemon": "maven-mvnd-1.0.7-windows-amd64", "wildfly": "41.0.1.Final"}
+
+
+@pytest.fixture
+def repo(tmp_path, monkeypatch):
+    (tmp_path / "packages.toml").write_text(MANIFEST, encoding="utf-8")
+    for folder in ("zulu-8", "OpenJDK", "mvndaemon", "WildFly", "temurin-8-jdk", "GraalVM-17"):
+        copy_pkg(folder, tmp_path)
+    state = {"approved": {}, "fail": set(), "releases": {k: v for k, v in RELEASES.items()}}
+
+    def fake_fetch(pkg, *, version=None, client=None):
+        if pkg.id in state["fail"]:
+            raise sources.SourceError("upstream returned nothing")
+        r = state["releases"][pkg.id]
+        return Release(r.version, r.version_raw, dict(r.urls), dict(r.sha256), r.checksum_source)
+
+    def fake_extras(pkg, release, client=None):
+        return {"dir_version": EXTRAS[pkg.id]} if pkg.id in EXTRAS else {}
+
+    def fake_approved(pid, client=None):
+        if pid in state["approved"] and isinstance(state["approved"][pid], Exception):
+            raise state["approved"][pid]
+        return state["approved"].get(pid)
+
+    monkeypatch.setattr(sources, "fetch", fake_fetch)
+    monkeypatch.setattr(sources, "resolve_extras", fake_extras)
+    monkeypatch.setattr(chocolatey, "approved_version", fake_approved)
+    state["root"] = tmp_path
+    return state
+
+
+def snapshot(root: Path) -> dict[str, bytes]:
+    return {p.relative_to(root).as_posix(): p.read_bytes() for p in sorted(root.rglob("*")) if p.is_file()}
+
+
+def run(root, *args):
+    return cli.main(["--root", str(root), *args], client=FakeClient(use_index=False))
+
+
+def test_dry_run_writes_nothing(repo, capsys):
+    before = snapshot(repo["root"])
+    code = run(repo["root"], "sync", "--dry-run", "--id", "zulu8,openjdk", "--id", "mvndaemon", "--id", "wildfly")
+    assert code == 0
+    assert snapshot(repo["root"]) == before
+    text = capsys.readouterr().out
+    assert text.count("would update") == 4
+    assert "| zulu8 | 8.96.0.205 | 8.98.0.1 | would update |" in text
+
+
+def test_fail_closed_leaves_files_identical(repo, capsys):
+    repo["fail"].add("zulu8")
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8,mvndaemon") == 1
+    after = snapshot(repo["root"])
+    assert {k: v for k, v in after.items() if k.startswith("zulu-8/")} == {
+        k: v for k, v in before.items() if k.startswith("zulu-8/")
+    }
+    out = capsys.readouterr().out
+    assert "zulu8: source: upstream returned nothing" in out
+    assert after["mvndaemon/mvndaemon.nuspec"] != before["mvndaemon/mvndaemon.nuspec"]  # others proceed
+
+
+def test_increase_writes_sha256_and_type(repo):
+    root = repo["root"]
+    script = root / "zulu-8/tools/chocolateyinstall.ps1"
+    old_sum = b"db296152b2ebf940767e8e88145465a27c238de074760e32759fe168a0ed0dee"
+    script.write_bytes(script.read_bytes().replace(old_sum, b"d" * 32).replace(b"checksumType64= 'sha256'", b"checksumType64= 'md5'"))
+    before = script.read_bytes()
+    assert run(root, "sync", "--id", "zulu8") == 0
+    after = script.read_bytes()
+    expected = (
+        before.replace(b"zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64.msi", b"zulu8.98.0.1-ca-fx-jdk8.0.512-win_x64.msi")
+        .replace(b"d" * 32, SHA.encode())
+        .replace(b"checksumType64= 'md5'", b"checksumType64= 'sha256'")
+    )
+    assert after == expected
+    assert b"<version>8.98.0.1</version>" in (root / "zulu-8/zulu-8.nuspec").read_bytes()
+    assert (root / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n") == (PKG_FIXTURES / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n")
+
+
+def test_approved_at_or_above_new_fails(repo, capsys):
+    repo["approved"]["zulu8"] = "8.98.0.1"
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8") == 1
+    assert snapshot(repo["root"]) == before
+    assert "not greater than Chocolatey approved 8.98.0.1" in capsys.readouterr().out
+
+
+def test_chocolatey_unreachable_fails(repo, capsys):
+    repo["approved"]["zulu8"] = chocolatey.ChocolateyError("Chocolatey feed unreachable for zulu8")
+    assert run(repo["root"], "sync", "--id", "zulu8") == 1
+    assert "unreachable" in capsys.readouterr().out
+
+
+def test_upstream_lower_than_repo_fails(repo, capsys):
+    repo["releases"]["zulu8"] = Release("8.90.0.1", "8.90.0.1", {"x64": "https://cdn.azul.com/a.msi"}, {"x64": SHA}, "t")
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8") == 1
+    assert snapshot(repo["root"]) == before
+    assert "lower than repo" in capsys.readouterr().out
+
+
+def test_equal_version_is_up_to_date(repo, capsys):
+    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": "https://cdn.azul.com/a.msi"}, {"x64": SHA}, "t")
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8") == 0
+    assert snapshot(repo["root"]) == before
+    assert "up-to-date" in capsys.readouterr().out
+
+
+def test_dir_version_tokens(repo):
+    root = repo["root"]
+    assert run(root, "sync", "--id", "openjdk,mvndaemon,wildfly") == 0
+    for name in ("chocolateyinstall.ps1", "chocolateyuninstall.ps1", "chocolateyBeforeModify.ps1"):
+        data = (root / "OpenJDK/tools" / name).read_bytes()
+        assert b'$version = "27"' in data or b"$version = '27'" in data, name
+    inst = (root / "mvndaemon/tools/chocolateyinstall.ps1").read_bytes()
+    assert b"/download/1.0.7/maven-mvnd-1.0.7-windows-amd64.zip'" in inst
+    assert b"$targetDir\\maven-mvnd-1.0.7-windows-amd64\\bin" in inst
+    for name in ("chocolateyuninstall.ps1", "chocolateyBeforeModify.ps1"):
+        assert b"maven-mvnd-1.0.7-windows-amd64" in (root / "mvndaemon/tools" / name).read_bytes()
+    assert b'$version = "41.0.1.Final"' in (root / "WildFly/tools/chocolateyuninstall.ps1").read_bytes()
+    assert b"<version>41.0.1</version>" in (root / "WildFly/wildfly.nuspec").read_bytes()
+
+
+def test_post_update_validation_failure_writes_nothing(repo, capsys):
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "Temurin8") == 1  # x86 Url still present
+    assert snapshot(repo["root"]) == before
+    assert "after update" in capsys.readouterr().out
+
+
+def test_report_and_frozen_skip(repo, tmp_path):
+    report = tmp_path / "out" / "sync-report.md"
+    code = run(repo["root"], "sync", "--dry-run", "--id", "graalvm-java17,zulu8", "--report", str(report))
+    assert code == 0
+    text = report.read_text(encoding="utf-8")
+    assert "| graalvm-java17 |  |  | skipped |" in text and "would update" in text
+
+
+def test_unknown_id_is_usage_error(repo):
+    assert run(repo["root"], "sync", "--id", "nope") == 2

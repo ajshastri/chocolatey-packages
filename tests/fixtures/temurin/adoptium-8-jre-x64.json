@@ -1,0 +1,46 @@
+[
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 469862,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "installer": {
+                "checksum": "087a67240cd659a35dd894ee1201ec1f989e244cbe29500f4fc0f00443850d09",
+                "checksum_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi.sha256.txt",
+                "download_count": 374932,
+                "link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi",
+                "metadata_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi.json",
+                "name": "OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi",
+                "signature_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi.sig",
+                "size": 32010240
+            },
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "82e2cdc6693737c5998445b31f69668fa0da77c7705121053f6508ac84961123",
+                "checksum_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.zip.sha256.txt",
+                "download_count": 94930,
+                "link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.zip",
+                "metadata_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.zip.json",
+                "name": "OpenJDK8U-jre_x64_windows_hotspot_8u504b01.zip",
+                "signature_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.zip.sig",
+                "size": 40104826
+            },
+            "project": "jdk",
+            "scm_ref": "jdk8u504-b01_adopt",
+            "updated_at": "2026-08-26T09:31:15Z"
+        },
+        "release_link": "https://github.com/adoptium/temurin8-binaries/releases/tag/jdk8u504-b01",
+        "release_name": "jdk8u504-b01",
+        "vendor": "eclipse",
+        "version": {
+            "build": 1,
+            "major": 8,
+            "minor": 0,
+            "openjdk_version": "1.8.0_504-b01",
+            "security": 504,
+            "semver": "8.0.504+1"
+        }
+    }
+]

@@ -1,0 +1,2 @@
+# Fixtures are byte-exact copies (CRLF, UTF-8 BOM); never convert line endings.
+* -text
