@@ -1,4 +1,5 @@
 $ErrorActionPreference  = 'Stop'
+if ((Get-OSArchitectureWidth 32) -or ($env:chocolateyForceX86 -eq 'true')) { throw "Temurin8jre is 64-bit only: Adoptium does not publish a 32-bit Windows build of this release." }
  if(!$PSScriptRoot){ $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent }
 . "$PSScriptRoot\helper.ps1"
 
@@ -8,24 +9,14 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 $packageArgs = @{
   PackageName     = 'Temurin8jre'
   fileType        = 'msi'
-  Url             = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi'
   Url64bit        = 'https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_windows_hotspot_8u504b01.msi'
-  Checksum        = '087a67240cd659a35dd894ee1201ec1f989e244cbe29500f4fc0f00443850d09'
-  ChecksumType    = 'sha256'
   Checksum64      = '087a67240cd659a35dd894ee1201ec1f989e244cbe29500f4fc0f00443850d09'
   ChecksumType64  = 'sha256'
   SilentArgs      = $pp
 }
 
-if ($parameters.both){
-write-warning "Installing 32bit version"
-Install-ChocolateyPackage $packageArgs.packageName $packageArgs.fileType $packageArgs.SilentArgs $packageArgs.url -checksum $packageArgs.checksum -checksumtype $packageArgs.ChecksumType
-write-warning "Installing 64bit version"
-Install-ChocolateyPackage $packageArgs.packageName $packageArgs.fileType $packageArgs.SilentArgs $packageArgs.Url64bit $packageArgs.Url64bit -checksum $packageArgs.Checksum64 -checksumtype $packageArgs.ChecksumType64
-} else {
-write-warning "Installing only Get-OSArchitectureWidth"
+if ($parameters.both) { Write-Warning "/both is no longer supported: no 32-bit build is published." }
 Install-ChocolateyPackage @packageArgs
-}
 
 
 
