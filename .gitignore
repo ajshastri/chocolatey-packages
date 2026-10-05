@@ -28,3 +28,7 @@ update_info.xml
 Update-AUPackages.md
 .vs.worktrees/
 .worktrees
+.venv/
+scratch/
+.agents/
+out/
