@@ -1,0 +1,86 @@
+# Daily upstream sync: updates package versions, URLs and sha256 checksums and
+# opens (or updates) a single PR from bot/sync into master.
+#
+# Secrets:
+#   GH_PAT  Fine-grained token for this repo with contents:write and
+#           pull-requests:write. It is used for checkout, push and the PR so
+#           that PR checks (ci.yaml) trigger; pushes made with GITHUB_TOKEN do
+#           not trigger workflows. The job's own GITHUB_TOKEN stays read-only.
+name: sync
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      vendor:
+        description: "Only sync this vendor (empty = all)"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.11.29"
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Prepare bot/sync branch
+        run: |
+          if git rev-parse --verify --quiet refs/remotes/origin/bot/sync >/dev/null; then
+            git checkout -B bot/sync refs/remotes/origin/bot/sync
+          else
+            git checkout -b bot/sync refs/remotes/origin/master
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              merge --no-edit refs/remotes/origin/master
+
+      - name: Sync
+        id: sync
+        continue-on-error: true
+        env:
+          VENDOR: ${{ inputs.vendor }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run python -m chocotools sync ${VENDOR:+--vendor "$VENDOR"} --report out/sync-report.md
+
+      - name: Commit, push and open PR
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No package changes."
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -am "chore(sync): upstream updates"
+          git push origin bot/sync
+          if [ -n "$(gh pr list --head bot/sync --base master --state open --json number --jq '.[].number')" ]; then
+            gh pr edit bot/sync --body-file out/sync-report.md
+          else
+            gh pr create --base master --head bot/sync \
+              --title "chore(sync): upstream updates" \
+              --body-file out/sync-report.md
+          fi
+
+      - name: Fail if any package failed to sync
+        if: steps.sync.outcome == 'failure'
+        run: exit 1
