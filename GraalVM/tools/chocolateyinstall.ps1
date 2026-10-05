@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\GraalVM"
-$version = "25.0.2+10.1"
+$graalvmDir = "graalvm-community-openjdk-25.0.2+10.1"
 
 $packageArgs = @{
     PackageName = $env:ChocolateyPackageName
@@ -12,6 +12,6 @@ $packageArgs = @{
 }
 
 Install-ChocolateyZipPackage @packageArgs
-Install-ChocolateyEnvironmentVariable 'JAVA_HOME' $targetDir\graalvm-community-openjdk-$version 'Machine'
+Install-ChocolateyEnvironmentVariable 'JAVA_HOME' "$targetDir\$graalvmDir" 'Machine'
 # The full path instead of the %JAVA_HOME% is needed so it can be removed with the Chocolatey Uninstall
-Install-ChocolateyPath $targetDir\graalvm-community-openjdk-$version\bin -PathType 'Machine'
+Install-ChocolateyPath "$targetDir\$graalvmDir\bin" -PathType 'Machine'

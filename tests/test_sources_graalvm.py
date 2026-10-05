@@ -24,14 +24,22 @@ def test_graalvm17_frozen_lookup_uses_sha256_asset(fake_client):
     assert r.sha256["x64"] == "285e045bfc0b87d2b61958fea97444c3c6c7e68fba3fdbbe146622328b52ec38"
 
 
-def test_dir_version():
-    assert graalvm.dir_version("graalvm-community-openjdk-25.0.2+10.1") == "25.0.2+10.1"
-    # 25i3 zips changed their root dir; the scripts still expect the old prefix.
-    with pytest.raises(sources.SourceError, match="graalvm-community-openjdk-"):
-        graalvm.dir_version("graalvm-community-25.3.4.1+1.1")
+def test_dir_version_accepts_both_layouts():
+    # up to 25.0.2 the zip root carried "openjdk-"; 25i3 zips dropped it
+    assert graalvm.dir_version("graalvm-community-openjdk-25.0.2+10.1") == "graalvm-community-openjdk-25.0.2+10.1"
+    assert graalvm.dir_version("graalvm-community-25.3.4.1+1.1") == "graalvm-community-25.3.4.1+1.1"
+
+
+@pytest.mark.parametrize("root", ["graalvm-ce-25.3.4.1", "graalvm-community-", "graalvm-community-openjdk-",
+                                  "graalvm-community-25 1", "x/graalvm-community-25.3.4.1"])
+def test_dir_version_rejects_other_roots(root):
+    with pytest.raises(sources.SourceError, match="unexpected GraalVM zip root"):
+        graalvm.dir_version(root)
 
 
 def test_resolve_extras(fake_client):
     r = graalvm.fetch(pkg(vendor="graalvm", major=25), client=fake_client)
-    fake_client.zip_roots[URL] = "graalvm-community-openjdk-25.0.4.1+1.1"
-    assert sources.resolve_extras(pkg(vendor="graalvm", major=25), r, fake_client) == {"dir_version": "25.0.4.1+1.1"}
+    fake_client.zip_roots[URL] = "graalvm-community-25.3.4.1+1.1"
+    assert sources.resolve_extras(pkg(vendor="graalvm", major=25), r, fake_client) == {
+        "dir_version": "graalvm-community-25.3.4.1+1.1"
+    }

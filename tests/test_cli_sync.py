@@ -52,7 +52,18 @@ major = 17
 image = "jdk"
 arch = ["x64"]
 frozen = true
+
+[[package]]
+id = "graalvm"
+folder = "GraalVM"
+vendor = "graalvm"
+major = 25
+image = "jdk"
+arch = ["x64"]
 """
+
+GRAALVM_URL = ("https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.3.4.1/"
+               "graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip")
 
 RELEASES = {
     "zulu8": Release("8.98.0.1", "8.98.0.1", {"x64": "https://cdn.azul.com/zulu/bin/zulu8.98.0.1-ca-fx-jdk8.0.512-win_x64.msi"},
@@ -65,14 +76,16 @@ RELEASES = {
                        {"neutral": SHA}, "github asset digest"),
     "Temurin8": Release("8.504.1", "jdk8u504-b01", {"x64": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_x64_windows_hotspot_8u504b01.msi"},
                         {"x64": "5115720df210f3c98b592ea2cb9981f48ba6b6942a7c40ba7fe4a59c37d5b815"}, "adoptium installer.checksum"),
+    "graalvm": Release("25.3.4.1", "25.3.4.1", {"x64": GRAALVM_URL}, {"x64": SHA}, "github asset digest"),
 }
-EXTRAS = {"openjdk": "27", "mvndaemon": "maven-mvnd-1.0.7-windows-amd64", "wildfly": "41.0.1.Final"}
+EXTRAS = {"openjdk": "27", "mvndaemon": "maven-mvnd-1.0.7-windows-amd64", "wildfly": "41.0.1.Final",
+          "graalvm": "graalvm-community-25.3.4.1+1.1"}
 
 
 @pytest.fixture
 def repo(tmp_path, monkeypatch):
     (tmp_path / "packages.toml").write_text(MANIFEST, encoding="utf-8")
-    for folder in ("zulu-8", "OpenJDK", "mvndaemon", "WildFly", "temurin-8-jdk", "GraalVM-17"):
+    for folder in ("zulu-8", "OpenJDK", "mvndaemon", "WildFly", "temurin-8-jdk", "GraalVM-17", "GraalVM"):
         copy_pkg(folder, tmp_path)
     state = {"approved": {}, "fail": set(), "releases": {k: v for k, v in RELEASES.items()}}
 
@@ -189,6 +202,28 @@ def test_dir_version_tokens(repo):
         assert b"maven-mvnd-1.0.7-windows-amd64" in (root / "mvndaemon/tools" / name).read_bytes()
     assert b'$version = "41.0.1.Final"' in (root / "WildFly/tools/chocolateyuninstall.ps1").read_bytes()
     assert b"<version>41.0.1</version>" in (root / "WildFly/wildfly.nuspec").read_bytes()
+
+
+def test_graalvm_dir_follows_zip_root(repo):
+    root = repo["root"]
+    before = {n: (root / "GraalVM/tools" / n).read_bytes() for n in ("chocolateyinstall.ps1", "chocolateyuninstall.ps1")}
+    assert run(root, "sync", "--id", "graalvm") == 0
+    old_dir = b'$graalvmDir = "graalvm-community-openjdk-25.0.2+10.1"'
+    new_dir = b'$graalvmDir = "graalvm-community-25.3.4.1+1.1"'
+    for name, old in before.items():
+        new = (root / "GraalVM/tools" / name).read_bytes()
+        assert old_dir in old and new_dir in new, name
+        assert new.count(b"\r\n") == old.count(b"\r\n"), name
+    inst = (root / "GraalVM/tools/chocolateyinstall.ps1").read_bytes()
+    assert inst == (
+        before["chocolateyinstall.ps1"]
+        .replace(old_dir, new_dir)
+        .replace(b"releases/download/jdk-25.0.2/graalvm-community-jdk-25.0.2_windows-x64_bin.zip",
+                 b"releases/download/graal-25.3.4.1/graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip")
+        .replace(b"72edc27ce2dd3c156332144a339c97995745cae291205ed2f9b5cc26aa9cb422", SHA.encode())
+    )
+    assert (root / "GraalVM/tools/chocolateyuninstall.ps1").read_bytes() == before["chocolateyuninstall.ps1"].replace(old_dir, new_dir)
+    assert b"<version>25.3.4.1</version>" in (root / "GraalVM/graalvm.nuspec").read_bytes()
 
 
 def test_post_update_validation_failure_writes_nothing(repo, capsys):

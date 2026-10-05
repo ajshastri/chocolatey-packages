@@ -37,7 +37,8 @@ INSTALL_SCRIPT = "tools/chocolateyinstall.ps1"
 PUSH_SOURCE = "https://push.chocolatey.org/"
 ZERO_SHA = "0" * 40
 # Vendors whose scripts carry a version-bearing install-directory token.
-DIR_VARIABLE_VENDORS = {"graalvm", "openjdk", "wildfly"}  # quoted $version = "..."
+# vendor -> quoted script variable holding the token ($graalvmDir is the full zip root)
+DIR_VARIABLE_VENDORS = {"graalvm": "graalvmDir", "openjdk": "version", "wildfly": "version"}
 DIR_LITERAL_VENDORS = {"mvnd"}  # literal maven-mvnd-<v>-windows-amd64
 
 
@@ -160,7 +161,7 @@ def compute_changes(root: Path, pkg: Package, release: sources.Release) -> dict[
         fields.update(installscript.arch_changes(arch, release.urls[arch], release.sha256[arch]))
     changes[INSTALL_SCRIPT] = installscript.update((folder / INSTALL_SCRIPT).read_bytes(), fields)
 
-    if pkg.vendor in DIR_VARIABLE_VENDORS | DIR_LITERAL_VENDORS:
+    if pkg.vendor in DIR_VARIABLE_VENDORS.keys() | DIR_LITERAL_VENDORS:
         dir_version = release.extras.get("dir_version")
         if not dir_version:
             raise installscript.ScriptError("dir_version is required for this vendor but missing")
@@ -169,7 +170,7 @@ def compute_changes(root: Path, pkg: Package, release: sources.Release) -> dict[
             rel = f"tools/{script.name}"
             data = changes.get(rel, script.read_bytes())
             if pkg.vendor in DIR_VARIABLE_VENDORS:
-                new, count = installscript.set_variable(data, "version", dir_version)
+                new, count = installscript.set_variable(data, DIR_VARIABLE_VENDORS[pkg.vendor], dir_version)
             else:
                 new, count = installscript.set_mvnd_dir(data, dir_version)
             total += count

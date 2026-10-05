@@ -6,9 +6,10 @@
 - Download: the asset with exactly that filename in
   ``GET https://api.github.com/repos/graalvm/graalvm-ce-builds/releases?per_page=40``;
   ``browser_download_url`` (github.com) and ``digest``. No asset -> fail.
-- ``dir_version`` (``resolve_extras``): the zip root directory minus
-  ``graalvm-community-openjdk-``, used by ``$version`` in the install and
-  uninstall scripts.
+- ``dir_version`` (``resolve_extras``): the zip root directory itself, written
+  to ``$graalvmDir`` in the install and uninstall scripts. Both layouts are
+  accepted: ``graalvm-community-openjdk-<v>`` (up to 25.0.2) and
+  ``graalvm-community-<v>`` (25i3 onwards, e.g. ``graalvm-community-25.3.4.1+1.1``).
 """
 
 from __future__ import annotations
@@ -22,7 +23,8 @@ from . import Release, SourceError, asset_sha256, find_asset, github_api, no_pin
 
 FOOJAY = "https://api.foojay.io/disco/v3.0/packages"
 REPO = "graalvm/graalvm-ce-builds"
-DIR_PREFIX = "graalvm-community-openjdk-"
+# Zip root layouts: graalvm-community-openjdk-25.0.2+10.1, graalvm-community-25.3.4.1+1.1
+_DIR_ROOT = re.compile(r"graalvm-community-(?:openjdk-)?[0-9][0-9A-Za-z.+_-]*")
 
 
 def normalize(java_version: str) -> str:
@@ -78,9 +80,13 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
 
 
 def dir_version(root: str) -> str:
-    if not root.startswith(DIR_PREFIX) or not re.fullmatch(r"[0-9A-Za-z.+_-]+", root):
-        raise SourceError(f"unexpected GraalVM zip root {root!r} (the scripts expect {DIR_PREFIX}<version>)")
-    return root[len(DIR_PREFIX) :]
+    """The install folder name: the zip root itself (either layout)."""
+    if not _DIR_ROOT.fullmatch(root):
+        raise SourceError(
+            f"unexpected GraalVM zip root {root!r} "
+            "(expected graalvm-community-<version> or graalvm-community-openjdk-<version>)"
+        )
+    return root
 
 
 def resolve_extras(pkg: Package, release: Release, client: Client) -> dict[str, str]:
