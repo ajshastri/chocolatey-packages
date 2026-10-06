@@ -63,6 +63,31 @@ def test_conflicting_branch_is_rebuilt():
     assert (p.base, p.commit, p.push, p.pr) == ("reset", True, "replace", "create")
 
 
+def test_conflicting_branch_with_open_pr_and_no_changes_closes_the_pr():
+    """master is already current, so the conflicting PR is stale: close it, not keep it."""
+    p = syncpr.plan(State(exists=True, unmerged=True, conflict=True, ancestor=False, open_pr=9, dirty=False))
+    assert (p.base, p.commit, p.push, p.pr) == ("reset", False, "none", "close")
+    assert p.note == syncpr.CLOSE_NOTE
+    assert "closing stale PR #9" in p.reason
+
+
+@pytest.mark.parametrize("ancestor", [True, False])
+def test_merged_branch_with_open_pr_and_no_changes_closes_the_pr(ancestor):
+    p = syncpr.plan(State(exists=True, unmerged=False, ancestor=ancestor, open_pr=4, dirty=False))
+    assert (p.base, p.commit, p.push, p.pr) == ("reset", False, "none", "close")
+
+
+def test_close_is_only_for_a_clean_reset_with_an_open_pr():
+    states = [
+        State(exists=False, open_pr=None, dirty=False),
+        State(exists=True, unmerged=True, open_pr=3, dirty=False),  # reuse: keep
+        State(exists=True, unmerged=True, open_pr=None, dirty=False),  # reuse: reopen
+        State(exists=True, unmerged=True, conflict=True, open_pr=None, dirty=False),  # nothing to close
+        State(exists=True, unmerged=True, conflict=True, open_pr=3, dirty=True),  # replace + create
+    ]
+    assert [syncpr.plan(s).pr for s in states] == ["none", "keep", "create", "none", "create"]
+
+
 def test_dirty_tree_always_commits():
     for state in (
         State(exists=False, dirty=True),
@@ -171,6 +196,9 @@ def test_gather_branch_conflicts_with_master(clone):
     s = syncpr.gather(clone, None, after_sync=False, branch="bot/conflict")
     assert (s.exists, s.unmerged, s.conflict, s.ancestor) == (True, True, True, False)
     assert syncpr.plan(s).base == "reset"
+    # After sync on the rebuilt branch: clean tree, PR still open -> close it.
+    s = syncpr.gather(clone, 8, after_sync=True, branch="bot/conflict")
+    assert syncpr.plan(s).pr == "close"
 
 
 def test_gather_dirty_tree(clone):
@@ -200,6 +228,21 @@ def test_cli_writes_github_output_and_body(clone, tmp_path, capsys):
     text = body.read_text(encoding="utf-8")
     assert text.startswith(syncpr.REOPEN_NOTE) and "0 changed, 0 failed, 1 checked." in text
     assert "pr=create" in capsys.readouterr().out
+
+
+def test_cli_close_writes_the_close_note(clone, tmp_path, monkeypatch):
+    real_gather = syncpr.gather
+    monkeypatch.setattr(syncpr, "gather", lambda root, open_pr, after_sync: real_gather(
+        root, open_pr, after_sync, branch="bot/conflict"))
+    report = tmp_path / "sync-report.md"
+    report.write_text("0 changed, 0 failed, 1 checked.\n", encoding="utf-8")
+    body = tmp_path / "pr-body.md"
+    gh_out = tmp_path / "gh_output"
+    code = cli.main(["--root", str(clone), "syncpr", "plan", "--after-sync", "--open-pr", "8",
+                     "--report", str(report), "--body", str(body), "--github-output", str(gh_out)])
+    assert code == 0
+    assert "pr=close" in gh_out.read_text(encoding="utf-8").splitlines()
+    assert body.read_text(encoding="utf-8").startswith(syncpr.CLOSE_NOTE)
 
 
 def test_cli_rejects_bad_pr_number(clone):

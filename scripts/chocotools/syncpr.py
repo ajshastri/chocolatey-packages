@@ -33,7 +33,12 @@ After sync (``plan``):
   branch and pushes it again, which needs no force-push. Deleting the head
   branch closes an open PR, so the PR is created again.
 - ``pr = create`` also covers a clean run whose branch still carries updates
-  but has no open PR (closed unmerged): the PR is opened again.
+  but has no open PR (closed unmerged): the PR is opened again, on every run,
+  until someone deletes ``bot/sync``. Deleting the branch is how a human
+  discards the updates; closing the PR alone is not.
+- ``pr = close``: the base is ``reset``, sync changed nothing and a PR is
+  still open. The branch holds nothing master needs (or conflicts with a
+  master that is already current), so the workflow comments and closes it.
 """
 
 from __future__ import annotations
@@ -48,6 +53,11 @@ REOPEN_NOTE = (
     "`bot/sync` still carries upstream updates from earlier sync runs that are not on `master`, "
     "and it had no open PR, so this PR was opened again. The table below is this run's sync report "
     "(packages already updated on the branch show as up-to-date)."
+)
+CLOSE_NOTE = (
+    "Closed by the sync workflow: `bot/sync` has nothing `master` still needs (it was merged, or it "
+    "conflicts with `master` while a sync run on `master` found no upstream updates). The next run that "
+    "finds updates rebuilds `bot/sync` from `master` and opens a new PR. This run's sync report:"
 )
 
 
@@ -70,7 +80,7 @@ class Plan:
     base: str  # new | reuse | reset
     commit: bool = False
     push: str = "none"  # none | push | replace
-    pr: str = "none"  # none | keep | edit | create
+    pr: str = "none"  # none | keep | edit | create | close
     reason: str = ""
     note: str = ""
 
@@ -99,7 +109,13 @@ def plan(state: State) -> Plan:
         if state.open_pr:
             return Plan(base, False, "none", "keep", reason + f"; PR #{state.open_pr} is open")
         return Plan(base, False, "none", "create", reason + "; no open PR, opening it again", REOPEN_NOTE)
-    return Plan(base, False, "none", "keep" if state.open_pr else "none", reason + "; no package changes")
+    if state.open_pr:
+        # reset + clean: the remote branch holds nothing master still needs
+        # (merged/equal/behind, or conflicting while master is already current),
+        # so its open PR is stale. Close it; keeping it leaves a conflicting PR open.
+        return Plan(base, False, "none", "close", reason + f"; no package changes, closing stale PR #{state.open_pr}",
+                    CLOSE_NOTE)
+    return Plan(base, False, "none", "none", reason + "; no package changes")
 
 
 # ----- facts from git ------------------------------------------------------------
