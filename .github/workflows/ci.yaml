@@ -33,5 +33,11 @@ jobs:
       - name: Validate packages
         run: uv run python -m chocotools validate
 
+      # actionlint silently skips its shellcheck rule when shellcheck is not on
+      # PATH. shellcheck-py (pinned dev dependency) puts it in the venv; check
+      # it is there so the lint cannot pass without running shellcheck.
+      - name: Check shellcheck is available
+        run: uv run shellcheck --version
+
       - name: Lint workflows
         run: uv run actionlint

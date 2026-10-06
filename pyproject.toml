@@ -13,6 +13,7 @@ chocotools = "chocotools.cli:main"
 dev = [
     "pytest==9.1.1",
     "actionlint-py==1.7.12.25",
+    "shellcheck-py==0.11.0.1",
 ]
 
 [build-system]

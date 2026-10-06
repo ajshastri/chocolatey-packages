@@ -40,6 +40,7 @@ the new version, as soon as the upstream ``A.B.C`` differs from the repo's
 from __future__ import annotations
 
 import re
+import urllib.parse
 from collections.abc import Iterable
 
 __all__ = [
@@ -61,6 +62,7 @@ __all__ = [
     "strip_package_fix",
     "same_line",
     "target_version",
+    "url_version",
 ]
 
 MAX_PARTS = 4
@@ -240,3 +242,55 @@ def target_version(upstream: str, current: str | None, fix: int | None) -> tuple
     if current and is_valid(current) and not same_line(upstream, current):
         return upstream, False
     return apply_package_fix(upstream, fix), True
+
+
+# ----- version carried by a download URL ------------------------------------------
+
+_V = r"(\d+(?:\.\d+)*)"
+# vendor -> [(regex on the URL-decoded URL, mapping of the match to a package version)]
+# Each mapping mirrors that vendor's ``sources.<vendor>.normalize`` so the URL
+# version is compared in the same form sync writes to the nuspec.
+_URL_RULES = {
+    "temurin": [
+        # release tag jdk8u504-b01 -> 8.504.1 (8.<update>.<build>)
+        (re.compile(r"/download/jdk8u(\d+)-b(\d+)/"), lambda m: f"8.{int(m[1])}.{int(m[2])}"),
+        # release tag jdk-21.0.12.1+1 -> 21.0.12.1 (build dropped)
+        (re.compile(rf"/download/jdk-{_V}\+\d+/"), lambda m: m[1]),
+    ],
+    # resources/<tag>/: 21.0.12.12.1 -> 21.0.12.121, 8.504.04.1 -> 8.504.4.1
+    "corretto": [(re.compile(rf"/resources/{_V}/"), lambda m: corretto_tag(m[1]))],
+    # the Zulu package version is the distro version (zulu21.52.203), not the JDK version
+    "zulu": [(re.compile(rf"/zulu{_V}-ca-"), lambda m: m[1])],
+    "liberica": [
+        (re.compile(r"/download/8u(\d+)\+(\d+)/"), lambda m: f"8.0.{int(m[1])}.{int(m[2])}"),
+        (re.compile(rf"/download/{_V}\+\d+/"), lambda m: m[1]),
+    ],
+    "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: m[1])],
+    "graalvm": [
+        # graal-25.3.4.1 is foojay's 4-part java_version; jdk-21.0.2 for the old CE builds
+        (re.compile(rf"/download/graal-{_V}/"), lambda m: m[1]),
+        (re.compile(rf"/download/jdk-{_V}/"), lambda m: m[1]),
+    ],
+    # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2
+    "openjdk": [(re.compile(rf"/openjdk-{_V}_windows"), lambda m: m[1])],
+    "jmc": [(re.compile(rf"/jmc-{_V}_windows"), lambda m: m[1])],
+    "mvnd": [(re.compile(rf"/download/v?{_V}/maven-mvnd-"), lambda m: m[1])],
+    "wildfly": [(re.compile(rf"/download/{_V}\.Final/"), lambda m: m[1])],
+    "lmc": [(re.compile(rf"/lmc/{_V}/"), lambda m: m[1])],
+}
+
+
+def url_version(vendor: str, url: str) -> str:
+    """The package version implied by a vendor download URL (normalized).
+
+    Raises ``VersionError`` if the URL carries no version token for that vendor.
+    """
+    rules = _URL_RULES.get(vendor)
+    if rules is None:
+        raise VersionError(f"no URL version rule for vendor {vendor!r}")
+    path = urllib.parse.unquote(urllib.parse.urlsplit(url).path)
+    for pattern, mapping in rules:
+        m = pattern.search(path)
+        if m:
+            return format(mapping(m))
+    raise VersionError(f"no {vendor} version token found in URL {url}")

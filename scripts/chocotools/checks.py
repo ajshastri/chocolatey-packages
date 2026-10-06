@@ -10,6 +10,12 @@
 - Checksums: sha256 passes; sha1/md5 are warnings; empty or wrong length is an error.
 - Versions: 1-4 numeric parts; a new version must be strictly greater than the
   repo version and Chocolatey's approved version.
+- URL/version consistency: every install-script URL must carry the nuspec
+  version in the vendor's own form (``versioning.url_version``). With
+  ``package_fix`` the fix suffix is stripped first (``21.0.12.101`` -> URL
+  ``21.0.12.1``). Frozen packages are checked too. ``URL_VERSION_EXCEPTIONS``
+  pins the one known historical mismatch to its exact version, so a later
+  hand edit of that package still fails.
 """
 
 from __future__ import annotations
@@ -37,6 +43,11 @@ _DENIED_RE = re.compile(
     r"(?i)(?<![a-z0-9-])(?:(?:[a-z0-9-]+\.)*foojay\.io|aka\.ms)(?![a-z0-9-])"
 )
 _HEX = re.compile(r"^[0-9a-fA-F]+$")
+# (id, nuspec version) -> version the URL carries.
+# graalvm-java17 was approved as 22.3.3 (the old GraalVM CE release number) but
+# installs graalvm-community jdk-17.0.9, the last CE 17 build. It is frozen and
+# cannot move to 17.0.9 (that sorts below 22.3.3), so the pair is pinned here.
+URL_VERSION_EXCEPTIONS = {("graalvm-java17", "22.3.3"): "17.0.9"}
 CHECKSUM_LENGTHS = {"sha256": 64, "sha1": 40, "md5": 32}
 WEAK_TYPES = {"sha1", "md5"}
 
@@ -141,6 +152,29 @@ def check_release(pkg: Package, release) -> list[str]:
     return errors
 
 
+def check_url_version(pkg: Package, version: str, url: str, label: str = "URL") -> list[str]:
+    """``url`` must carry ``version`` (package fix stripped) in the vendor's form."""
+    if not versioning.is_valid(version):
+        return []  # reported by check_version
+    expected = URL_VERSION_EXCEPTIONS.get((pkg.id, version), version)
+    if pkg.package_fix and expected == version:
+        try:
+            expected = versioning.strip_package_fix(version, pkg.package_fix)
+        except versioning.VersionError as exc:
+            return [f"{label}: {exc} (run sync to apply package_fix)"]
+    try:
+        found = versioning.url_version(pkg.vendor, url)
+    except versioning.VersionError as exc:
+        return [f"{label}: {exc}"]
+    if not versioning.equal(found, expected):
+        if pkg.package_fix and versioning.equal(found, version):
+            return [f"{label} matches nuspec {version} but package_fix {pkg.package_fix} is not applied "
+                    f"(run sync to apply package_fix): {url}"]
+        shown = expected if expected == version else f"{expected} (from nuspec {version})"
+        return [f"{label} is for version {found} but the nuspec expects {shown}: {url}"]
+    return []
+
+
 def _read_files(folder: Path, overrides: dict[str, bytes]) -> dict[str, bytes]:
     files: dict[str, bytes] = {}
     if folder.is_dir():
@@ -197,7 +231,10 @@ def validate_package(root: Path, pkg: Package, overrides: dict[str, bytes] | Non
         if url is None:
             res.errors.append(f"{arch} URL field ({url_key}) is missing")
         else:
-            res.errors += check_url(url, f"{arch} URL")
+            url_errors = check_url(url, f"{arch} URL")
+            res.errors += url_errors
+            if not url_errors and info.version:
+                res.errors += check_url_version(pkg, info.version, url, f"{arch} URL")
         if script.get(sum_key) is None:
             res.errors.append(f"{arch} checksum field ({sum_key}) is missing")
         else:

@@ -85,9 +85,11 @@ uv run python -m chocotools validate [--online]          # offline checks; --onl
 uv run python -m chocotools build [--id ID]              # choco pack into out\ (needs Windows + Chocolatey)
 uv run python -m chocotools compare --format md          # repo vs Chocolatey vs upstream report
 uv run pytest
+uv run actionlint                                        # workflow lint; shellcheck comes from the pinned shellcheck-py dev dependency
 ```
 
 - `packages.toml` is the manifest: one entry per package (id, folder, vendor, major, image, arch). Packages marked `frozen = true` are skipped by `sync` and `publish` but still checked by `validate` and `compare`.
+- `validate` also checks that every install-script URL carries the nuspec version in the vendor's own form (for example Temurin `8.504.1` ↔ `jdk8u504-b01`, Corretto `21.0.12.121` ↔ `21.0.12.12.1`, Zulu distro version ↔ `zulu21.52.203`), so a hand-edited version bump with a stale URL fails CI.
 - `sync` only writes when the upstream version is higher than both the repo version and the approved Chocolatey version. It uses vendor download URLs and sha256 checksums. A package that fails is reported and its files stay unchanged.
 - `package_fix = N` in `packages.toml` publishes a package fix version when Chocolatey will not take the upstream version again (rejected versions cannot be re-pushed). The 4th segment becomes `P*100+N`, so upstream `21.0.12.1` with fix 1 is `21.0.12.101`, and a later respin `21.0.12.2` is `21.0.12.201`. `sync` removes the line itself when upstream moves to a new `A.B.C` (e.g. `21.0.13`). Details are in `scripts/chocotools/versioning.py`.
 - Repository secret `GH_PAT`: fine-grained token with contents and pull-requests write. The sync workflow uses it to check out, push `bot/sync` and open the PR so PR checks run.
