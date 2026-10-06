@@ -26,7 +26,7 @@ def jobs(path: Path) -> dict[str, str]:
 
 def test_publish_real_push_is_gated_by_chocolatey_environment():
     blocks = jobs(WORKFLOWS / "publish.yaml")
-    assert set(blocks) == {"dry-run", "publish"}
+    assert set(blocks) == {"check", "publish"}
     publish = blocks["publish"]
     assert re.search(r"^    environment: chocolatey$", publish, re.M)
     assert "chocotools publish --changed" in publish
@@ -37,11 +37,23 @@ def test_publish_real_push_is_gated_by_chocolatey_environment():
                 assert job == "publish", f"{job} runs a real publish outside the environment: {cmd}"
 
 
-def test_publish_dry_run_job_has_no_key_and_no_environment():
-    dry = jobs(WORKFLOWS / "publish.yaml")["dry-run"]
-    assert "CHOCO_KEY" not in dry
-    assert "environment:" not in dry
-    assert "inputs.dry_run" in dry
-    assert re.findall(r"chocotools publish[^\n]*", dry) == [
-        'chocotools publish --id "$env:IDS" --dry-run'
+def test_publish_waits_for_the_ungated_check_job():
+    """The reviewer approves after validate/pack/test-install have run."""
+    publish = jobs(WORKFLOWS / "publish.yaml")["publish"]
+    assert re.search(r"^    needs: check$", publish, re.M)
+    assert "!inputs.dry_run" in publish
+
+
+def test_publish_check_job_has_no_key_and_no_environment():
+    check = jobs(WORKFLOWS / "publish.yaml")["check"]
+    assert "CHOCO_KEY" not in check
+    assert "environment:" not in check
+    assert re.findall(r"chocotools publish[^\n]*", check) == [
+        'chocotools publish --changed "$env:BEFORE..$env:SHA" --dry-run',
+        'chocotools publish --id "$env:IDS" --dry-run',
     ]
+
+
+def test_publish_has_no_concurrency_group():
+    """A shared group would cancel pending runs while one waits for approval."""
+    assert "concurrency:" not in (WORKFLOWS / "publish.yaml").read_text(encoding="utf-8")

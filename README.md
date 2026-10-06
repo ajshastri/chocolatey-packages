@@ -71,7 +71,7 @@
 | --- | :---: | --- |
 | sync | [![sync](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml) | Daily (and on demand): runs `chocotools sync` and opens or updates one PR from `bot/sync` into `master`. A branch whose PR was closed unmerged gets its PR opened again; a branch already merged is rebuilt from `master` (`chocotools syncpr plan`). |
 | ci | [![ci](https://github.com/ajshastri/chocolatey-packages/actions/workflows/ci.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/ci.yaml) | On pull requests and pushes to `master`: pytest, `chocotools validate` and actionlint. |
-| publish | [![publish](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml) | On pushes to `master` that change package files (or on demand): validate, pack, test-install and push to Chocolatey. Every real push waits for approval in the `chocolatey` environment; dispatched dry runs do not. |
+| publish | [![publish](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml) | On pushes to `master` that change package files (or on demand): validate, pack, test-install and push to Chocolatey. An ungated `check` job runs the checks first; the `choco push` job then waits for approval in the `chocolatey` environment. Dispatched dry runs stop after `check`. |
 
 ## Tooling
 
@@ -93,11 +93,11 @@ uv run actionlint                                        # workflow lint; shellc
 - `sync` only writes when the upstream version is higher than both the repo version and the approved Chocolatey version. It uses vendor download URLs and sha256 checksums. A package that fails is reported and its files stay unchanged.
 - `package_fix = N` in `packages.toml` publishes a package fix version when Chocolatey will not take the upstream version again (rejected versions cannot be re-pushed). The 4th segment becomes `P*100+N`, so upstream `21.0.12.1` with fix 1 is `21.0.12.101`, and a later respin `21.0.12.2` is `21.0.12.201`. `sync` removes the line itself when upstream moves to a new `A.B.C` (e.g. `21.0.13`). Details are in `scripts/chocotools/versioning.py`.
 - Repository secret `GH_PAT`: fine-grained token with contents and pull-requests write. The sync workflow uses it to check out, push `bot/sync` and open the PR so PR checks run.
-- Publish approval gate (one-time setup, repo settings cannot be created from code):
+- Publish approval gate (one-time setup, repo settings cannot be created from code). Do this before merging the branch that adds the gate: if `publish.yaml` references a `chocolatey` environment that does not exist yet, GitHub creates it without protection rules, and the first publish runs ungated with the repository-level `CHOCO_KEY`.
   1. Settings → Environments → New environment, name it `chocolatey`.
   2. Under Deployment protection rules, tick Required reviewers and add `ajshastri`. Save.
   3. In the same environment, under Environment secrets, add `CHOCO_KEY` (the Chocolatey community API key).
   4. Delete any repository-level `CHOCO_KEY` secret so the key is only released to the approved `publish` job.
 
-  The `publish` job then pauses on every push to `master` that changes package files (and on dispatched runs with `dry_run` off) until a reviewer approves it under the run's "Review deployments" button. Dispatched dry runs run in a separate job without the environment or the key.
+  Every publish run first runs the ungated `check` job (`publish --dry-run`: validate, pack, test-install; no environment, no key). The `publish` job then pauses until a reviewer approves it under the run's "Review deployments" button, repeats the checks on the same commit and pushes. Dispatched dry runs end after `check`. The workflow has no concurrency group, so a run waiting for approval never cancels another run's push; each run publishes only the packages its own commit range changed.
 - GitHub disables scheduled workflows after 60 days without repository activity. Merging the sync PRs counts as activity.
