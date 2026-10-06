@@ -15,6 +15,7 @@ failures, 2 usage/manifest error, 3 missing prerequisite (no choco / not Windows
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import json
 import os
 import shutil
@@ -149,12 +150,16 @@ class SyncRow:
         return self.status == "failed"
 
 
-def compute_changes(root: Path, pkg: Package, release: sources.Release) -> dict[str, bytes]:
-    """New bytes for every file that changes (folder-relative posix paths)."""
+def compute_changes(root: Path, pkg: Package, release: sources.Release, version: str | None = None) -> dict[str, bytes]:
+    """New bytes for every file that changes (folder-relative posix paths).
+
+    ``version`` is the nuspec version to write (default ``release.version``;
+    differs when a package fix applies).
+    """
     folder = Path(root) / pkg.folder
     nuspec_file = manifest.nuspec_path(root, pkg)
     changes: dict[str, bytes] = {
-        nuspec_file.name: nuspec.set_version(nuspec_file.read_bytes(), release.version)
+        nuspec_file.name: nuspec.set_version(nuspec_file.read_bytes(), version or release.version)
     }
     fields: dict[str, str] = {}
     for arch in pkg.arch:
@@ -218,34 +223,51 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
     if problems:
         row.status, row.message = "failed", "; ".join(problems)
         return row
+    if current and not versioning.is_valid(current):
+        row.status, row.message = "failed", f"repo version {current!r} is not a valid version"
+        return row
+    try:
+        target, keep_fix = versioning.target_version(release.version, current, pkg.package_fix)
+    except versioning.VersionError as exc:
+        row.status, row.message = "failed", f"package fix: {exc}"
+        return row
+    clear_fix = bool(pkg.package_fix) and not keep_fix
+    notes = []
+    if keep_fix:
+        notes.append(f"package fix {pkg.package_fix} (upstream {release.version})")
+    if clear_fix:
+        notes.append(f"upstream moved to a new A.B.C; package_fix {pkg.package_fix} cleared")
+    row.new = target
     if current:
-        if not versioning.is_valid(current):
-            row.status, row.message = "failed", f"repo version {current!r} is not a valid version"
-            return row
-        cmp = versioning.compare_nuget(release.version, current)
+        cmp = versioning.compare_nuget(target, current)
         if cmp == 0:
-            row.status = "up-to-date"
+            row.status, row.message = "up-to-date", "; ".join(notes)
             return row
         if cmp < 0:
             row.status = "failed"
-            row.message = f"upstream {release.version} is lower than repo {current}"
+            row.message = f"upstream {target} is lower than repo {current}"
             return row
     try:
         approved = chocolatey.approved_version(pkg.id, client)
     except chocolatey.ChocolateyError as exc:
         row.status, row.message = "failed", str(exc)
         return row
-    problems = checks.check_increase(release.version, current, approved)
+    problems = checks.check_increase(target, current, approved)
     if problems:
         row.status, row.message = "failed", "; ".join(problems)
         return row
+    new_manifest = None
     try:
         release.extras.update(sources.resolve_extras(pkg, release, client))
-        files = compute_changes(root, pkg, release)
-    except (sources.SourceError, installscript.ScriptError, nuspec.NuspecError, OSError) as exc:
+        files = compute_changes(root, pkg, release, target)
+        if clear_fix:
+            manifest_file = Path(root) / manifest.MANIFEST_NAME
+            new_manifest = manifest.clear_package_fix(manifest_file.read_bytes().decode("utf-8"), pkg.id)
+    except (sources.SourceError, installscript.ScriptError, nuspec.NuspecError, ManifestError, OSError) as exc:
         row.status, row.message = "failed", str(exc)
         return row
-    result = checks.validate_package(root, pkg, overrides=files)
+    checked_pkg = dataclasses.replace(pkg, package_fix=None) if clear_fix else pkg
+    result = checks.validate_package(root, checked_pkg, overrides=files)
     if result.errors:
         row.status, row.message = "failed", "after update: " + "; ".join(result.errors)
         return row
@@ -255,12 +277,15 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
     else:
         try:
             write_files(folder, files)
+            if new_manifest is not None:
+                write_files(Path(root), {manifest.MANIFEST_NAME: new_manifest.encode("utf-8")})
         except OSError as exc:
             row.status, row.message = "failed", f"write failed: {exc}"
             return row
         row.status = "updated"
     if release.extras.get("dir_version"):
-        row.message = f"dir_version {release.extras['dir_version']}"
+        notes.append(f"dir_version {release.extras['dir_version']}")
+    row.message = "; ".join(notes)
     return row
 
 
@@ -478,7 +503,7 @@ def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
 
 def compare_row(root: Path, pkg: Package, client: Client) -> dict:
     row = {"folder": pkg.folder, "id": pkg.id, "repo": "", "choco_approved": "", "source_raw": "",
-           "source": "", "status": ""}
+           "source": "", "status": "", "note": ""}
     try:
         row["repo"] = nuspec.read(manifest.nuspec_path(root, pkg).read_bytes()).version
     except (ManifestError, nuspec.NuspecError, OSError) as exc:
@@ -503,8 +528,11 @@ def compare_row(root: Path, pkg: Package, client: Client) -> dict:
     elif not row["repo"] or not versioning.is_valid(row["repo"]):
         row["status"] = "behind"
     else:
-        cmp = versioning.compare_nuget(row["repo"], row["source"])
+        target, keep_fix = versioning.target_version(row["source"], row["repo"], pkg.package_fix)
+        cmp = versioning.compare_nuget(row["repo"], target)
         row["status"] = "in-sync" if cmp == 0 else ("behind" if cmp < 0 else "ahead")
+        if keep_fix:
+            row["note"] = f"package fix {pkg.package_fix}: {row['source']} -> {target}"
     return row
 
 
@@ -514,10 +542,11 @@ def cmd_compare(args, root: Path, mf: Manifest, client: Client) -> int:
         text = json.dumps(rows, indent=2) + "\n"
     else:
         table = md_table(
-            ["Folder", "Id", "Repo", "Choco approved", "Source (raw -> normalized)", "Status"],
+            ["Folder", "Id", "Repo", "Choco approved", "Source (raw -> normalized)", "Status", "Note"],
             [
                 [r["folder"], r["id"], r["repo"] or "(empty)", r["choco_approved"],
-                 f"{r['source_raw']} -> {r['source']}" if r["source_raw"] else r["source"], r["status"]]
+                 f"{r['source_raw']} -> {r['source']}" if r["source_raw"] else r["source"], r["status"],
+                 r["note"]]
                 for r in rows
             ],
         )

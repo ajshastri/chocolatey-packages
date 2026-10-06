@@ -7,6 +7,9 @@ Schema (one ``[[package]]`` table per package):
 - ``variant`` (Liberica only): ``std``, ``full`` or ``lite``
 - ``arch``: list of ``x64``, ``x86``, ``neutral``
 - ``frozen`` (bool, default false), ``notes`` (str)
+- ``package_fix`` (int 1-99, optional): package fix version for a version
+  Chocolatey will not accept again (see ``versioning`` for the scheme). ``sync``
+  removes the line itself once upstream moves to a new ``A.B.C``.
 
 A top-level ``ignore = [...]`` lists folders that hold a nuspec but are not
 managed (e.g. FreeDownloadManager). ``check_tree`` reports any other nuspec
@@ -15,6 +18,7 @@ folder missing from the manifest.
 
 from __future__ import annotations
 
+import re
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -37,7 +41,8 @@ ARCHES = ("x64", "x86", "neutral")
 IMAGES = ("jdk", "jre")
 VARIANTS = ("std", "full", "lite")
 MANIFEST_NAME = "packages.toml"
-_KNOWN_KEYS = {"id", "folder", "vendor", "major", "image", "variant", "arch", "frozen", "notes"}
+_KNOWN_KEYS = {"id", "folder", "vendor", "major", "image", "variant", "arch", "frozen", "notes", "package_fix"}
+MAX_PACKAGE_FIX = 99
 
 
 class ManifestError(Exception):
@@ -55,6 +60,7 @@ class Package:
     arch: tuple[str, ...] = ("x64",)
     frozen: bool = False
     notes: str = ""
+    package_fix: int | None = None
 
 
 @dataclass
@@ -131,6 +137,11 @@ def _package(entry: dict, index: int) -> Package:
     notes = entry.get("notes", "")
     if not isinstance(notes, str):
         raise ManifestError(f"{where}: 'notes' must be a string")
+    package_fix = entry.get("package_fix")
+    if package_fix is not None and (
+        not isinstance(package_fix, int) or isinstance(package_fix, bool) or not 1 <= package_fix <= MAX_PACKAGE_FIX
+    ):
+        raise ManifestError(f"{where}: 'package_fix' must be an integer 1-{MAX_PACKAGE_FIX}")
     return Package(
         id=pid,
         folder=entry["folder"],
@@ -141,6 +152,7 @@ def _package(entry: dict, index: int) -> Package:
         arch=tuple(arch),
         frozen=frozen,
         notes=notes,
+        package_fix=package_fix,
     )
 
 
@@ -181,6 +193,34 @@ def load(root: Path) -> Manifest:
     except OSError as exc:
         raise ManifestError(f"cannot read {path}: {exc}") from exc
     return parse(text, root=Path(root))
+
+
+_TABLE = re.compile(r"^\[\[package\]\][ \t]*\r?$", re.M)
+_FIX_LINE = re.compile(r"^[ \t]*package_fix[ \t]*=[ \t]*\d+[ \t]*(?:#[^\r\n]*)?(?:\r?\n|\Z)", re.M)
+
+
+def clear_package_fix(text: str, pkg_id: str) -> str:
+    """Remove the ``package_fix = N`` line from one ``[[package]]`` table.
+
+    A minimal text edit: every other byte is kept. The result is re-parsed and
+    must differ from the input only in that package's ``package_fix``.
+    """
+    starts = [m.start() for m in _TABLE.finditer(text)] + [len(text)]
+    id_line = re.compile(rf'^[ \t]*id[ \t]*=[ \t]*"{re.escape(pkg_id)}"[ \t]*\r?$', re.M)
+    for begin, end in zip(starts, starts[1:]):
+        block = text[begin:end]
+        if not id_line.search(block):
+            continue
+        lines = list(_FIX_LINE.finditer(block))
+        if len(lines) != 1:
+            raise ManifestError(f"{pkg_id}: expected one package_fix line, found {len(lines)}")
+        new = text[: begin + lines[0].start()] + text[begin + lines[0].end() :]
+        before, after = parse(text), parse(new)
+        expected = [p if p.id != pkg_id else Package(**{**p.__dict__, "package_fix": None}) for p in before.packages]
+        if after.packages != expected or after.ignore != before.ignore:
+            raise ManifestError(f"{pkg_id}: removing package_fix changed other manifest values")
+        return new
+    raise ManifestError(f"{pkg_id}: no [[package]] table with this id")
 
 
 def nuspec_path(root: Path, pkg: Package) -> Path:

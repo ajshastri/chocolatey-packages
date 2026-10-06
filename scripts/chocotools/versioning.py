@@ -10,6 +10,31 @@ Output form (``format``):
 - never more than 4 segments (raises ``VersionError``).
 
 Comparison pads with zeros, so ``21.52.203.0`` equals ``21.52.203``.
+
+Package fix versions (``package_fix = N`` in ``packages.toml``, 1 <= N <= 99)
+------------------------------------------------------------------------------
+Needed when a version can never be pushed again (Chocolatey rejected it, and
+rejected versions cannot be modified) but the upstream version has not moved.
+Upstream already uses the 4th segment (Temurin ``21.0.12.1``), so the fix
+follows Chocolatey's "add two zeroes" rule: the 4th segment becomes
+``P * 100 + N``, where ``P`` is the upstream 4th segment (0 if absent).
+
+While ``package_fix`` is set, *every* version on the same ``A.B.C`` line keeps
+the two-digit suffix, so a later upstream respin still sorts above the fix:
+
+=========================  =======================  ============================
+upstream                   package_fix = 1          why it is safe
+=========================  =======================  ============================
+``21.0.12.1`` (rejected)   ``21.0.12.101``          ``101 > 1``
+``21.0.12.2`` (respin)     ``21.0.12.201``          ``201 > 101``
+``21.0.13`` (next update)  ``21.0.13`` (fix cleared) ``13 > 12`` in the 3rd segment
+``8.504.1`` (Temurin 8)    ``8.504.1.1``            ``8.504.1.1 > 8.504.1``
+``25.0.4.10.1`` Corretto   ``25.0.4.10101``         ``10101 > 101``; respin ``.10.2`` -> ``10201``
+=========================  =======================  ============================
+
+``sync`` clears ``package_fix`` from the manifest, in the same run that writes
+the new version, as soon as the upstream ``A.B.C`` differs from the repo's
+(see ``target_version``). Nobody needs to remove it by hand.
 """
 
 from __future__ import annotations
@@ -31,9 +56,16 @@ __all__ = [
     "strip_build",
     "join_parts",
     "corretto_tag",
+    "FIX_FACTOR",
+    "apply_package_fix",
+    "strip_package_fix",
+    "same_line",
+    "target_version",
 ]
 
 MAX_PARTS = 4
+FIX_FACTOR = 100
+MAX_PACKAGE_FIX = FIX_FACTOR - 1
 _NUMERIC = re.compile(r"^\d+(\.\d+)*$")
 
 
@@ -150,3 +182,61 @@ def corretto_tag(tag: str) -> str:
     elif len(parts) != 4:
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     return format(".".join(parts))
+
+
+# ----- package fix versions --------------------------------------------------
+
+
+def _check_fix(fix: int) -> None:
+    if isinstance(fix, bool) or not isinstance(fix, int) or not 1 <= fix <= MAX_PACKAGE_FIX:
+        raise VersionError(f"package_fix must be an integer 1-{MAX_PACKAGE_FIX}, got {fix!r}")
+
+
+def _four(version: str) -> list[int]:
+    parts = list(parse(version))
+    return parts + [0] * (MAX_PARTS - len(parts))
+
+
+def apply_package_fix(upstream: str, fix: int) -> str:
+    """``A.B.C[.P]`` + fix ``N`` -> ``A.B.C.(P*100+N)``.
+
+    ``21.0.12.1`` + 1 -> ``21.0.12.101``; ``8.504.1`` + 1 -> ``8.504.1.1``.
+    """
+    _check_fix(fix)
+    parts = _four(upstream)
+    parts[3] = parts[3] * FIX_FACTOR + fix
+    return format(parts)
+
+
+def strip_package_fix(version: str, fix: int) -> str:
+    """Inverse of ``apply_package_fix``: ``21.0.12.101`` (fix 1) -> ``21.0.12.1``.
+
+    Raises ``VersionError`` if the 4th segment does not end in the fix digits.
+    """
+    _check_fix(fix)
+    parts = _four(version)
+    if parts[3] % FIX_FACTOR != fix:
+        raise VersionError(f"version {version} does not carry package fix {fix} (4th segment must end in {fix:02d})")
+    parts[3] //= FIX_FACTOR
+    return format(parts)
+
+
+def same_line(a: str, b: str) -> bool:
+    """True if ``a`` and ``b`` share the first three segments (``A.B.C``)."""
+    return _four(a)[:3] == _four(b)[:3]
+
+
+def target_version(upstream: str, current: str | None, fix: int | None) -> tuple[str, bool]:
+    """The version sync should hold for ``upstream``, and whether ``package_fix`` still applies.
+
+    - no fix: ``(upstream, False)``
+    - fix set and ``upstream`` is on the repo's ``A.B.C`` line (or the repo
+      version is empty/invalid): ``(apply_package_fix(upstream, fix), True)``
+    - fix set and upstream moved to a new ``A.B.C``: ``(upstream, False)``;
+      the caller clears ``package_fix`` from the manifest.
+    """
+    if not fix:
+        return upstream, False
+    if current and is_valid(current) and not same_line(upstream, current):
+        return upstream, False
+    return apply_package_fix(upstream, fix), True
