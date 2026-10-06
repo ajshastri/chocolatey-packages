@@ -69,7 +69,7 @@
 
 | Workflow | Status | What it does |
 | --- | :---: | --- |
-| sync | [![sync](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml) | Daily (and on demand): runs `chocotools sync` and opens or updates one PR from `bot/sync` into `master`. |
+| sync | [![sync](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml) | Daily (and on demand): runs `chocotools sync` and opens or updates one PR from `bot/sync` into `master`. A branch whose PR was closed unmerged gets its PR opened again; a branch already merged is rebuilt from `master` (`chocotools syncpr plan`). |
 | ci | [![ci](https://github.com/ajshastri/chocolatey-packages/actions/workflows/ci.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/ci.yaml) | On pull requests and pushes to `master`: pytest, `chocotools validate` and actionlint. |
 | publish | [![publish](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml) | On pushes to `master` that change package files (or on demand): validate, pack, test-install and push to Chocolatey. Every real push waits for approval in the `chocolatey` environment; dispatched dry runs do not. |
 

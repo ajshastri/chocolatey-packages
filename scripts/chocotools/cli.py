@@ -6,6 +6,7 @@ Commands:
   build    [--id ID ... | --changed BASE..HEAD] [--out DIR]
   publish  [--id ID ... | --changed BASE..HEAD] [--dry-run]
   compare  [--format md|json] [--output PATH]
+  syncpr plan [--open-pr N] [--after-sync] [--report PATH --body PATH] [--github-output PATH]
 
 ``--id`` is repeatable and comma-splittable. Exit codes: 0 ok, 1 package
 failures, 2 usage/manifest error, 3 missing prerequisite (no choco / not Windows
@@ -25,7 +26,7 @@ import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import __version__, checks, chocolatey, installscript, manifest, nuspec, sources, versioning
+from . import __version__, checks, chocolatey, installscript, manifest, nuspec, sources, syncpr, versioning
 from .http import Client, HttpError, default_client
 from .manifest import Manifest, ManifestError, Package
 
@@ -561,6 +562,31 @@ def cmd_compare(args, root: Path, mf: Manifest, client: Client) -> int:
     return EXIT_FAILED if any(r["status"].startswith("error") for r in rows) else EXIT_OK
 
 
+# ----- syncpr ------------------------------------------------------------------
+
+
+def cmd_syncpr(args, root: Path, mf: Manifest, client: Client) -> int:
+    text = (args.open_pr or "").strip()
+    if text and not text.isdigit():
+        raise UsageError(f"--open-pr expects a PR number, got {text!r}")
+    open_pr = int(text) if text else None
+    try:
+        state = syncpr.gather(root, open_pr, args.after_sync)
+    except syncpr.SyncPrError as exc:
+        err(f"chocotools syncpr: {exc}")
+        return EXIT_FAILED
+    plan = syncpr.plan(state)
+    values = syncpr.outputs(plan, args.after_sync)
+    for key, value in values.items():
+        out(f"{key}={value}")
+    if args.body:
+        syncpr.write_body(Path(args.report) if args.report else None, Path(args.body), plan.note)
+    if args.github_output:
+        with open(args.github_output, "a", encoding="utf-8") as fh:
+            fh.writelines(f"{key}={value}\n" for key, value in values.items())
+    return EXIT_OK
+
+
 # ----- entry point -------------------------------------------------------------
 
 
@@ -602,6 +628,14 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("compare", help="repo vs Chocolatey vs upstream report")
     p.add_argument("--format", choices=("md", "json"), default="md")
     p.add_argument("--output", metavar="PATH")
+
+    p = sub.add_parser("syncpr", help="decide bot/sync branch and PR actions for the sync workflow")
+    p.add_argument("action", choices=("plan",))
+    p.add_argument("--open-pr", default="", metavar="N", help="open bot/sync PR number (empty = none)")
+    p.add_argument("--after-sync", action="store_true", help="also decide commit, push and PR")
+    p.add_argument("--report", metavar="PATH", help="sync report to use as the PR body")
+    p.add_argument("--body", metavar="PATH", help="write the PR body here")
+    p.add_argument("--github-output", metavar="PATH", help="append key=value lines (e.g. $GITHUB_OUTPUT)")
     return parser
 
 
@@ -611,6 +645,7 @@ COMMANDS = {
     "build": cmd_build,
     "publish": cmd_publish,
     "compare": cmd_compare,
+    "syncpr": cmd_syncpr,
 }
 
 
