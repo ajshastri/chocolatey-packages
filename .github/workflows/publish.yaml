@@ -1,7 +1,20 @@
 # Packs, test-installs and pushes changed packages to the Chocolatey community feed.
 #
-# Secrets:
-#   CHOCO_KEY  Chocolatey community API key used by `choco push`.
+# Two jobs, so that only a real push is gated:
+#   dry-run  Dispatched runs with dry_run=true. Validates, packs and
+#            test-installs, never pushes. No environment, no CHOCO_KEY, no
+#            approval wait.
+#   publish  Pushes to master that touch package files, and dispatched runs
+#            with dry_run=false. Runs in the `chocolatey` environment, so the
+#            job waits until a required reviewer approves it, and only then
+#            receives CHOCO_KEY.
+#
+# One-time repo setup (cannot be done from code; see README "Tooling"):
+#   Settings -> Environments -> New environment `chocolatey`
+#   -> Required reviewers: ajshastri
+#   -> Environment secrets: CHOCO_KEY (Chocolatey community API key)
+# Delete any repository-level CHOCO_KEY afterwards so the key exists only
+# behind the approval gate.
 name: publish
 
 on:
@@ -30,8 +43,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
+  dry-run:
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run
     runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.11.29"
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Publish selected packages (dry run)
+        env:
+          IDS: ${{ inputs.ids }}
+        run: uv run python -m chocotools publish --id "$env:IDS" --dry-run
+
+  publish:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run)
+    runs-on: windows-latest
+    # Required reviewers on this environment gate every real push.
+    environment: chocolatey
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -50,19 +87,14 @@ jobs:
         env:
           BEFORE: ${{ github.event.before }}
           SHA: ${{ github.sha }}
+          # Environment secret of `chocolatey`; only available after approval.
           CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
         run: uv run python -m chocotools publish --changed "$env:BEFORE..$env:SHA"
 
-      - name: Publish selected packages (dry run)
-        if: github.event_name == 'workflow_dispatch' && inputs.dry_run
-        env:
-          IDS: ${{ inputs.ids }}
-          CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
-        run: uv run python -m chocotools publish --id "$env:IDS" --dry-run
-
       - name: Publish selected packages
-        if: github.event_name == 'workflow_dispatch' && !inputs.dry_run
+        if: github.event_name == 'workflow_dispatch'
         env:
           IDS: ${{ inputs.ids }}
+          # Environment secret of `chocolatey`; only available after approval.
           CHOCO_KEY: ${{ secrets.CHOCO_KEY }}
         run: uv run python -m chocotools publish --id "$env:IDS"
