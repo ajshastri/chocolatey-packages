@@ -123,7 +123,7 @@ def test_neutral_url_is_checked(tmp_path):
 
 def test_package_fix_version_matches_upstream_url(tmp_path):
     shutil.copytree(PKG_FIXTURES / "temurin-21-jdk", tmp_path / "t")
-    fixed = pkg(id="Temurin21", folder="t", major=21, package_fix=1)
+    fixed = pkg(id="Temurin21", folder="t", major=21, package_fix=1, package_fix_line="21.0.12")
     # Fix declared but not applied yet: sync has to bump the nuspec first.
     assert url_errors(checks.validate_package(tmp_path, fixed).errors) == [
         "x64 URL matches nuspec 21.0.12.1 but package_fix 1 is not applied (run sync to apply package_fix): "
@@ -138,9 +138,17 @@ def test_package_fix_version_matches_upstream_url(tmp_path):
     assert checks.validate_package(tmp_path, fixed).errors == []
     # Without the manifest field, 21.0.12.101 does not match the 21.0.12.1 URL.
     assert url_errors(checks.validate_package(tmp_path, pkg(id="Temurin21", folder="t", major=21)).errors)
-    # A hand bump of the fixed package with the old URL still fails.
+    # A hand bump of the fixed package to another line reports the fix as stale
+    # (not "run sync", which would carry the fix over to the new line).
     bump_nuspec(tmp_path / "t", b"<version>21.0.12.101</version>", b"<version>21.0.13.1</version>")
-    assert any("expects 21.0.13 (from nuspec 21.0.13.1)" in e for e in checks.validate_package(tmp_path, fixed).errors)
+    errors = url_errors(checks.validate_package(tmp_path, fixed).errors)
+    assert errors == [
+        "x64 URL: package_fix 1 is stale: it was declared for 21.0.12 but the nuspec version 21.0.13.1 is on "
+        "another A.B.C line; remove package_fix and package_fix_line from packages.toml"
+    ]
+    # Once the fix is removed, the stale URL is still caught.
+    assert any("is for version 21.0.12.1 but the nuspec expects 21.0.13.1" in e
+               for e in checks.validate_package(tmp_path, pkg(id="Temurin21", folder="t", major=21)).errors)
 
 
 def test_graalvm_java17_exception_is_pinned_to_its_version(tmp_path):

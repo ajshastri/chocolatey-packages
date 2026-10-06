@@ -8,8 +8,11 @@ Schema (one ``[[package]]`` table per package):
 - ``arch``: list of ``x64``, ``x86``, ``neutral``
 - ``frozen`` (bool, default false), ``notes`` (str)
 - ``package_fix`` (int 1-99, optional): package fix version for a version
-  Chocolatey will not accept again (see ``versioning`` for the scheme). ``sync``
-  removes the line itself once upstream moves to a new ``A.B.C``.
+  Chocolatey will not accept again (see ``versioning`` for the scheme).
+- ``package_fix_line`` (``"A.B.C"``, required with ``package_fix`` and only
+  with it): the upstream line the fix was declared for. The fix applies only
+  to versions on that line, so a stale fix is never carried to a new line.
+  ``sync`` removes both lines itself once upstream moves to a new ``A.B.C``.
 
 A top-level ``ignore = [...]`` lists folders that hold a nuspec but are not
 managed (e.g. FreeDownloadManager). ``check_tree`` reports any other nuspec
@@ -41,8 +44,11 @@ ARCHES = ("x64", "x86", "neutral")
 IMAGES = ("jdk", "jre")
 VARIANTS = ("std", "full", "lite")
 MANIFEST_NAME = "packages.toml"
-_KNOWN_KEYS = {"id", "folder", "vendor", "major", "image", "variant", "arch", "frozen", "notes", "package_fix"}
+_KNOWN_KEYS = {
+    "id", "folder", "vendor", "major", "image", "variant", "arch", "frozen", "notes", "package_fix", "package_fix_line",
+}
 MAX_PACKAGE_FIX = 99
+_LINE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 class ManifestError(Exception):
@@ -61,6 +67,7 @@ class Package:
     frozen: bool = False
     notes: str = ""
     package_fix: int | None = None
+    package_fix_line: str | None = None
 
 
 @dataclass
@@ -142,6 +149,11 @@ def _package(entry: dict, index: int) -> Package:
         not isinstance(package_fix, int) or isinstance(package_fix, bool) or not 1 <= package_fix <= MAX_PACKAGE_FIX
     ):
         raise ManifestError(f"{where}: 'package_fix' must be an integer 1-{MAX_PACKAGE_FIX}")
+    package_fix_line = entry.get("package_fix_line")
+    if package_fix_line is not None and (not isinstance(package_fix_line, str) or not _LINE.match(package_fix_line)):
+        raise ManifestError(f"{where}: 'package_fix_line' must be a string \"A.B.C\" (three numeric parts)")
+    if (package_fix is None) != (package_fix_line is None):
+        raise ManifestError(f"{where}: 'package_fix' and 'package_fix_line' must be set together")
     return Package(
         id=pid,
         folder=entry["folder"],
@@ -153,6 +165,7 @@ def _package(entry: dict, index: int) -> Package:
         frozen=frozen,
         notes=notes,
         package_fix=package_fix,
+        package_fix_line=package_fix_line,
     )
 
 
@@ -196,14 +209,18 @@ def load(root: Path) -> Manifest:
 
 
 _TABLE = re.compile(r"^\[\[package\]\][ \t]*\r?$", re.M)
-_FIX_LINE = re.compile(r"^[ \t]*package_fix[ \t]*=[ \t]*\d+[ \t]*(?:#[^\r\n]*)?(?:\r?\n|\Z)", re.M)
+_EOL = r"[ \t]*(?:#[^\r\n]*)?(?:\r?\n|\Z)"
+_FIX_LINES = {
+    "package_fix": re.compile(rf"^[ \t]*package_fix[ \t]*=[ \t]*\d+{_EOL}", re.M),
+    "package_fix_line": re.compile(rf'^[ \t]*package_fix_line[ \t]*=[ \t]*"[^"\r\n]*"{_EOL}', re.M),
+}
 
 
 def clear_package_fix(text: str, pkg_id: str) -> str:
-    """Remove the ``package_fix = N`` line from one ``[[package]]`` table.
+    """Remove the ``package_fix`` and ``package_fix_line`` lines from one ``[[package]]`` table.
 
     A minimal text edit: every other byte is kept. The result is re-parsed and
-    must differ from the input only in that package's ``package_fix``.
+    must differ from the input only in that package's two fix fields.
     """
     starts = [m.start() for m in _TABLE.finditer(text)] + [len(text)]
     id_line = re.compile(rf'^[ \t]*id[ \t]*=[ \t]*"{re.escape(pkg_id)}"[ \t]*\r?$', re.M)
@@ -211,12 +228,19 @@ def clear_package_fix(text: str, pkg_id: str) -> str:
         block = text[begin:end]
         if not id_line.search(block):
             continue
-        lines = list(_FIX_LINE.finditer(block))
-        if len(lines) != 1:
-            raise ManifestError(f"{pkg_id}: expected one package_fix line, found {len(lines)}")
-        new = text[: begin + lines[0].start()] + text[begin + lines[0].end() :]
+        spans = []
+        for key, pattern in _FIX_LINES.items():
+            found = list(pattern.finditer(block))
+            if len(found) != 1:
+                raise ManifestError(f"{pkg_id}: expected one {key} line, found {len(found)}")
+            spans.append(found[0].span())
+        new_block = block
+        for start, stop in sorted(spans, reverse=True):
+            new_block = new_block[:start] + new_block[stop:]
+        new = text[:begin] + new_block + text[end:]
         before, after = parse(text), parse(new)
-        expected = [p if p.id != pkg_id else Package(**{**p.__dict__, "package_fix": None}) for p in before.packages]
+        cleared = {"package_fix": None, "package_fix_line": None}
+        expected = [p if p.id != pkg_id else Package(**{**p.__dict__, **cleared}) for p in before.packages]
         if after.packages != expected or after.ignore != before.ignore:
             raise ManifestError(f"{pkg_id}: removing package_fix changed other manifest values")
         return new

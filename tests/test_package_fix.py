@@ -54,12 +54,19 @@ def test_fix_sorts_above_rejected_and_below_every_later_release(rejected, fixed,
 
 def test_target_version_rules():
     tv = versioning.target_version
-    assert tv("21.0.12.1", "21.0.12.1", None) == ("21.0.12.1", False)
-    assert tv("21.0.12.1", "21.0.12.1", 1) == ("21.0.12.101", True)  # first application
-    assert tv("21.0.12.1", "21.0.12.101", 1) == ("21.0.12.101", True)  # steady state
-    assert tv("21.0.12.2", "21.0.12.101", 1) == ("21.0.12.201", True)  # respin keeps the suffix
-    assert tv("21.0.13", "21.0.12.101", 1) == ("21.0.13", False)  # new A.B.C: fix cleared
-    assert tv("21.0.12.1", "", 1) == ("21.0.12.101", True)  # empty repo version
+    assert tv("21.0.12.1", None, None) == ("21.0.12.1", False)
+    assert tv("21.0.12.1", 1, "21.0.12") == ("21.0.12.101", True)  # on the declared line
+    assert tv("21.0.12.2", 1, "21.0.12") == ("21.0.12.201", True)  # respin keeps the suffix
+    assert tv("21.0.13", 1, "21.0.12") == ("21.0.13", False)  # new A.B.C: fix cleared
+    with pytest.raises(versioning.VersionError, match="package_fix_line"):
+        tv("21.0.12.1", 1, None)
+
+
+def test_target_version_ignores_the_repo_line():
+    """The fix is keyed to the declared line, not to wherever the nuspec is now:
+    a nuspec hand-bumped to 21.0.13 never turns upstream 21.0.13 into 21.0.13.1."""
+    assert versioning.target_version("21.0.13", 1, "21.0.12") == ("21.0.13", False)
+    assert versioning.target_version("21.0.13.1", 1, "21.0.12") == ("21.0.13.1", False)
 
 
 @pytest.mark.parametrize("bad", [0, 100, -1, True, "1"])
@@ -88,7 +95,8 @@ major = 21
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "21.0.12"
 notes = ""
 
 [[package]]
@@ -99,12 +107,18 @@ major = 21
 image = "jre"
 arch = ["x64"]
 package_fix = 3
+package_fix_line = "21.0.12"
 """
+FIX_LINES = (
+    "package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines\n"
+    'package_fix_line = "21.0.12"\n'
+)
 
 
 def test_manifest_parses_package_fix():
     mf = manifest.parse(MANIFEST)
-    assert {p.id: p.package_fix for p in mf.packages} == {"Temurin21": 1, "Temurin21jre": 3}
+    assert {p.id: (p.package_fix, p.package_fix_line) for p in mf.packages} == {
+        "Temurin21": (1, "21.0.12"), "Temurin21jre": (3, "21.0.12")}
 
 
 @pytest.mark.parametrize("bad", ["0", "100", "true", '"1"', "1.5"])
@@ -113,13 +127,28 @@ def test_manifest_rejects_bad_package_fix(bad):
         manifest.parse(MANIFEST.replace("package_fix = 3", f"package_fix = {bad}"))
 
 
+@pytest.mark.parametrize("bad", ['"21.0"', '"21.0.12.1"', '"21.0.x"', "21", '""'])
+def test_manifest_rejects_bad_package_fix_line(bad):
+    with pytest.raises(manifest.ManifestError, match="package_fix_line"):
+        manifest.parse(MANIFEST.replace('package_fix = 3\npackage_fix_line = "21.0.12"',
+                                        f"package_fix = 3\npackage_fix_line = {bad}"))
+
+
+def test_manifest_requires_fix_and_line_together():
+    with pytest.raises(manifest.ManifestError, match="must be set together"):
+        manifest.parse(MANIFEST.replace('package_fix = 3\npackage_fix_line = "21.0.12"\n', "package_fix = 3\n"))
+    with pytest.raises(manifest.ManifestError, match="must be set together"):
+        manifest.parse(MANIFEST.replace("package_fix = 3\n", ""))
+
+
 def test_clear_package_fix_is_a_minimal_edit():
     new = manifest.clear_package_fix(MANIFEST, "Temurin21")
-    line = "package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line\n"
-    assert new == MANIFEST.replace(line, "")
-    assert {p.id: p.package_fix for p in manifest.parse(new).packages} == {"Temurin21": None, "Temurin21jre": 3}
+    assert new == MANIFEST.replace(FIX_LINES, "")
+    assert {p.id: (p.package_fix, p.package_fix_line) for p in manifest.parse(new).packages} == {
+        "Temurin21": (None, None), "Temurin21jre": (3, "21.0.12")}
     crlf = MANIFEST.replace("\n", "\r\n")
-    assert manifest.clear_package_fix(crlf, "Temurin21jre") == crlf.replace("package_fix = 3\r\n", "")
+    assert manifest.clear_package_fix(crlf, "Temurin21jre") == crlf.replace(
+        'package_fix = 3\r\npackage_fix_line = "21.0.12"\r\n', "")
 
 
 def test_clear_package_fix_errors():
@@ -207,11 +236,42 @@ def test_sync_next_update_clears_fix(repo, capsys):
     assert (root / "packages.toml").read_bytes() == manifest_before  # dry run writes nothing
     assert run(root, "sync") == 0
     assert b"<version>21.0.13</version>" in nuspec_version(root)
-    line = b"package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line\n"
-    assert (root / "packages.toml").read_bytes() == manifest_before.replace(line, b"")
+    assert (root / "packages.toml").read_bytes() == manifest_before.replace(FIX_LINES.encode("utf-8"), b"")
     capsys.readouterr()
     assert run(root, "sync", "--dry-run") == 0
     assert "| Temurin21 | 21.0.13 | 21.0.13 | up-to-date |" in capsys.readouterr().out
+
+
+def hand_bump_to_21_0_13(root: Path) -> None:
+    """The nuspec and URL reach 21.0.13 while package_fix is still declared for 21.0.12
+    (a hand edit, or sync's folder write succeeding and its packages.toml write failing)."""
+    nuspec_file = root / "temurin-21-jdk/temurin21.nuspec"
+    data = nuspec_file.read_bytes()
+    nuspec_file.write_bytes(data.replace(b"<version>21.0.12.1</version>", b"<version>21.0.13</version>"))
+    script = root / "temurin-21-jdk/tools/chocolateyinstall.ps1"
+    old = URL_12_1.encode("utf-8")
+    assert old in script.read_bytes()
+    script.write_bytes(script.read_bytes().replace(old, URL_13.encode("utf-8")))
+
+
+def test_stale_fix_is_reported_not_carried_to_the_new_line(repo, capsys):
+    root = repo["root"]
+    hand_bump_to_21_0_13(root)
+    manifest_before = (root / "packages.toml").read_bytes()
+    assert run(root, "validate") == cli.EXIT_FAILED
+    out = capsys.readouterr().out
+    assert "package_fix 1 is stale: it was declared for 21.0.12 but the nuspec version 21.0.13" in out
+    assert "run sync" not in out
+    repo["release"] = ("21.0.13", "jdk-21.0.13+8", URL_13, SHA)
+    assert run(root, "sync") == 0
+    out = capsys.readouterr().out
+    assert "| Temurin21 | 21.0.13 | 21.0.13 | up-to-date |" in out
+    assert "package_fix 1 is stale (declared for 21.0.12)" in out
+    assert b"<version>21.0.13</version>" in nuspec_version(root)  # never 21.0.13.1
+    assert (root / "packages.toml").read_bytes() == manifest_before
+    # Removing the two lines, as the message says, makes the package valid again.
+    (root / "packages.toml").write_bytes(manifest_before.replace(FIX_LINES.encode("utf-8"), b""))
+    assert run(root, "validate") == 0
 
 
 def test_compare_reports_fix_as_in_sync(repo):

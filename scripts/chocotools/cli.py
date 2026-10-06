@@ -228,7 +228,7 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
         row.status, row.message = "failed", f"repo version {current!r} is not a valid version"
         return row
     try:
-        target, keep_fix = versioning.target_version(release.version, current, pkg.package_fix)
+        target, keep_fix = versioning.target_version(release.version, pkg.package_fix, pkg.package_fix_line)
     except versioning.VersionError as exc:
         row.status, row.message = "failed", f"package fix: {exc}"
         return row
@@ -237,11 +237,15 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
     if keep_fix:
         notes.append(f"package fix {pkg.package_fix} (upstream {release.version})")
     if clear_fix:
-        notes.append(f"upstream moved to a new A.B.C; package_fix {pkg.package_fix} cleared")
+        notes.append(f"upstream left {pkg.package_fix_line}; package_fix {pkg.package_fix} cleared")
     row.new = target
     if current:
         cmp = versioning.compare_nuget(target, current)
         if cmp == 0:
+            if clear_fix:
+                # The nuspec already left the fix's line (hand edit): nothing is written, so say so.
+                notes = [f"package_fix {pkg.package_fix} is stale (declared for {pkg.package_fix_line}); "
+                         "remove package_fix and package_fix_line from packages.toml"]
             row.status, row.message = "up-to-date", "; ".join(notes)
             return row
         if cmp < 0:
@@ -267,7 +271,7 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
     except (sources.SourceError, installscript.ScriptError, nuspec.NuspecError, ManifestError, OSError) as exc:
         row.status, row.message = "failed", str(exc)
         return row
-    checked_pkg = dataclasses.replace(pkg, package_fix=None) if clear_fix else pkg
+    checked_pkg = dataclasses.replace(pkg, package_fix=None, package_fix_line=None) if clear_fix else pkg
     result = checks.validate_package(root, checked_pkg, overrides=files)
     if result.errors:
         row.status, row.message = "failed", "after update: " + "; ".join(result.errors)
@@ -529,7 +533,11 @@ def compare_row(root: Path, pkg: Package, client: Client) -> dict:
     elif not row["repo"] or not versioning.is_valid(row["repo"]):
         row["status"] = "behind"
     else:
-        target, keep_fix = versioning.target_version(row["source"], row["repo"], pkg.package_fix)
+        try:
+            target, keep_fix = versioning.target_version(row["source"], pkg.package_fix, pkg.package_fix_line)
+        except versioning.VersionError as exc:
+            row["status"] = f"error: package fix: {exc}"
+            return row
         cmp = versioning.compare_nuget(row["repo"], target)
         row["status"] = "in-sync" if cmp == 0 else ("behind" if cmp < 0 else "ahead")
         if keep_fix:

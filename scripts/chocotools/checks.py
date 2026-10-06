@@ -13,7 +13,8 @@
 - URL/version consistency: every install-script URL must carry the nuspec
   version in the vendor's own form (``versioning.url_version``). With
   ``package_fix`` the fix suffix is stripped first (``21.0.12.101`` -> URL
-  ``21.0.12.1``). Frozen packages are checked too. ``URL_VERSION_EXCEPTIONS``
+  ``21.0.12.1``); a nuspec that is not on ``package_fix_line`` is reported as
+  a stale fix. Frozen packages are checked too. ``URL_VERSION_EXCEPTIONS``
   pins the one known historical mismatch to its exact version, so a later
   hand edit of that package still fails.
 """
@@ -157,6 +158,11 @@ def check_url_version(pkg: Package, version: str, url: str, label: str = "URL") 
     if not versioning.is_valid(version):
         return []  # reported by check_version
     expected = URL_VERSION_EXCEPTIONS.get((pkg.id, version), version)
+    if pkg.package_fix and pkg.package_fix_line and not versioning.same_line(version, pkg.package_fix_line):
+        # Do not suggest sync: the fix belongs to another line and must not be carried over.
+        return [f"{label}: package_fix {pkg.package_fix} is stale: it was declared for {pkg.package_fix_line} "
+                f"but the nuspec version {version} is on another A.B.C line; remove package_fix and "
+                f"package_fix_line from packages.toml"]
     if pkg.package_fix and expected == version:
         try:
             expected = versioning.strip_package_fix(version, pkg.package_fix)

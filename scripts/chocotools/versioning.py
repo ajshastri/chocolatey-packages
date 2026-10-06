@@ -19,8 +19,9 @@ Upstream already uses the 4th segment (Temurin ``21.0.12.1``), so the fix
 follows Chocolatey's "add two zeroes" rule: the 4th segment becomes
 ``P * 100 + N``, where ``P`` is the upstream 4th segment (0 if absent).
 
-While ``package_fix`` is set, *every* version on the same ``A.B.C`` line keeps
-the two-digit suffix, so a later upstream respin still sorts above the fix:
+The fix is declared for one line with ``package_fix_line = "A.B.C"``. While
+it is set, *every* upstream version on that line keeps the two-digit suffix,
+so a later upstream respin still sorts above the fix:
 
 =========================  =======================  ============================
 upstream                   package_fix = 1          why it is safe
@@ -32,9 +33,11 @@ upstream                   package_fix = 1          why it is safe
 ``25.0.4.10.1`` Corretto   ``25.0.4.10101``         ``10101 > 101``; respin ``.10.2`` -> ``10201``
 =========================  =======================  ============================
 
-``sync`` clears ``package_fix`` from the manifest, in the same run that writes
-the new version, as soon as the upstream ``A.B.C`` differs from the repo's
-(see ``target_version``). Nobody needs to remove it by hand.
+``sync`` clears ``package_fix`` and ``package_fix_line`` from the manifest,
+in the same run that writes the new version, as soon as upstream is on
+another ``A.B.C`` than ``package_fix_line`` (see ``target_version``). Nobody
+needs to remove them by hand. If the nuspec ends up on another line while the
+fix is still set, ``validate`` reports the fix as stale instead of applying it.
 """
 
 from __future__ import annotations
@@ -228,18 +231,24 @@ def same_line(a: str, b: str) -> bool:
     return _four(a)[:3] == _four(b)[:3]
 
 
-def target_version(upstream: str, current: str | None, fix: int | None) -> tuple[str, bool]:
+def target_version(upstream: str, fix: int | None, line: str | None) -> tuple[str, bool]:
     """The version sync should hold for ``upstream``, and whether ``package_fix`` still applies.
 
+    ``line`` is ``package_fix_line``, the ``A.B.C`` the fix was declared for.
+    The repo's current version plays no part, so a nuspec that reached a new
+    line while the fix was still set (hand edit, or a failed manifest write)
+    never gets the fix carried over.
+
     - no fix: ``(upstream, False)``
-    - fix set and ``upstream`` is on the repo's ``A.B.C`` line (or the repo
-      version is empty/invalid): ``(apply_package_fix(upstream, fix), True)``
-    - fix set and upstream moved to a new ``A.B.C``: ``(upstream, False)``;
-      the caller clears ``package_fix`` from the manifest.
+    - fix set and ``upstream`` is on ``line``: ``(apply_package_fix(upstream, fix), True)``
+    - fix set and ``upstream`` is on another ``A.B.C``: ``(upstream, False)``;
+      the caller clears ``package_fix`` and ``package_fix_line`` from the manifest.
     """
     if not fix:
         return upstream, False
-    if current and is_valid(current) and not same_line(upstream, current):
+    if not line:
+        raise VersionError("package_fix is set without package_fix_line")
+    if not same_line(upstream, line):
         return upstream, False
     return apply_package_fix(upstream, fix), True
 

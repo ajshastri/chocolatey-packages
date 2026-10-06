@@ -1,7 +1,8 @@
 # Package manifest: one [[package]] per Chocolatey package managed by chocotools.
 # Fields: id (Chocolatey id = nuspec <id>), folder, vendor, major, image (jdk|jre),
 # variant (Liberica only: std|full|lite), arch (x64|x86|neutral), frozen, notes,
-# package_fix (optional int 1-99: package fix version, see chocotools/versioning.py).
+# package_fix (optional int 1-99: package fix version, see chocotools/versioning.py)
+# with package_fix_line (required with package_fix: the "A.B.C" line it was declared for).
 # Frozen packages are skipped by sync and publish but still checked by validate
 # and compare. Folders listed in `ignore` hold a nuspec but are not managed.
 
@@ -201,7 +202,8 @@ major = 11
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "11.0.32"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
@@ -212,7 +214,8 @@ major = 11
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "11.0.32"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
@@ -223,7 +226,8 @@ major = 17
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "17.0.20"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
@@ -234,7 +238,8 @@ major = 17
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "17.0.20"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
@@ -245,7 +250,8 @@ major = 21
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "21.0.12"
 notes = ""
 
 [[package]]
@@ -256,7 +262,8 @@ major = 21
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "21.0.12"
 notes = ""
 
 [[package]]
@@ -267,7 +274,8 @@ major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "25.0.4"
 notes = ""
 
 [[package]]
@@ -278,7 +286,8 @@ major = 25
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes this line
+package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "25.0.4"
 notes = ""
 
 # ----- BellSoft Liberica --------------------------------------------------------
