@@ -107,11 +107,20 @@ def test_no_choco_is_prerequisite_error(env, monkeypatch):
     assert run(env, "--id", "zulu8", "--dry-run") == 3
 
 
-def test_version_not_above_approved_fails(env, capsys):
+def test_version_equal_to_approved_is_skipped(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("CHOCO_KEY", "k")
     env["approved"] = "8.96.0.205"
+    assert run(env, "--id", "zulu8") == 0
+    assert choco_cmds(env) == []
+    assert "skip  zulu8: 8.96.0.205 already approved on Chocolatey" in capsys.readouterr().out
+
+
+def test_version_below_approved_fails(env, capsys):
+    env["approved"] = "8.97.0.1"
     assert run(env, "--id", "zulu8", "--dry-run") == 1
     assert choco_cmds(env) == []
-    assert "not greater than Chocolatey approved" in capsys.readouterr().out
+    assert "not greater than Chocolatey approved 8.97.0.1" in capsys.readouterr().out
 
 
 def test_failed_install_stops_push(env, monkeypatch):

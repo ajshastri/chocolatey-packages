@@ -16,7 +16,8 @@
 # pending one when another run queues. While a run waits for approval that
 # would cancel a later push's run, and its --changed range would never be
 # published. Each run publishes only its own range, and publish refuses a
-# version that is not above Chocolatey's approved version.
+# version below Chocolatey's approved version (a version equal to it is
+# skipped: the files changed without a version bump, nothing to push).
 #
 # One-time repo setup, BEFORE this workflow reaches master (cannot be done
 # from code; see README "Tooling"). If the environment does not exist when a

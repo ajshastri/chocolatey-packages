@@ -474,7 +474,11 @@ def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
         try:
             version = nuspec.read(manifest.nuspec_path(root, pkg).read_bytes()).version
             approved = chocolatey.approved_version(pkg.id, client)
-            if approved and versioning.compare_nuget(version, approved) <= 0:
+            if approved and versioning.compare_nuget(version, approved) == 0:
+                # Files changed without a version bump (e.g. a checksum edit): nothing to push.
+                out(f"skip  {pkg.id}: {version} already approved on Chocolatey")
+                continue
+            if approved and versioning.compare_nuget(version, approved) < 0:
                 raise RuntimeError(f"version {version} is not greater than Chocolatey approved {approved}")
             nupkg = pack(root, pkg, out_dir)
             if in_ci:
