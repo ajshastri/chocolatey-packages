@@ -32,20 +32,23 @@ def env(tmp_path, monkeypatch):
     (tmp_path / "packages.toml").write_text(MANIFEST, encoding="utf-8")
     copy_pkg("zulu-8", tmp_path)
     copy_pkg("GraalVM-17", tmp_path)
-    state = {"cmds": [], "status": "", "approved": "8.90.0.1", "fail": set()}
+    # "output": choco subcommand -> (stdout, stderr) the fake choco prints
+    state = {"cmds": [], "status": "", "approved": "8.90.0.1", "fail": set(), "output": {}}
 
     def fake_run(cmd, *, cwd=None):
         state["cmds"].append(list(cmd))
-        stdout, code = "", 0
+        stdout, stderr, code = "", "", 0
         if cmd[:2] == ["git", "status"]:
             stdout = state["status"]
-        elif cmd[:2] == ["choco", "pack"]:
+        elif cmd[0] == "choco":
+            stdout, stderr = state["output"].get(cmd[1], ("", ""))
+        if cmd[:2] == ["choco", "pack"]:
             out_dir = Path(cmd[cmd.index("--output-directory") + 1])
             out_dir.mkdir(parents=True, exist_ok=True)
             (out_dir / "zulu8.8.96.0.205.nupkg").write_bytes(b"nupkg")
         if cmd[1] in state["fail"]:
             code = 1
-        return subprocess.CompletedProcess(cmd, code, stdout, "")
+        return subprocess.CompletedProcess(cmd, code, stdout, stderr)
 
     monkeypatch.setattr(cli, "_run", fake_run)
     monkeypatch.setattr(cli, "choco_available", lambda: "C:/choco/choco.exe")
@@ -129,6 +132,75 @@ def test_failed_install_stops_push(env, monkeypatch):
     env["fail"].add("install")
     assert run(env, "--id", "zulu8") == 1
     assert "push" not in choco_cmds(env)
+
+
+def test_ci_prints_choco_output_in_log_groups(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    env["output"] = {
+        "pack": ("Successfully created package 'zulu8.8.96.0.205.nupkg'", ""),
+        "install": ("Installing zulu8 8.96.0.205\nThe install of zulu8 was successful.", ""),
+        "uninstall": ("zulu8 has been successfully uninstalled.", "a warning on stderr"),
+    }
+    assert run(env, "--id", "zulu8", "--dry-run") == 0
+    lines = capsys.readouterr().out.splitlines()
+    starts = [line for line in lines if line.startswith("::group::")]
+    assert starts == ["::group::choco pack zulu8 8.96.0.205", "::group::choco install zulu8 8.96.0.205",
+                      "::group::choco uninstall zulu8 8.96.0.205"]
+    assert lines.count("::endgroup::") == 3
+    # every group: title, command line, workflow commands paused around choco's output, end
+    i = lines.index("::group::choco install zulu8 8.96.0.205")
+    assert lines[i + 1].startswith("$ choco install zulu8 --version 8.96.0.205")
+    token = lines[i + 2].removeprefix("::stop-commands::")
+    assert lines[i + 2].startswith("::stop-commands::") and len(token) == 32
+    assert lines[i + 3:i + 7] == ["Installing zulu8 8.96.0.205", "The install of zulu8 was successful.",
+                                  f"::{token}::", "::endgroup::"]
+    j = lines.index("::group::choco uninstall zulu8 8.96.0.205")
+    assert "zulu8 has been successfully uninstalled." in lines[j:j + 8]
+    assert "a warning on stderr" in lines[j:j + 8]
+
+
+def test_local_output_is_plain(env, capsys):
+    env["output"] = {"pack": ("Successfully created package 'zulu8.8.96.0.205.nupkg'", "")}
+    assert run(env, "--id", "zulu8", "--dry-run") == 0
+    out = capsys.readouterr().out
+    assert "Successfully created package 'zulu8.8.96.0.205.nupkg'" in out
+    assert "::group::" not in out and "::endgroup::" not in out and "::stop-commands::" not in out
+
+
+def test_failed_install_error_carries_output_tail(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    env["fail"].add("install")
+    env["output"] = {"install": ("x" * 3000 + "\nERROR: Running msiexec failed with exit code 1603.", "")}
+    assert run(env, "--id", "zulu8", "--dry-run") == 1
+    assert choco_cmds(env) == ["pack", "install"]
+    out = capsys.readouterr().out
+    fail = next(line for line in out.splitlines() if line.startswith("FAIL  zulu8: "))
+    assert fail.startswith("FAIL  zulu8: choco install zulu8 8.96.0.205 failed (exit 1): ")
+    tail = out[out.index("failed (exit 1): ") + len("failed (exit 1): "):]
+    assert "exit code 1603." in tail and len(tail.rstrip("\n")) == 2000
+    assert out.count("::endgroup::") == 2  # the failed install's group is closed too
+
+
+def test_key_is_redacted_from_choco_output(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("CHOCO_KEY", "secret-key")
+    env["fail"].add("push")
+    env["output"] = {
+        "install": ("echoing secret-key from an install script", ""),
+        "push": ("Attempting to push with key secret-key", "401 for secret-key"),
+    }
+    assert run(env, "--id", "zulu8") == 1
+    out = capsys.readouterr().out
+    assert "secret-key" not in out
+    assert "echoing *** from an install script" in out
+    assert "Attempting to push with key ***" in out and "-k ***" in out
+    assert "FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1): " in out and "401 for ***" in out
+
+
+def test_redact_covers_key_argument_without_env(monkeypatch):
+    monkeypatch.delenv("CHOCO_KEY", raising=False)
+    assert cli._redact("key=abc123 ok", ["choco", "push", "x", "-k", "abc123"]) == "key=*** ok"
+    assert cli._redact("nothing secret", ["choco", "pack", "x"]) == "nothing secret"
 
 
 def test_frozen_packages_are_skipped(env, capsys):

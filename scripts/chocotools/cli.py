@@ -19,6 +19,7 @@ import argparse
 import dataclasses
 import json
 import os
+import secrets
 import shutil
 import subprocess
 import sys
@@ -94,6 +95,46 @@ def _display(cmd: list[str]) -> str:
         if part in ("-k", "--key", "--api-key"):
             shown[i + 1] = "***"
     return " ".join(shown)
+
+
+def _redact(text: str, cmd: list[str]) -> str:
+    """Replace the API key (CHOCO_KEY, or a ``-k`` value in ``cmd``) with ``***``."""
+    keys = {os.environ.get("CHOCO_KEY", "")}
+    keys |= {cmd[i + 1] for i, part in enumerate(cmd[:-1]) if part in ("-k", "--key", "--api-key")}
+    for key in sorted(filter(None, keys), key=len, reverse=True):
+        text = text.replace(key, "***")
+    return text
+
+
+def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subprocess.CompletedProcess:
+    """Run a choco command and print its output, so the log shows what choco did.
+
+    In GitHub Actions (GITHUB_ACTIONS=true) the output is wrapped in a
+    collapsible ``::group::<title>`` / ``::endgroup::`` block, and workflow
+    commands are switched off while choco's output is echoed (``::stop-commands::``),
+    so a ``::`` line in that output is shown, not executed. The API key is
+    redacted from everything printed. A non-zero exit raises RuntimeError
+    carrying the last 2000 characters of the output.
+    """
+    in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
+    proc = _run(cmd, cwd=cwd)
+    output = _redact("\n".join(s.rstrip() for s in (proc.stdout, proc.stderr) if s and s.strip()), cmd)
+    if in_ci:
+        out(f"::group::{title}")
+    out(f"$ {_display(cmd)}")
+    if output:
+        if in_ci:
+            token = secrets.token_hex(16)
+            out(f"::stop-commands::{token}")
+            out(output)
+            out(f"::{token}::")
+        else:
+            out(output)
+    if in_ci:
+        out("::endgroup::")
+    if proc.returncode != 0:
+        raise RuntimeError(f"{title} failed (exit {proc.returncode}): {output[-2000:]}")
+    return proc
 
 
 def git(root: Path, *args: str) -> subprocess.CompletedProcess:
@@ -392,12 +433,7 @@ def pack(root: Path, pkg: Package, out_dir: Path) -> Path:
     version = nuspec.read(nuspec_file.read_bytes()).version
     out_dir.mkdir(parents=True, exist_ok=True)
     cmd = ["choco", "pack", str(nuspec_file), "--output-directory", str(out_dir), "--limit-output"]
-    out(f"$ {_display(cmd)}")
-    proc = _run(cmd, cwd=root)
-    if proc.stdout:
-        out(proc.stdout.rstrip())
-    if proc.returncode != 0:
-        raise RuntimeError(f"choco pack failed for {pkg.id} (exit {proc.returncode}): {proc.stderr.strip()}")
+    run_choco(cmd, f"choco pack {pkg.id} {version}", cwd=root)
     nupkg = out_dir / f"{pkg.id}.{version}.nupkg"
     if not nupkg.is_file():
         matches = sorted(out_dir.glob(f"{pkg.id}.*.nupkg"))
@@ -482,24 +518,17 @@ def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
                 raise RuntimeError(f"version {version} is not greater than Chocolatey approved {approved}")
             nupkg = pack(root, pkg, out_dir)
             if in_ci:
-                for cmd in (
-                    ["choco", "install", pkg.id, "--version", version, "--source", str(out_dir), "-y", "--no-progress"],
-                    ["choco", "uninstall", pkg.id, "-y"],
-                ):
-                    out(f"$ {_display(cmd)}")
-                    proc = _run(cmd, cwd=root)
-                    if proc.returncode != 0:
-                        raise RuntimeError(f"{cmd[1]} failed (exit {proc.returncode}): {proc.stdout[-2000:]}")
+                install = ["choco", "install", pkg.id, "--version", version, "--source", str(out_dir), "-y",
+                           "--no-progress"]
+                run_choco(install, f"choco install {pkg.id} {version}", cwd=root)
+                run_choco(["choco", "uninstall", pkg.id, "-y"], f"choco uninstall {pkg.id} {version}", cwd=root)
             else:
                 out(f"skip  {pkg.id}: test install runs in CI only (GITHUB_ACTIONS != true)")
             if args.dry_run:
                 out(f"dry-run {pkg.id} {version}: not pushed")
                 continue
             cmd = ["choco", "push", str(nupkg), "--source", PUSH_SOURCE, "-k", key]
-            out(f"$ {_display(cmd)}")
-            proc = _run(cmd, cwd=root)
-            if proc.returncode != 0:
-                raise RuntimeError(f"choco push failed (exit {proc.returncode}): {proc.stdout[-2000:]}")
+            run_choco(cmd, f"choco push {pkg.id} {version}", cwd=root)
             out(f"pushed {pkg.id} {version}")
         except (RuntimeError, ManifestError, nuspec.NuspecError, chocolatey.ChocolateyError, OSError) as exc:
             out(f"FAIL  {pkg.id}: {exc}")
