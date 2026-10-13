@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>zulu8</id>
+    <version>8.96.0.205</version>
+	<packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/zulu-8</packageSourceUrl>
+    <owners>Aditya</owners>
+    <title>Zulu 8</title>
+    <authors>Azul Systems</authors>
+    <projectUrl>https://www.azul.com/products/zulu-enterprise/</projectUrl>
+    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/azul-logo.png</iconUrl>
+    <copyright>Azul 2023. All rights reserved.</copyright>
+    <licenseUrl>https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <docsUrl>https://docs.azul.com/core/</docsUrl>
+    <tags>zulu-8 java java8 jdk jdk8 openjdk zulu zulu8</tags>
+    <summary>Azul® Zulu® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</summary>
+    <description>Azul® Zulu® is a Java Development Kit (JDK), and a compliant implementation of the Java Standard Edition (SE) specification that contains all the Java components needed to build and run Java SE applications.</description>
+    <releaseNotes>https://docs.azul.com/core/release-notes</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
+

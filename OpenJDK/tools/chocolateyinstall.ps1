@@ -2,13 +2,13 @@ $ErrorActionPreference = 'Stop'
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\OpenJDK"
 
-$version = "26.0.2.1"
+$version = "27"
 
 $packageArgs = @{
     PackageName      = $env:ChocolateyPackageName
     UnzipLocation    = $targetDir = $installDir
-    Url64            = 'https://download.java.net/java/GA/jdk26.0.2.1/3b8e6c7ec6274148a7aa15e7e7dfb53c/1/GPL/openjdk-26.0.2.1_windows-x64_bin.zip'
-    Checksum64       = '0c3a8a30993de864937e6bced5270edc39c80c584cfd359ac222638c42758f1c'
+    Url64            = 'https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_windows-x64_bin.zip'
+    Checksum64       = '41172837168dd25a8d9fe5eb253ac1efc568c5f9ff608144bcacadfdf50f876c'
     ChecksumType64   = 'sha256'
 }
 

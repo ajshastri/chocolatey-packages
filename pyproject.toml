@@ -1,0 +1,30 @@
+[project]
+name = "chocotools"
+version = "0.1.0"
+description = "Sync, validate, build, publish and compare the Chocolatey packages in this repo"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+chocotools = "chocotools.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "actionlint-py==1.7.12.25",
+    "shellcheck-py==0.11.0.1",
+]
+
+[build-system]
+requires = ["uv_build==0.11.29"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = "scripts"
+module-name = "chocotools"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["online: hits the network"]
+addopts = "-m 'not online'"

@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xml:base="https://community.chocolatey.org/api/v2/">
+  <title type="text">FindPackagesById</title>
+  <id>https://community.chocolatey.org/api/v2/FindPackagesById</id>
+  <updated>2026-10-05T03:38:07Z</updated>
+  <link rel="self" title="FindPackagesById" href="FindPackagesById" />
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>26.0.2.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>26.0.2.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>25.0.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>25.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>22.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>21.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>21.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>17.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>21.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>11.0.2.01</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>17.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>11.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>16.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>20.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>15.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>20.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>11.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>18.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>19.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>16.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>14.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>22.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>18.0.1.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>20.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>12.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>14.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>12.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>19.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>17.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>19.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>18.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>14.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>11.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>13.0.33.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>13.0.102</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>13.0.101</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>15.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>18.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>12.0.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>12.0.2</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <link rel="next" href="https://community.chocolatey.org/api/v2/FindPackagesById?id='openjdk'&amp;$skiptoken='1758252900447','12.0.2','openjdk'" />
+</feed>

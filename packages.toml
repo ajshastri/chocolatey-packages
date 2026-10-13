@@ -1,0 +1,683 @@
+# Package manifest: one [[package]] per Chocolatey package managed by chocotools.
+# Fields: id (Chocolatey id = nuspec <id>), folder, vendor, major, image (jdk|jre),
+# variant (Liberica only: std|full|lite), arch (x64|x86|neutral), frozen, notes,
+# package_fix (optional int 1-99: package fix version, see chocotools/versioning.py)
+# with package_fix_line (required with package_fix: the "A.B.C" line it was declared for).
+# Frozen packages are skipped by sync and publish but still checked by validate
+# and compare. Folders listed in `ignore` hold a nuspec but are not managed.
+
+ignore = ["FreeDownloadManager"]
+
+# ----- Amazon Corretto --------------------------------------------------------
+
+[[package]]
+id = "correttojdk"
+folder = "corretto-jdk"
+vendor = "corretto"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "corretto8jdk"
+folder = "corretto-jdk-8"
+vendor = "corretto"
+major = 8
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "corretto8jre"
+folder = "corretto-jre-8"
+vendor = "corretto"
+major = 8
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "corretto11jdk"
+folder = "corretto-jdk-11"
+vendor = "corretto"
+major = 11
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "corretto17jdk"
+folder = "corretto-jdk-17"
+vendor = "corretto"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "corretto21jdk"
+folder = "corretto-jdk-21"
+vendor = "corretto"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "corretto25jdk"
+folder = "corretto-jdk-25"
+vendor = "corretto"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+# ----- Azul Zulu ----------------------------------------------------------------
+
+[[package]]
+id = "zulu"
+folder = "zulu"
+vendor = "zulu"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "zulu7"
+folder = "zulu-7"
+vendor = "zulu"
+major = 7
+image = "jdk"
+arch = ["x64"]
+frozen = true
+notes = "No newer Windows CA build than 7.56.0.11"
+
+[[package]]
+id = "zulu8"
+folder = "zulu-8"
+vendor = "zulu"
+major = 8
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "zulu11"
+folder = "zulu-11"
+vendor = "zulu"
+major = 11
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "zulu17"
+folder = "zulu-17"
+vendor = "zulu"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "zulu21"
+folder = "zulu-21"
+vendor = "zulu"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "zulu25"
+folder = "zulu-25"
+vendor = "zulu"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+# ----- Eclipse Temurin ----------------------------------------------------------
+
+[[package]]
+id = "Temurin"
+folder = "temurin-jdk"
+vendor = "temurin"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "latest"
+
+[[package]]
+id = "Temurinjre"
+folder = "temurin-jre"
+vendor = "temurin"
+major = 25
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = "latest"
+
+[[package]]
+id = "Temurin8"
+folder = "temurin-8-jdk"
+vendor = "temurin"
+major = 8
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin8jre"
+folder = "temurin-8-jre"
+vendor = "temurin"
+major = 8
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin11"
+folder = "temurin-11-jdk"
+vendor = "temurin"
+major = 11
+image = "jdk"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "11.0.32"
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin11jre"
+folder = "temurin-11-jre"
+vendor = "temurin"
+major = 11
+image = "jre"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "11.0.32"
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin17"
+folder = "temurin-17-jdk"
+vendor = "temurin"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "17.0.20"
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin17jre"
+folder = "temurin-17-jre"
+vendor = "temurin"
+major = 17
+image = "jre"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 17.0.20.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "17.0.20"
+notes = "Adoptium publishes no x86 build of the current release"
+
+[[package]]
+id = "Temurin21"
+folder = "temurin-21-jdk"
+vendor = "temurin"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "21.0.12"
+notes = ""
+
+[[package]]
+id = "Temurin21jre"
+folder = "temurin-21-jre"
+vendor = "temurin"
+major = 21
+image = "jre"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "21.0.12"
+notes = ""
+
+[[package]]
+id = "Temurin25"
+folder = "temurin-25-jdk"
+vendor = "temurin"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "25.0.4"
+notes = ""
+
+[[package]]
+id = "Temurin25jre"
+folder = "temurin-25-jre"
+vendor = "temurin"
+major = 25
+image = "jre"
+arch = ["x64"]
+frozen = false
+package_fix = 1  # 25.0.4.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
+package_fix_line = "25.0.4"
+notes = ""
+
+# ----- BellSoft Liberica --------------------------------------------------------
+
+[[package]]
+id = "liberica8jdk"
+folder = "liberica-8-jdk"
+vendor = "liberica"
+major = 8
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica8jre"
+folder = "liberica-8-jre"
+vendor = "liberica"
+major = 8
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica11jdk"
+folder = "liberica-11-jdk"
+vendor = "liberica"
+major = 11
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica11jdkfull"
+folder = "liberica-11-jdkfull"
+vendor = "liberica"
+major = 11
+image = "jdk"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica11jre"
+folder = "liberica-11-jre"
+vendor = "liberica"
+major = 11
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica11jrefull"
+folder = "liberica-11-jrefull"
+vendor = "liberica"
+major = 11
+image = "jre"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica17jdk"
+folder = "liberica-17-jdk"
+vendor = "liberica"
+major = 17
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica17jdkfull"
+folder = "liberica-17-jdkfull"
+vendor = "liberica"
+major = 17
+image = "jdk"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica17jdklite"
+folder = "liberica-17-jdklite"
+vendor = "liberica"
+major = 17
+image = "jdk"
+variant = "lite"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica17jre"
+folder = "liberica-17-jre"
+vendor = "liberica"
+major = 17
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica17jrefull"
+folder = "liberica-17-jrefull"
+vendor = "liberica"
+major = 17
+image = "jre"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica21jdk"
+folder = "liberica-21-jdk"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica21jdkfull"
+folder = "liberica-21-jdkfull"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica21jdklite"
+folder = "liberica-21-jdklite"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "lite"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica21jre"
+folder = "liberica-21-jre"
+vendor = "liberica"
+major = 21
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica21jrefull"
+folder = "liberica-21-jrefull"
+vendor = "liberica"
+major = 21
+image = "jre"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "libericajdk"
+folder = "liberica-jdk"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "libericajdkfull"
+folder = "liberica-jdkfull"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "libericajdklite"
+folder = "liberica-jdklite"
+vendor = "liberica"
+major = 21
+image = "jdk"
+variant = "lite"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "libericajre"
+folder = "liberica-jre"
+vendor = "liberica"
+major = 21
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "libericajrefull"
+folder = "liberica-jrefull"
+vendor = "liberica"
+major = 21
+image = "jre"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "liberica-mission-control"
+folder = "LibericaMissionControl"
+vendor = "lmc"
+arch = ["x64"]
+frozen = true
+notes = "Manual: no machine-readable Liberica Mission Control source"
+
+# ----- SAP Machine --------------------------------------------------------------
+
+[[package]]
+id = "sapmachine11"
+folder = "sapmachine-11-jdk"
+vendor = "sapmachine"
+major = 11
+image = "jdk"
+arch = ["x64"]
+frozen = true
+notes = "Pinned at 11.0.25: SAP ships no Windows MSI for 11.0.26+"
+
+[[package]]
+id = "sapmachine11jre"
+folder = "sapmachine-11-jre"
+vendor = "sapmachine"
+major = 11
+image = "jre"
+arch = ["x64"]
+frozen = true
+notes = "Pinned at 11.0.25: SAP ships no Windows MSI for 11.0.26+"
+
+[[package]]
+id = "sapmachine17"
+folder = "sapmachine-17-jdk"
+vendor = "sapmachine"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "sapmachine17jre"
+folder = "sapmachine-17-jre"
+vendor = "sapmachine"
+major = 17
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "sapmachine21"
+folder = "sapmachine-21-jdk"
+vendor = "sapmachine"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "sapmachine21jre"
+folder = "sapmachine-21-jre"
+vendor = "sapmachine"
+major = 21
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "sapmachine"
+folder = "sapmachine-jdk"
+vendor = "sapmachine"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+[[package]]
+id = "sapmachinejre"
+folder = "sapmachine-jre"
+vendor = "sapmachine"
+major = 21
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = "latest LTS"
+
+# ----- GraalVM Community --------------------------------------------------------
+
+[[package]]
+id = "graalvm"
+folder = "GraalVM"
+vendor = "graalvm"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "Version is foojay's graalvm_community java_version (4-part)"
+
+[[package]]
+id = "graalvm-java17"
+folder = "GraalVM-17"
+vendor = "graalvm"
+major = 17
+image = "jdk"
+arch = ["x64"]
+frozen = true
+notes = "No Community build after jdk-17.0.9"
+
+[[package]]
+id = "graalvm-java21"
+folder = "GraalVM-21"
+vendor = "graalvm"
+major = 21
+image = "jdk"
+arch = ["x64"]
+frozen = true
+notes = "No Community build after jdk-21.0.2"
+
+# ----- Other --------------------------------------------------------------------
+
+[[package]]
+id = "openjdk"
+folder = "OpenJDK"
+vendor = "openjdk"
+major = 27
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = "Tracks the current GA major on jdk.java.net; moving to a new major is a manifest edit"
+
+[[package]]
+id = "jmc"
+folder = "JMC"
+vendor = "jmc"
+major = 9
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "mvndaemon"
+folder = "mvndaemon"
+vendor = "mvnd"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "wildfly"
+folder = "WildFly"
+vendor = "wildfly"
+arch = ["neutral"]
+frozen = false
+notes = ""

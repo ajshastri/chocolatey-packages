@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xml:base="https://community.chocolatey.org/api/v2/">
+  <title type="text">FindPackagesById</title>
+  <id>https://community.chocolatey.org/api/v2/FindPackagesById</id>
+  <updated>2026-10-05T03:38:09Z</updated>
+  <link rel="self" title="FindPackagesById" href="FindPackagesById" />
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>15.0.1</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>16.0.0</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <entry>
+    <content type="application/xml"><m:properties><d:Version>13.0.33</d:Version>
+      <d:IsApproved m:type="Edm.Boolean">true</d:IsApproved>
+      <d:PackageStatus>Approved</d:PackageStatus>
+      </m:properties></content></entry>
+  <link rel="next" href="https://community.chocolatey.org/api/v2/FindPackagesById?id='openjdk'&amp;$skiptoken='1757683204197','13.0.33','openjdk'" />
+</feed>

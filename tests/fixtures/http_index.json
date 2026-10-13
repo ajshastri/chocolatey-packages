@@ -1,0 +1,113 @@
+{
+ "get": {
+  "https://api.adoptium.net/v3/assets/latest/11/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse": "temurin/adoptium-11-jdk-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/11/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse": "temurin/adoptium-11-jre-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/17/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse": "temurin/adoptium-17-jdk-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/17/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse": "temurin/adoptium-17-jre-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse": "temurin/adoptium-21-jdk-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse": "temurin/adoptium-21-jre-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse": "temurin/adoptium-25-jdk-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse": "temurin/adoptium-25-jre-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/8/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse": "temurin/adoptium-8-jdk-x64.json",
+  "https://api.adoptium.net/v3/assets/latest/8/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse": "temurin/adoptium-8-jre-x64.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/0e28c041-ca4e-478f-9762-34bf51562596": "zulu/package-0e28c041-ca4e-478f-9762-34bf51562596.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/10da6aa7-3d9f-4bdc-8c11-fadc7e37b40c": "zulu/package-10da6aa7-3d9f-4bdc-8c11-fadc7e37b40c.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/5e275197-3fc6-4fba-876d-7a8ff6d2335f": "zulu/package-5e275197-3fc6-4fba-876d-7a8ff6d2335f.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/63013106-9263-4f5d-8149-3de825501906": "zulu/package-63013106-9263-4f5d-8149-3de825501906.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/64483b27-112b-45ce-a471-e304d79ce7b4": "zulu/package-64483b27-112b-45ce-a471-e304d79ce7b4.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=11&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=true&latest=true&distro_version=11&release_status=ga&crac_supported=false&availability_types=CA&certifications=tck&page=1&page_size=1": "zulu/list-11.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=17&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=true&latest=true&distro_version=17&release_status=ga&crac_supported=false&availability_types=CA&certifications=tck&page=1&page_size=1": "zulu/list-17.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=21&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=true&latest=true&distro_version=21&release_status=ga&crac_supported=false&availability_types=CA&certifications=tck&page=1&page_size=1": "zulu/list-21.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=25&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=true&latest=true&distro_version=25&release_status=ga&crac_supported=false&availability_types=CA&certifications=tck&page=1&page_size=1": "zulu/list-25.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=7&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=false&latest=true&release_status=ga&availability_types=CA&page=1&page_size=1": "zulu/list-7.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/?java_version=8&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=true&latest=true&distro_version=8&release_status=ga&crac_supported=false&availability_types=CA&certifications=tck&page=1&page_size=1": "zulu/list-8.json",
+  "https://api.azul.com/metadata/v1/zulu/packages/b824d121-fe63-4bad-ba3f-d0466344c684": "zulu/package-b824d121-fe63-4bad-ba3f-d0466344c684.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=11&bundle-type=jdk&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-11-jdk.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=11&bundle-type=jdk-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-11-jdk-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=11&bundle-type=jre&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-11-jre.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=11&bundle-type=jre-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-11-jre-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=17&bundle-type=jdk&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-17-jdk.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=17&bundle-type=jdk-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-17-jdk-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=17&bundle-type=jdk-lite&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-17-jdk-lite.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=17&bundle-type=jre&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-17-jre.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=17&bundle-type=jre-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-17-jre-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=21&bundle-type=jdk&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-21-jdk.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=21&bundle-type=jdk-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-21-jdk-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=21&bundle-type=jdk-lite&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-21-jdk-lite.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=21&bundle-type=jre&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-21-jre.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=21&bundle-type=jre-full&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-21-jre-full.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=8&bundle-type=jdk&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-8-jdk.json",
+  "https://api.bell-sw.com/v1/liberica/releases?version-feature=8&bundle-type=jre&os=windows&arch=x86&bitness=64&package-type=msi&version-modifier=latest": "liberica/bellsoft-8-jre.json",
+  "https://api.foojay.io/disco/v3.0/packages?version=17&distribution=graalvm_community&architecture=amd64&archive_type=zip&operating_system=windows&package_type=jdk&latest=available": "graalvm/foojay-17.json",
+  "https://api.foojay.io/disco/v3.0/packages?version=25&distribution=graalvm_community&architecture=amd64&archive_type=zip&operating_system=windows&package_type=jdk&latest=available": "graalvm/foojay-25.json",
+  "https://api.github.com/repos/SAP/SapMachine/releases/tags/sapmachine-11.0.25": "sapmachine/github-releases-tags-sapmachine-11.0.25.json",
+  "https://api.github.com/repos/SAP/SapMachine/releases?per_page=100&page=1": "sapmachine/github-releases-page1.json",
+  "https://api.github.com/repos/apache/maven-mvnd/releases/latest": "mvnd/github-releases-latest.json",
+  "https://api.github.com/repos/bell-sw/Liberica/releases/tags/11.0.32.1%2B1": "liberica/github-releases-tags-11.0.32.1-1.json",
+  "https://api.github.com/repos/bell-sw/Liberica/releases/tags/17.0.20.1%2B1": "liberica/github-releases-tags-17.0.20.1-1.json",
+  "https://api.github.com/repos/bell-sw/Liberica/releases/tags/21.0.12.1%2B1": "liberica/github-releases-tags-21.0.12.1-1.json",
+  "https://api.github.com/repos/bell-sw/Liberica/releases/tags/8u504%2B1": "liberica/github-releases-tags-8u504-1.json",
+  "https://api.github.com/repos/corretto/corretto-11/releases/latest": "corretto/github-corretto-11-releases-latest.json",
+  "https://api.github.com/repos/corretto/corretto-17/releases/latest": "corretto/github-corretto-17-releases-latest.json",
+  "https://api.github.com/repos/corretto/corretto-21/releases/latest": "corretto/github-corretto-21-releases-latest.json",
+  "https://api.github.com/repos/corretto/corretto-25/releases/latest": "corretto/github-corretto-25-releases-latest.json",
+  "https://api.github.com/repos/corretto/corretto-8/releases/latest": "corretto/github-corretto-8-releases-latest.json",
+  "https://api.github.com/repos/graalvm/graalvm-ce-builds/releases?per_page=40": "graalvm/github-releases.json",
+  "https://api.github.com/repos/openjdk/jmc/tags?per_page=100": "jmc/github-tags.json",
+  "https://api.github.com/repos/wildfly/wildfly/releases/latest": "wildfly/github-releases-latest.json",
+  "https://community.chocolatey.org/api/v2/FindPackagesById()?id=%27openjdk%27": "chocolatey/openjdk-page1.xml",
+  "https://community.chocolatey.org/api/v2/FindPackagesById?id='openjdk'&$skiptoken='1757683204197','13.0.33','openjdk'": "chocolatey/openjdk-page3.xml",
+  "https://community.chocolatey.org/api/v2/FindPackagesById?id='openjdk'&$skiptoken='1758252900447','12.0.2','openjdk'": "chocolatey/openjdk-page2.xml",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-11-x64-windows-jdk.msi": "corretto/amazon-corretto-11-x64-windows-jdk.msi.latest_sha256.txt",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-17-x64-windows-jdk.msi": "corretto/amazon-corretto-17-x64-windows-jdk.msi.latest_sha256.txt",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-21-x64-windows-jdk.msi": "corretto/amazon-corretto-21-x64-windows-jdk.msi.latest_sha256.txt",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-25-x64-windows-jdk.msi": "corretto/amazon-corretto-25-x64-windows-jdk.msi.latest_sha256.txt",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-8-x64-windows-jdk.msi": "corretto/amazon-corretto-8-x64-windows-jdk.msi.latest_sha256.txt",
+  "https://corretto.aws/downloads/latest_sha256/amazon-corretto-8-x64-windows-jre.msi": "corretto/amazon-corretto-8-x64-windows-jre.msi.latest_sha256.txt",
+  "https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_windows-x64_bin.zip.sha256": "openjdk/openjdk-27_windows-x64_bin.zip.sha256",
+  "https://download.java.net/java/GA/jmc9/05/binaries/jmc-9.1.2_windows-x64.zip.sha256": "jmc/jmc-9.1.2_windows-x64.zip.sha256",
+  "https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.25/sapmachine-jdk-11.0.25_windows-x64_bin.msi.sha256.txt": "sapmachine/sapmachine-jdk-11.0.25_windows-x64_bin.msi.sha256.txt",
+  "https://github.com/SAP/SapMachine/releases/download/sapmachine-11.0.25/sapmachine-jre-11.0.25_windows-x64_bin.msi.sha256.txt": "sapmachine/sapmachine-jre-11.0.25_windows-x64_bin.msi.sha256.txt",
+  "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_windows-x64_bin.zip.sha256": "graalvm/graalvm-community-jdk-17.0.9_windows-x64_bin.zip.sha256",
+  "https://jdk.java.net/27/": "openjdk/jdk.java.net-27.html",
+  "https://jdk.java.net/jmc/9/": "jmc/jdk.java.net-jmc-9.html"
+ },
+ "head": {
+  "https://corretto.aws/downloads/latest/amazon-corretto-11-x64-windows-jdk.msi": {
+   "headers": {
+    "location": "/downloads/resources/11.0.32.12.1/amazon-corretto-11.0.32.12.1-windows-x64.msi"
+   },
+   "status": 302
+  },
+  "https://corretto.aws/downloads/latest/amazon-corretto-17-x64-windows-jdk.msi": {
+   "headers": {
+    "location": "/downloads/resources/17.0.20.12.1/amazon-corretto-17.0.20.12.1-windows-x64.msi"
+   },
+   "status": 302
+  },
+  "https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi": {
+   "headers": {
+    "location": "/downloads/resources/21.0.12.12.1/amazon-corretto-21.0.12.12.1-windows-x64.msi"
+   },
+   "status": 302
+  },
+  "https://corretto.aws/downloads/latest/amazon-corretto-25-x64-windows-jdk.msi": {
+   "headers": {
+    "location": "/downloads/resources/25.0.4.10.1/amazon-corretto-25.0.4.10.1-windows-x64.msi"
+   },
+   "status": 302
+  },
+  "https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jdk.msi": {
+   "headers": {
+    "location": "/downloads/resources/8.504.04.1/amazon-corretto-8.504.04.1-windows-x64-jdk.msi"
+   },
+   "status": 302
+  },
+  "https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jre.msi": {
+   "headers": {
+    "location": "/downloads/resources/8.504.04.1/amazon-corretto-8.504.04.1-windows-x64-jre.msi"
+   },
+   "status": 302
+  }
+ }
+}
