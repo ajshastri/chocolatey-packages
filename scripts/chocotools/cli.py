@@ -38,6 +38,8 @@ EXIT_PREREQ = 3
 
 INSTALL_SCRIPT = "tools/chocolateyinstall.ps1"
 PUSH_SOURCE = "https://push.chocolatey.org/"
+# Seconds each choco subcommand may run before run_choco kills it and fails the package.
+CHOCO_TIMEOUTS = {"pack": 10 * 60, "install": 30 * 60, "uninstall": 15 * 60, "push": 10 * 60}
 ZERO_SHA = "0" * 40
 # Vendors whose scripts carry a version-bearing install-directory token.
 # vendor -> quoted script variable holding the token ($graalvmDir is the full zip root)
@@ -84,9 +86,35 @@ def md_table(headers: list[str], rows: list[list[str]]) -> str:
     return "\n".join(lines)
 
 
-def _run(cmd: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess:
-    """Run a command without a shell, capturing text output."""
-    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+def _kill_tree(proc: subprocess.Popen) -> None:
+    """Kill ``proc`` and its children (choco starts msiexec/powershell, which hold its pipes)."""
+    if os.name == "nt":
+        try:
+            subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True, timeout=60)
+        except (OSError, subprocess.SubprocessError):
+            pass  # proc.kill() below still stops choco itself
+    proc.kill()
+
+
+def _run(cmd: list[str], *, cwd: Path | None = None, timeout: float | None = None) -> subprocess.CompletedProcess:
+    """Run a command without a shell, capturing text output.
+
+    With ``timeout`` (seconds) the process tree is killed when it runs too long,
+    and ``subprocess.TimeoutExpired`` is raised carrying the output captured so far.
+    """
+    if timeout is None:
+        return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    with subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as proc:
+        try:
+            stdout, stderr = proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            _kill_tree(proc)
+            try:
+                stdout, stderr = proc.communicate(timeout=60)
+            except subprocess.TimeoutExpired:  # a survivor still holds the pipes
+                stdout, stderr = "", "(output lost: the process tree could not be stopped)"
+            raise subprocess.TimeoutExpired(cmd, timeout, output=stdout, stderr=stderr) from None
+    return subprocess.CompletedProcess(cmd, proc.returncode, stdout, stderr)
 
 
 def _display(cmd: list[str]) -> str:
@@ -106,6 +134,13 @@ def _redact(text: str, cmd: list[str]) -> str:
     return text
 
 
+def _text(value) -> str:
+    """Captured output as text (``TimeoutExpired`` may carry bytes)."""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value or ""
+
+
 def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subprocess.CompletedProcess:
     """Run a choco command and print its output, so the log shows what choco did.
 
@@ -113,12 +148,25 @@ def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subproc
     collapsible ``::group::<title>`` / ``::endgroup::`` block, and workflow
     commands are switched off while choco's output is echoed (``::stop-commands::``),
     so a ``::`` line in that output is shown, not executed. The API key is
-    redacted from everything printed. A non-zero exit raises RuntimeError
-    carrying the last 2000 characters of the output.
+    redacted from everything printed.
+
+    Each subcommand has a timeout (``CHOCO_TIMEOUTS``); on expiry the process
+    tree is killed and the output captured so far is printed in the same block.
+    A non-zero exit or a timeout raises a one-line RuntimeError (step and exit
+    code, or the timeout); choco's output is printed once, above it.
     """
     in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
-    proc = _run(cmd, cwd=cwd)
-    output = _redact("\n".join(s.rstrip() for s in (proc.stdout, proc.stderr) if s and s.strip()), cmd)
+    timeout = CHOCO_TIMEOUTS[cmd[1]]
+    try:
+        proc = _run(cmd, cwd=cwd, timeout=timeout)
+        stdout, stderr, problem = proc.stdout, proc.stderr, None
+        if proc.returncode != 0:
+            problem = f"{title} failed (exit {proc.returncode})"
+    except subprocess.TimeoutExpired as exc:
+        proc = None
+        stdout, stderr = _text(exc.stdout), _text(exc.stderr)
+        problem = f"{title} timed out after {timeout // 60} min and was stopped (its output so far is above)"
+    output = _redact("\n".join(s.rstrip() for s in (stdout, stderr) if s and s.strip()), cmd)
     if in_ci:
         out(f"::group::{title}")
     out(f"$ {_display(cmd)}")
@@ -132,8 +180,8 @@ def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subproc
             out(output)
     if in_ci:
         out("::endgroup::")
-    if proc.returncode != 0:
-        raise RuntimeError(f"{title} failed (exit {proc.returncode}): {output[-2000:]}")
+    if problem:
+        raise RuntimeError(problem)
     return proc
 
 

@@ -1,4 +1,6 @@
 import subprocess
+import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -33,10 +35,17 @@ def env(tmp_path, monkeypatch):
     copy_pkg("zulu-8", tmp_path)
     copy_pkg("GraalVM-17", tmp_path)
     # "output": choco subcommand -> (stdout, stderr) the fake choco prints
-    state = {"cmds": [], "status": "", "approved": "8.90.0.1", "fail": set(), "output": {}}
+    # "hang": choco subcommands that run past their timeout (TimeoutExpired with the output so far)
+    state = {"cmds": [], "status": "", "approved": "8.90.0.1", "fail": set(), "output": {}, "hang": set(),
+             "timeouts": {}}
 
-    def fake_run(cmd, *, cwd=None):
+    def fake_run(cmd, *, cwd=None, timeout=None):
         state["cmds"].append(list(cmd))
+        if cmd[0] == "choco":
+            state["timeouts"][cmd[1]] = timeout
+            if cmd[1] in state["hang"]:
+                stdout, stderr = state["output"].get(cmd[1], ("", ""))
+                raise subprocess.TimeoutExpired(cmd, timeout, output=stdout, stderr=stderr)
         stdout, stderr, code = "", "", 0
         if cmd[:2] == ["git", "status"]:
             stdout = state["status"]
@@ -167,18 +176,90 @@ def test_local_output_is_plain(env, capsys):
     assert "::group::" not in out and "::endgroup::" not in out and "::stop-commands::" not in out
 
 
-def test_failed_install_error_carries_output_tail(env, monkeypatch, capsys):
+def guarded_block(lines: list[str], title: str) -> list[str]:
+    """The lines between ``::stop-commands::<token>`` and ``::<token>::`` in the group ``title``."""
+    i = lines.index(f"::group::{title}")
+    assert lines[i + 2].startswith("::stop-commands::")
+    token = lines[i + 2].removeprefix("::stop-commands::")
+    end = lines.index(f"::{token}::", i)
+    assert lines[end + 1] == "::endgroup::"
+    return lines[i + 3:end]
+
+
+def test_failed_install_output_is_printed_once_inside_the_guard(env, monkeypatch, capsys):
     monkeypatch.setenv("GITHUB_ACTIONS", "true")
     env["fail"].add("install")
-    env["output"] = {"install": ("x" * 3000 + "\nERROR: Running msiexec failed with exit code 1603.", "")}
+    log = "x" * 3000 + "\n::error::injected by an install script\nERROR: Running msiexec failed with exit code 1603."
+    env["output"] = {"install": (log, "")}
     assert run(env, "--id", "zulu8", "--dry-run") == 1
     assert choco_cmds(env) == ["pack", "install"]
     out = capsys.readouterr().out
-    fail = next(line for line in out.splitlines() if line.startswith("FAIL  zulu8: "))
-    assert fail.startswith("FAIL  zulu8: choco install zulu8 8.96.0.205 failed (exit 1): ")
-    tail = out[out.index("failed (exit 1): ") + len("failed (exit 1): "):]
-    assert "exit code 1603." in tail and len(tail.rstrip("\n")) == 2000
+    lines = out.splitlines()
+    # choco's output appears once, all of it inside the stop-commands block of the install group
+    assert guarded_block(lines, "choco install zulu8 8.96.0.205") == log.splitlines()
+    assert out.count("::error::injected by an install script") == 1
+    assert out.count("exit code 1603.") == 1 and out.count("x" * 3000) == 1
+    # the FAIL line is one short line after the group: id, step, exit code
+    assert [line for line in lines if line.startswith("FAIL")] == [
+        "FAIL  zulu8: choco install zulu8 8.96.0.205 failed (exit 1)"]
+    assert lines.index("FAIL  zulu8: choco install zulu8 8.96.0.205 failed (exit 1)") > lines.index("::endgroup::")
     assert out.count("::endgroup::") == 2  # the failed install's group is closed too
+
+
+def test_successful_output_with_workflow_command_stays_inside_the_guard(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    env["output"] = {"install": ("::set-output name=x::y\nThe install of zulu8 was successful.", "")}
+    assert run(env, "--id", "zulu8", "--dry-run") == 0
+    out = capsys.readouterr().out
+    assert guarded_block(out.splitlines(), "choco install zulu8 8.96.0.205") == [
+        "::set-output name=x::y", "The install of zulu8 was successful."]
+    assert out.count("::set-output name=x::y") == 1
+
+
+def test_choco_timeouts_per_subcommand(env, monkeypatch):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("CHOCO_KEY", "k")
+    assert run(env, "--id", "zulu8") == 0
+    assert env["timeouts"] == {"pack": 600, "install": 1800, "uninstall": 900, "push": 600}
+    assert env["timeouts"] == cli.CHOCO_TIMEOUTS
+
+
+def test_install_timeout_fails_package_with_partial_output(env, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("CHOCO_KEY", "secret-key")
+    env["hang"].add("install")
+    # TimeoutExpired carries bytes on POSIX even with text=True; both forms are handled
+    env["output"] = {"install": ("Installing zulu8 8.96.0.205\nkey secret-key", b"msiexec still running")}
+    assert run(env, "--id", "zulu8") == 1
+    assert choco_cmds(env) == ["pack", "install"]  # no uninstall, no push
+    out = capsys.readouterr().out
+    lines = out.splitlines()
+    assert guarded_block(lines, "choco install zulu8 8.96.0.205") == [
+        "Installing zulu8 8.96.0.205", "key ***", "msiexec still running"]
+    assert "secret-key" not in out
+    assert [line for line in lines if line.startswith("FAIL")] == [
+        "FAIL  zulu8: choco install zulu8 8.96.0.205 timed out after 30 min and was stopped "
+        "(its output so far is above)"]
+
+
+def test_pack_timeout_fails_the_package_outside_ci(env, capsys):
+    env["hang"].add("pack")
+    assert run(env, "--id", "zulu8", "--dry-run") == 1
+    out = capsys.readouterr().out
+    assert "FAIL  zulu8: choco pack zulu8 8.96.0.205 timed out after 10 min" in out
+    assert "::group::" not in out  # plain output outside CI
+
+
+def test_run_kills_a_hung_process_and_keeps_its_output():
+    # Like choco starting msiexec: a grandchild inherits the pipes and outlives a plain kill.
+    script = ("import subprocess, sys, time; "
+              "subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'], stdout=sys.stdout, "
+              "stderr=sys.stderr); print('partial line', flush=True); time.sleep(60)")
+    started = time.monotonic()
+    with pytest.raises(subprocess.TimeoutExpired) as info:
+        cli._run([sys.executable, "-c", script], timeout=2)
+    assert time.monotonic() - started < 30
+    assert "partial line" in cli._text(info.value.stdout)
 
 
 def test_key_is_redacted_from_choco_output(env, monkeypatch, capsys):
@@ -194,7 +275,7 @@ def test_key_is_redacted_from_choco_output(env, monkeypatch, capsys):
     assert "secret-key" not in out
     assert "echoing *** from an install script" in out
     assert "Attempting to push with key ***" in out and "-k ***" in out
-    assert "FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1): " in out and "401 for ***" in out
+    assert "FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1)\n" in out and "401 for ***" in out
 
 
 def test_redact_covers_key_argument_without_env(monkeypatch):
