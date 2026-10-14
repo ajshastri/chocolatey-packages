@@ -226,6 +226,24 @@ def test_graalvm_dir_follows_zip_root(repo):
     assert b"<version>25.3.4.1</version>" in (root / "GraalVM/graalvm.nuspec").read_bytes()
 
 
+GRAALVM_25I4_URL = ("https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/"
+                    "graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip")
+
+
+def test_graalvm_five_part_tag_syncs_to_four_part_version(repo, monkeypatch, capsys):
+    # graal-25.4.4.1.1 used to fail with "after update: x64 URL: more than 4 parts: 25.4.4.1.1"
+    root = repo["root"]
+    repo["releases"]["graalvm"] = Release("25.4.4.1", "25.4.4.1", {"x64": GRAALVM_25I4_URL}, {"x64": SHA},
+                                          "github asset digest")
+    monkeypatch.setitem(EXTRAS, "graalvm", "graalvm-community-25.4.4.1.1+1.1")  # the real 25i4 zip root
+    assert run(root, "sync", "--id", "graalvm") == 0, capsys.readouterr().out
+    inst = (root / "GraalVM/tools/chocolateyinstall.ps1").read_bytes()
+    assert GRAALVM_25I4_URL.encode() in inst
+    for name in ("chocolateyinstall.ps1", "chocolateyuninstall.ps1"):
+        assert b'$graalvmDir = "graalvm-community-25.4.4.1.1+1.1"' in (root / "GraalVM/tools" / name).read_bytes()
+    assert b"<version>25.4.4.1</version>" in (root / "GraalVM/graalvm.nuspec").read_bytes()
+
+
 def test_post_update_validation_failure_writes_nothing(repo, capsys):
     before = snapshot(repo["root"])
     assert run(repo["root"], "sync", "--id", "Temurin8") == 1  # x86 Url still present

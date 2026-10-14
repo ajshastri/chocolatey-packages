@@ -60,6 +60,7 @@ __all__ = [
     "strip_build",
     "join_parts",
     "corretto_tag",
+    "graalvm_tag",
     "FIX_FACTOR",
     "apply_package_fix",
     "strip_package_fix",
@@ -256,6 +257,32 @@ def target_version(upstream: str, fix: int | None, line: str | None) -> tuple[st
 # ----- version carried by a download URL ------------------------------------------
 
 _V = r"(\d+(?:\.\d+)*)"
+
+
+def graalvm_tag(m: re.Match) -> str:
+    """Package version of a GraalVM CE ``graal-`` release URL (tag and asset name).
+
+    The tag is ``<M>.<I>.<rest>`` and the asset ``graalvm-community-jdk-<M>i<I>-<M>.0.<rest>``:
+
+    - ``graal-25.3.4.1``   / ``25i3-25.0.4.1``   -> ``25.3.4.1``
+    - ``graal-25.4.4.1.1`` / ``25i4-25.0.4.1.1`` -> ``25.4.4.1``
+
+    The package version is foojay's ``java_version``, the tag's first four
+    parts, so a 5th tag part (a GraalVM respin) is dropped. Tag and asset must
+    describe the same build, otherwise ``VersionError``.
+    """
+    tag, major, iteration, asset = m[1], m[2], m[3], m[4]
+    asset_parts = asset.split(".")
+    if asset_parts[:2] != [major, "0"] or len(asset_parts) < 3:
+        raise VersionError(f"GraalVM asset version {major}i{iteration}-{asset} is not {major}i{iteration}-{major}.0.<update>")
+    if tag.split(".") != [major, iteration, *asset_parts[2:]]:
+        raise VersionError(f"GraalVM tag graal-{tag} does not match asset {major}i{iteration}-{asset}")
+    parts = tag.split(".")
+    if len(parts) > MAX_PARTS + 1:
+        raise VersionError(f"GraalVM tag graal-{tag} has more than {MAX_PARTS + 1} parts")
+    return ".".join(parts[:MAX_PARTS])
+
+
 # vendor -> [(regex on the URL-decoded URL, mapping of the match to a package version)]
 # Each mapping mirrors that vendor's ``sources.<vendor>.normalize`` so the URL
 # version is compared in the same form sync writes to the nuspec.
@@ -276,8 +303,11 @@ _URL_RULES = {
     ],
     "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: m[1])],
     "graalvm": [
-        # graal-25.3.4.1 is foojay's 4-part java_version; jdk-21.0.2 for the old CE builds
+        # graal-<tag>/graalvm-community-jdk-<M>i<I>-<M>.0.<rest>_: see graalvm_tag
+        (re.compile(rf"/download/graal-{_V}/graalvm-community-jdk-(\d+)i(\d+)-{_V}_"), graalvm_tag),
+        # any other graal- tag must itself be a package version (1-4 parts)
         (re.compile(rf"/download/graal-{_V}/"), lambda m: m[1]),
+        # jdk-21.0.2 for the old CE builds
         (re.compile(rf"/download/jdk-{_V}/"), lambda m: m[1]),
     ],
     # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2

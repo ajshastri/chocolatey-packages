@@ -19,6 +19,7 @@ import argparse
 import dataclasses
 import json
 import os
+import secrets
 import shutil
 import subprocess
 import sys
@@ -37,6 +38,8 @@ EXIT_PREREQ = 3
 
 INSTALL_SCRIPT = "tools/chocolateyinstall.ps1"
 PUSH_SOURCE = "https://push.chocolatey.org/"
+# Seconds each choco subcommand may run before run_choco kills it and fails the package.
+CHOCO_TIMEOUTS = {"pack": 10 * 60, "install": 30 * 60, "uninstall": 15 * 60, "push": 10 * 60}
 ZERO_SHA = "0" * 40
 # Vendors whose scripts carry a version-bearing install-directory token.
 # vendor -> quoted script variable holding the token ($graalvmDir is the full zip root)
@@ -83,9 +86,35 @@ def md_table(headers: list[str], rows: list[list[str]]) -> str:
     return "\n".join(lines)
 
 
-def _run(cmd: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess:
-    """Run a command without a shell, capturing text output."""
-    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+def _kill_tree(proc: subprocess.Popen) -> None:
+    """Kill ``proc`` and its children (choco starts msiexec/powershell, which hold its pipes)."""
+    if os.name == "nt":
+        try:
+            subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True, timeout=60)
+        except (OSError, subprocess.SubprocessError):
+            pass  # proc.kill() below still stops choco itself
+    proc.kill()
+
+
+def _run(cmd: list[str], *, cwd: Path | None = None, timeout: float | None = None) -> subprocess.CompletedProcess:
+    """Run a command without a shell, capturing text output.
+
+    With ``timeout`` (seconds) the process tree is killed when it runs too long,
+    and ``subprocess.TimeoutExpired`` is raised carrying the output captured so far.
+    """
+    if timeout is None:
+        return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    with subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as proc:
+        try:
+            stdout, stderr = proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            _kill_tree(proc)
+            try:
+                stdout, stderr = proc.communicate(timeout=60)
+            except subprocess.TimeoutExpired:  # a survivor still holds the pipes
+                stdout, stderr = "", "(output lost: the process tree could not be stopped)"
+            raise subprocess.TimeoutExpired(cmd, timeout, output=stdout, stderr=stderr) from None
+    return subprocess.CompletedProcess(cmd, proc.returncode, stdout, stderr)
 
 
 def _display(cmd: list[str]) -> str:
@@ -94,6 +123,68 @@ def _display(cmd: list[str]) -> str:
         if part in ("-k", "--key", "--api-key"):
             shown[i + 1] = "***"
     return " ".join(shown)
+
+
+def _redact(text: str, cmd: list[str]) -> str:
+    """Replace the API key (CHOCO_KEY, or a ``-k`` value in ``cmd``) with ``***``."""
+    keys = {os.environ.get("CHOCO_KEY", "")}
+    keys |= {cmd[i + 1] for i, part in enumerate(cmd[:-1]) if part in ("-k", "--key", "--api-key")}
+    for key in sorted(filter(None, keys), key=len, reverse=True):
+        text = text.replace(key, "***")
+    return text
+
+
+def _text(value) -> str:
+    """Captured output as text (``TimeoutExpired`` may carry bytes)."""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value or ""
+
+
+def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subprocess.CompletedProcess:
+    """Run a choco command and print its output, so the log shows what choco did.
+
+    In GitHub Actions (GITHUB_ACTIONS=true) the output is wrapped in a
+    collapsible ``::group::<title>`` / ``::endgroup::`` block, and workflow
+    commands are switched off while choco's output is echoed (``::stop-commands::``),
+    so a ``::`` line in that output is shown, not executed. The API key is
+    redacted from everything printed.
+
+    Each subcommand has a timeout (``CHOCO_TIMEOUTS``); on expiry the process
+    tree is killed and the output captured so far is printed in the same block.
+    A non-zero exit or a timeout raises a one-line RuntimeError (step and exit
+    code, or the timeout); choco's output is printed once, above it.
+    """
+    in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
+    timeout = CHOCO_TIMEOUTS[cmd[1]]
+    try:
+        proc = _run(cmd, cwd=cwd, timeout=timeout)
+        stdout, stderr, problem = proc.stdout, proc.stderr, None
+        if proc.returncode != 0:
+            problem = f"{title} failed (exit {proc.returncode})"
+    except subprocess.TimeoutExpired as exc:
+        proc = None
+        stdout, stderr = _text(exc.stdout), _text(exc.stderr)
+        problem = f"{title} timed out after {timeout // 60} min and was stopped"
+    output = _redact("\n".join(s.rstrip() for s in (stdout, stderr) if s and s.strip()), cmd)
+    if proc is None and output:
+        problem += " (its output so far is above)"
+    if in_ci:
+        out(f"::group::{title}")
+    out(f"$ {_display(cmd)}")
+    if output:
+        if in_ci:
+            token = secrets.token_hex(16)
+            out(f"::stop-commands::{token}")
+            out(output)
+            out(f"::{token}::")
+        else:
+            out(output)
+    if in_ci:
+        out("::endgroup::")
+    if problem:
+        raise RuntimeError(problem)
+    return proc
 
 
 def git(root: Path, *args: str) -> subprocess.CompletedProcess:
@@ -392,12 +483,7 @@ def pack(root: Path, pkg: Package, out_dir: Path) -> Path:
     version = nuspec.read(nuspec_file.read_bytes()).version
     out_dir.mkdir(parents=True, exist_ok=True)
     cmd = ["choco", "pack", str(nuspec_file), "--output-directory", str(out_dir), "--limit-output"]
-    out(f"$ {_display(cmd)}")
-    proc = _run(cmd, cwd=root)
-    if proc.stdout:
-        out(proc.stdout.rstrip())
-    if proc.returncode != 0:
-        raise RuntimeError(f"choco pack failed for {pkg.id} (exit {proc.returncode}): {proc.stderr.strip()}")
+    run_choco(cmd, f"choco pack {pkg.id} {version}", cwd=root)
     nupkg = out_dir / f"{pkg.id}.{version}.nupkg"
     if not nupkg.is_file():
         matches = sorted(out_dir.glob(f"{pkg.id}.*.nupkg"))
@@ -474,28 +560,25 @@ def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
         try:
             version = nuspec.read(manifest.nuspec_path(root, pkg).read_bytes()).version
             approved = chocolatey.approved_version(pkg.id, client)
-            if approved and versioning.compare_nuget(version, approved) <= 0:
+            if approved and versioning.compare_nuget(version, approved) == 0:
+                # Files changed without a version bump (e.g. a checksum edit): nothing to push.
+                out(f"skip  {pkg.id}: {version} already approved on Chocolatey")
+                continue
+            if approved and versioning.compare_nuget(version, approved) < 0:
                 raise RuntimeError(f"version {version} is not greater than Chocolatey approved {approved}")
             nupkg = pack(root, pkg, out_dir)
             if in_ci:
-                for cmd in (
-                    ["choco", "install", pkg.id, "--version", version, "--source", str(out_dir), "-y", "--no-progress"],
-                    ["choco", "uninstall", pkg.id, "-y"],
-                ):
-                    out(f"$ {_display(cmd)}")
-                    proc = _run(cmd, cwd=root)
-                    if proc.returncode != 0:
-                        raise RuntimeError(f"{cmd[1]} failed (exit {proc.returncode}): {proc.stdout[-2000:]}")
+                install = ["choco", "install", pkg.id, "--version", version, "--source", str(out_dir), "-y",
+                           "--no-progress"]
+                run_choco(install, f"choco install {pkg.id} {version}", cwd=root)
+                run_choco(["choco", "uninstall", pkg.id, "-y"], f"choco uninstall {pkg.id} {version}", cwd=root)
             else:
                 out(f"skip  {pkg.id}: test install runs in CI only (GITHUB_ACTIONS != true)")
             if args.dry_run:
                 out(f"dry-run {pkg.id} {version}: not pushed")
                 continue
             cmd = ["choco", "push", str(nupkg), "--source", PUSH_SOURCE, "-k", key]
-            out(f"$ {_display(cmd)}")
-            proc = _run(cmd, cwd=root)
-            if proc.returncode != 0:
-                raise RuntimeError(f"choco push failed (exit {proc.returncode}): {proc.stdout[-2000:]}")
+            run_choco(cmd, f"choco push {pkg.id} {version}", cwd=root)
             out(f"pushed {pkg.id} {version}")
         except (RuntimeError, ManifestError, nuspec.NuspecError, chocolatey.ChocolateyError, OSError) as exc:
             out(f"FAIL  {pkg.id}: {exc}")
