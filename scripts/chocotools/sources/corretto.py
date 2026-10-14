@@ -13,7 +13,7 @@
   ``pending`` (GitHub tag, ``published_at``, HTTP status of the tag's MSI URL);
   GitHub tags can be fixes for other platforms that never get a Windows MSI, so
   ``sync`` waits instead of failing (see ``sources.PENDING_ESCALATION_DAYS``).
-  Older than the served tag: fail (out of step).
+  Older than the served tag: the served build is used, with a note.
 - Version mapping: ``A.B.C.D.E`` -> ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``).
 """
 
@@ -88,9 +88,11 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
     if tag is None:
         raise SourceError(f"corretto.aws latest points to {location}, not a {pkg.image} MSI under {RESOURCES}")
     pending = None
-    if tag != github_tag:
-        if versioning.compare_nuget(normalize(github_tag), normalize(tag)) <= 0:
-            raise SourceError(f"corretto.aws latest points to {location}, GitHub tag is {github_tag}")
+    notes = []
+    if tag != github_tag and versioning.compare_nuget(normalize(github_tag), normalize(tag)) <= 0:
+        # GitHub is only a hint: a release it has not caught up with is still the served build.
+        notes.append(f"GitHub latest tag {github_tag} is behind corretto.aws latest {tag}")
+    elif tag != github_tag:
         # GitHub is ahead of corretto.aws: wait for the latest link (which may never move,
         # if the tag only fixes another platform).
         status = msi_status(client, f"{BASE}{RESOURCES}{github_tag}/{filename(pkg, github_tag)}")
@@ -108,4 +110,5 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
         checksum_source="corretto.aws latest_sha256",
         raw={"github_tag": github_tag, "served_tag": tag, "location": location},
         pending=pending,
+        notes=notes,
     )

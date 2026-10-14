@@ -27,13 +27,17 @@ def test_corretto8_jre(fake_client):
     assert r.urls["x64"].endswith("/8.504.04.1/amazon-corretto-8.504.04.1-windows-x64-jre.msi")
 
 
-def test_latest_redirect_mismatch_fails(fake_client):
+def test_github_behind_latest_link_uses_the_served_build_with_a_note(fake_client):
+    # corretto.aws is authoritative: a GitHub tag that has not caught up is only noted.
     fake_client.head_map[LATEST21] = {
         "status": 302,
         "headers": {"location": "/downloads/resources/21.0.13.1.1/amazon-corretto-21.0.13.1.1-windows-x64.msi"},
     }
-    with pytest.raises(sources.SourceError, match="GitHub tag is 21.0.12.12.1"):
-        corretto.fetch(pkg(vendor="corretto", major=21), client=fake_client)
+    r = corretto.fetch(pkg(vendor="corretto", major=21), client=fake_client)
+    assert (r.version, r.version_raw) == ("21.0.13.11", "21.0.13.1.1")
+    assert r.urls["x64"] == "https://corretto.aws/downloads/resources/21.0.13.1.1/amazon-corretto-21.0.13.1.1-windows-x64.msi"
+    assert r.pending is None
+    assert r.notes == ["GitHub latest tag 21.0.12.12.1 is behind corretto.aws latest 21.0.13.1.1"]
 
 
 GITHUB21 = "https://api.github.com/repos/corretto/corretto-21/releases/latest"

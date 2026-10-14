@@ -100,6 +100,7 @@ class Release:
     extras: dict[str, str] = field(default_factory=dict)  # e.g. dir_version
     raw: object = None
     pending: Pending | None = None  # a newer announced release this one stands in for
+    notes: list[str] = field(default_factory=list)  # remarks for the sync/compare note, e.g. a lagging hint
 
 
 def module(vendor: str) -> ModuleType:

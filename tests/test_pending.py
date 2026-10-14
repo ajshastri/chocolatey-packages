@@ -117,6 +117,21 @@ def test_latest_link_newer_than_repo_syncs_to_it(repo, capsys):
     assert "1 changed, 0 pending, 0 failed, 1 checked." in out
 
 
+def test_github_behind_latest_link_syncs_with_a_note(repo, capsys):
+    # GitHub still at 21.0.12.12.1, corretto.aws latest moved to 21.0.12.13.1: corretto.aws decides.
+    client = repo["client"]
+    set_github(client, "21.0.12.12.1")
+    client.head_map[LATEST21] = {"status": 302, "headers": {"location": MSI21.format("21.0.12.13.1")}}
+    client.get_map[SHA21] = b"a" * 64 + b"\n"
+    assert run(repo, "sync", "--id", "corretto21jdk") == 0
+    nuspec = (repo["root"] / "corretto-jdk-21/corretto21jdk.nuspec").read_bytes()
+    assert b"<version>21.0.12.131</version>" in nuspec
+    out = capsys.readouterr().out
+    assert "| corretto21jdk | 21.0.12.121 | 21.0.12.131 | updated |" in out
+    assert "GitHub latest tag 21.0.12.12.1 is behind corretto.aws latest 21.0.12.13.1" in out
+    assert "1 changed, 0 pending, 0 failed, 1 checked." in out
+
+
 @pytest.mark.parametrize("days, code, status", [(89, 0, "pending"), (91, 1, "failed")])
 def test_pending_escalates_after_90_days(repo, capsys, days, code, status):
     repo["now"] = PUBLISHED + timedelta(days=days)

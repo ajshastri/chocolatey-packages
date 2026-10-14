@@ -202,6 +202,11 @@ def duration(seconds: float) -> str:
     return f"{seconds:.0f}s"
 
 
+def circuit_open_message(policy: RetryPolicy, spent: float) -> str:
+    """Why a request to a host whose circuit breaker is open fails at once."""
+    return f"{policy.label} unavailable (gave up after {duration(spent)} of retries earlier in this run)"
+
+
 def redact(text: str) -> str:
     """Hide ``$CHOCO_KEY`` (the Chocolatey API key) in a log line."""
     key = os.environ.get("CHOCO_KEY", "")
@@ -226,7 +231,8 @@ class Client:
     _last: dict[str, float] = field(default_factory=dict)
     _memo: dict[str, bytes] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
-    _gave_up: dict[str, float] = field(default_factory=dict)  # host -> budget it used up (circuit open)
+    # host -> budget it used up (circuit open); publish's choco push retries share it for push.chocolatey.org
+    gave_up: dict[str, float] = field(default_factory=dict)
 
     @classmethod
     def from_env(cls) -> "Client":
@@ -289,9 +295,8 @@ class Client:
         """
         host = _host(url)
         policy = retry_policy(host, self.feed_budget)
-        if policy.circuit_breaker and host in self._gave_up:
-            raise HttpError(f"{policy.label} unavailable (gave up after {duration(self._gave_up[host])} of retries "
-                            "earlier in this run)", None, url)
+        if policy.circuit_breaker and host in self.gave_up:
+            raise HttpError(circuit_open_message(policy, self.gave_up[host]), None, url)
         backoff = Backoff(policy, clock=self.clock, uniform=self.uniform)
         while True:
             self._throttle(url)
@@ -324,7 +329,7 @@ class Client:
                 if policy.budget is None:
                     raise HttpError(message, status, url) from error
                 if policy.circuit_breaker:
-                    self._gave_up[host] = policy.budget
+                    self.gave_up[host] = policy.budget
                 raise HttpError(f"{policy.label} unavailable: gave up after {duration(policy.budget)} of retries; "
                                 f"last error: {message}", status, url) from error
             self.log(backoff.line(host, reason, wait))

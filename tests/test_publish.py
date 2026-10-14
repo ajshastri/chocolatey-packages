@@ -8,6 +8,7 @@ import pytest
 
 from chocotools import chocolatey, cli
 from conftest import FakeClient, copy_pkg
+from conftest import pkg as make_pkg
 
 MANIFEST = """
 [[package]]
@@ -81,6 +82,7 @@ def env(tmp_path, monkeypatch):
     client.sleep = lambda s: (state["sleeps"].append(s), clock.__setitem__("t", clock["t"] + s))
     client.uniform = lambda low, high: high
     client.feed_budget = None
+    client.gave_up = {}  # the circuit breaker state a real Client keeps per host
     state["client"] = client
     return state
 
@@ -394,12 +396,25 @@ def test_push_retry_conflict_not_on_the_feed_fails(env, monkeypatch, capsys):
             "does not list zulu8 8.96.0.205") in capsys.readouterr().out
 
 
-def test_push_conflict_on_the_first_attempt_is_not_retried(env, monkeypatch, capsys):
+def test_push_conflict_on_the_first_attempt_confirmed_on_the_feed_is_success(env, monkeypatch, capsys):
+    # A re-run after an earlier run pushed the version (submitted, not approved yet).
     env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.96.0.205")
+    push_env(env, monkeypatch, (1, CONFLICT))
+    assert run(env, "--id", "zulu8") == 0
+    assert choco_cmds(env).count("push") == 1 and env["sleeps"] == []
+    out = capsys.readouterr().out
+    assert ("skip  zulu8: 8.96.0.205 already on Chocolatey (choco push got a conflict; Chocolatey lists the "
+            "version)") in out
+    assert "FAIL" not in out
+
+
+def test_push_conflict_on_the_first_attempt_not_on_the_feed_fails(env, monkeypatch, capsys):
+    env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.90.0.1", "true")
     push_env(env, monkeypatch, (1, CONFLICT))
     assert run(env, "--id", "zulu8") == 1
     assert choco_cmds(env).count("push") == 1 and env["sleeps"] == []
-    assert "FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1)" in capsys.readouterr().out
+    assert ("FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1): Chocolatey reports a conflict but does not "
+            "list zulu8 8.96.0.205") in capsys.readouterr().out
 
 
 def test_push_non_transient_failure_is_not_retried(env, monkeypatch, capsys):
@@ -417,6 +432,49 @@ def test_push_gives_up_when_the_budget_is_spent(env, monkeypatch, capsys):
     assert choco_cmds(env).count("push") == 3
     assert ("FAIL  zulu8: choco push zulu8 8.96.0.205 (retry 2) failed (exit 1); gave up after 12s of push retries"
             in capsys.readouterr().out)
+
+
+@pytest.mark.parametrize("pid, version", [("Temurin8", "8.504.1"), ("liberica8jdk", "8.0.504.1"),
+                                          ("corretto8jdk", "8.504.4.1"), ("x", "8.0.409.1")])
+def test_push_status_digits_in_the_version_are_not_transient(env, monkeypatch, pid, version):
+    # choco names the nupkg; its 504 (or 409) is part of the version, the 401 is the real answer.
+    nupkg = env["root"] / "out" / f"{pid}.{version}.nupkg"
+    output = (f"Attempting to push {pid}.{version}.nupkg to https://push.chocolatey.org/\n"
+              f"{pid} {version} was not pushed: Response status code does not indicate success: 401 (Unauthorized).\n"
+              f"Failed to process {nupkg}")
+    push_env(env, monkeypatch, (1, output))
+    with pytest.raises(cli.ChocoError, match="failed \\(exit 1\\)"):
+        cli.push(env["root"], cli_pkg(pid), version, nupkg, "secret-key", env["client"])
+    assert choco_cmds(env) == ["push"] and env["sleeps"] == []
+
+
+def cli_pkg(pid):
+    return make_pkg(id=pid, folder=pid)
+
+
+@pytest.mark.parametrize("text, hit", [
+    ("Response status code does not indicate success: 503 (Service Unavailable).", "503"),
+    ("HTTP 502", "502"), ("upstream error 504.", "504"), ("got 429", "429"),
+    ("version 8.0.504+1", None), ("jdk8u504-b01", None), ("Temurin8.8.504.1.nupkg", None), ("8.504.4.1", None),
+])
+def test_push_transient_status_codes_stand_alone(text, hit):
+    match = cli.PUSH_TRANSIENT.search(text)
+    assert (match.group(0) if match else None) == hit
+
+
+def test_push_circuit_breaker_fails_later_pushes_at_once(env, monkeypatch, capsys):
+    env["client"].feed_budget = 12
+    push_env(env, monkeypatch, *[(1, UNAVAILABLE)] * 10)
+    nupkg = env["root"] / "out" / "zulu8.8.96.0.205.nupkg"
+    with pytest.raises(RuntimeError, match="gave up after 12s of push retries"):
+        cli.push(env["root"], cli_pkg("zulu8"), "8.96.0.205", nupkg, "secret-key", env["client"])
+    pushes, sleeps = choco_cmds(env).count("push"), list(env["sleeps"])
+    assert env["client"].gave_up == {"push.chocolatey.org": 12}
+    with pytest.raises(RuntimeError) as info:
+        cli.push(env["root"], cli_pkg("zulu11"), "11.0.1", env["root"] / "out" / "zulu11.11.0.1.nupkg",
+                 "secret-key", env["client"])
+    assert str(info.value) == "Chocolatey feed unavailable (gave up after 12s of retries earlier in this run)"
+    assert choco_cmds(env).count("push") == pushes and env["sleeps"] == sleeps  # no push, no wait
 
 
 def test_push_retry_logs_redact_the_key(env, monkeypatch, capsys):

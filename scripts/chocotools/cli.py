@@ -43,15 +43,19 @@ INSTALL_SCRIPT = "tools/chocolateyinstall.ps1"
 PUSH_SOURCE = "https://push.chocolatey.org/"
 # Seconds each choco subcommand may run before run_choco kills it and fails the package.
 CHOCO_TIMEOUTS = {"pack": 10 * 60, "install": 30 * 60, "uninstall": 15 * 60, "push": 10 * 60}
+# A status code standing alone, not part of a version or name such as 8.504.1, 8.0.504+1 or jdk8u504-b01.
+_STATUS = r"(?<![\w.]){}(?![\w+]|\.\d)"
 # choco push output that marks a failure worth retrying (feed overloaded or unreachable).
+# push() matches it after removing the nupkg name and version from the output.
 PUSH_TRANSIENT = re.compile(
-    r"\b(?:429|500|502|503|504)\b|too many requests|internal server error|bad gateway|service unavailable"
-    r"|gateway time-?out|timed? ?out|unable to connect|could not connect|connection (?:was )?(?:closed|reset"
-    r"|refused|aborted)|forcibly closed|actively refused|remote name could not be resolved|no such host",
+    _STATUS.format("(?:429|500|502|503|504)") + r"|too many requests|internal server error|bad gateway"
+    r"|service unavailable|gateway time-?out|timed? ?out|unable to connect|could not connect"
+    r"|connection (?:was )?(?:closed|reset|refused|aborted)|forcibly closed|actively refused"
+    r"|remote name could not be resolved|no such host",
     re.IGNORECASE,
 )
 # choco push output saying the version is already on the feed.
-PUSH_CONFLICT = re.compile(r"\b409\b|\bconflict\b|already exists", re.IGNORECASE)
+PUSH_CONFLICT = re.compile(_STATUS.format("409") + r"|\bconflict\b|already exists", re.IGNORECASE)
 ZERO_SHA = "0" * 40
 # Vendors whose scripts carry a version-bearing install-directory token.
 # vendor -> quoted script variable holding the token ($graalvmDir is the full zip root)
@@ -346,7 +350,7 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
         row.status, row.message = "failed", f"package fix: {exc}"
         return row
     clear_fix = bool(pkg.package_fix) and not keep_fix
-    notes = []
+    notes = list(release.notes)
     if keep_fix:
         notes.append(f"package fix {pkg.package_fix} (upstream {release.version})")
     if clear_fix:
@@ -357,8 +361,8 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
         if cmp == 0:
             if clear_fix:
                 # The nuspec already left the fix's line (hand edit): nothing is written, so say so.
-                notes = [f"package_fix {pkg.package_fix} is stale (declared for {pkg.package_fix_line}); "
-                         "remove package_fix and package_fix_line from packages.toml"]
+                notes = [*release.notes, f"package_fix {pkg.package_fix} is stale (declared for "
+                         f"{pkg.package_fix_line}); remove package_fix and package_fix_line from packages.toml"]
             if release.pending:
                 # A newer release is announced but not served yet: wait for it, unless it has waited too long.
                 notes.insert(0, release.pending.message())
@@ -568,20 +572,31 @@ def tree_problems(root: Path, pkgs: list[Package]) -> list[str]:
     return problems
 
 
+def push_output(output: str, nupkg: Path, version: str) -> str:
+    """choco push output without the nupkg path/name and version, whose digits are not status codes."""
+    for text in sorted({str(nupkg), nupkg.name, version}, key=len, reverse=True):
+        output = output.replace(text, " ")
+    return output
+
+
 def push(root: Path, pkg: Package, version: str, nupkg: Path, key: str, client: Client) -> str:
     """``choco push`` with the Chocolatey feed's retry policy; returns the success line.
 
     A failed push whose output shows a transient problem (``PUSH_TRANSIENT``: 429/5xx,
     timeout, connection failure) or that choco timed out is retried with backoff
-    until the feed's retry budget is spent. If a retry gets a conflict
-    (``PUSH_CONFLICT``: the version already exists), an earlier attempt probably
-    went through: that counts as success only when the feed or the package page
-    shows ``<id> <version>``. Anything else fails at once.
+    until the feed's retry budget is spent. Once one push has spent it, later
+    pushes in the run fail at once (the client's circuit breaker for the push
+    host). A conflict (``PUSH_CONFLICT``: the version already exists, from this
+    run's earlier attempt or an earlier run) counts as success only when the
+    feed or the package page shows ``<id> <version>``. Anything else fails at once.
     """
     cmd = ["choco", "push", str(nupkg), "--source", PUSH_SOURCE, "-k", key]
     title = f"choco push {pkg.id} {version}"
     host = urllib.parse.urlsplit(PUSH_SOURCE).hostname or ""
     policy = http.retry_policy(host, getattr(client, "feed_budget", None))
+    gave_up = getattr(client, "gave_up", None)  # host -> spent budget, shared with the client's requests
+    if policy.circuit_breaker and gave_up is not None and host in gave_up:
+        raise RuntimeError(http.circuit_open_message(policy, gave_up[host]))
     backoff = http.Backoff(policy, clock=getattr(client, "clock", time.monotonic),
                            uniform=getattr(client, "uniform", random.uniform))
     sleep = getattr(client, "sleep", time.sleep)
@@ -591,16 +606,23 @@ def push(root: Path, pkg: Package, version: str, nupkg: Path, key: str, client: 
             run_choco(cmd, title if not retry else f"{title} (retry {retry})", cwd=root)
             return f"pushed {pkg.id} {version}"
         except ChocoError as exc:
-            if retry and PUSH_CONFLICT.search(exc.output):
-                if chocolatey.has_version(pkg.id, version, client):
+            output = push_output(exc.output, nupkg, version)
+            if PUSH_CONFLICT.search(output):
+                if not chocolatey.has_version(pkg.id, version, client):
+                    raise RuntimeError(f"{exc}: Chocolatey reports a conflict but does not list "
+                                       f"{pkg.id} {version}") from exc
+                if retry:
                     return (f"pushed {pkg.id} {version} (retry {retry} got a conflict; Chocolatey lists the version, "
                             "so an earlier attempt went through)")
-                raise RuntimeError(f"{exc}: Chocolatey reports a conflict but does not list {pkg.id} {version}") from exc
-            transient = PUSH_TRANSIENT.search(exc.output)
+                return (f"skip  {pkg.id}: {version} already on Chocolatey (choco push got a conflict; "
+                        "Chocolatey lists the version)")
+            transient = PUSH_TRANSIENT.search(output)
             if not (exc.timed_out or transient):
                 raise
             wait = backoff.next_wait()
             if wait is None:
+                if policy.circuit_breaker and gave_up is not None:
+                    gave_up[host] = policy.budget or 0
                 raise RuntimeError(f"{exc}; gave up after {http.duration(policy.budget or 0)} of push retries") from exc
             reason = str(exc) if transient is None else f"{exc}, output mentions {transient.group(0)!r}"
             err(_redact(backoff.line(host, reason, wait), cmd))
@@ -699,7 +721,9 @@ def compare_row(root: Path, pkg: Package, client: Client) -> dict:
             return row
         cmp = versioning.compare_nuget(row["repo"], target)
         row["status"] = "in-sync" if cmp == 0 else ("behind" if cmp < 0 else "ahead")
-        notes = [f"package fix {pkg.package_fix}: {row['source']} -> {target}"] if keep_fix else []
+        notes = list(release.notes)
+        if keep_fix:
+            notes.append(f"package fix {pkg.package_fix}: {row['source']} -> {target}")
         if release.pending:
             if cmp == 0:
                 row["status"] = "pending upstream"
