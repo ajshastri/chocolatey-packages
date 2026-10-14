@@ -37,11 +37,17 @@ def env(tmp_path, monkeypatch):
     copy_pkg("GraalVM-17", tmp_path)
     # "output": choco subcommand -> (stdout, stderr) the fake choco prints
     # "hang": choco subcommands that run past their timeout (TimeoutExpired with the output so far)
+    # "pushes": per-call choco push results (exit code, stdout) consumed in order; "hang" times that call out
     state = {"cmds": [], "status": "", "approved": "8.90.0.1", "fail": set(), "output": {}, "hang": set(),
-             "timeouts": {}}
+             "timeouts": {}, "pushes": []}
 
     def fake_run(cmd, *, cwd=None, timeout=None):
         state["cmds"].append(list(cmd))
+        if cmd[:2] == ["choco", "push"] and state["pushes"]:
+            code, stdout = state["pushes"].pop(0)
+            if code == "hang":
+                raise subprocess.TimeoutExpired(cmd, timeout, output=stdout, stderr="")
+            return subprocess.CompletedProcess(cmd, code, stdout, "")
         if cmd[0] == "choco":
             state["timeouts"][cmd[1]] = timeout
             if cmd[1] in state["hang"]:
@@ -65,8 +71,17 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(chocolatey, "approved_version", lambda pid, client=None: state["approved"])
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.delenv("CHOCO_KEY", raising=False)
+    monkeypatch.delenv("CHOCOTOOLS_FEED_RETRY_BUDGET", raising=False)
     state["root"] = tmp_path
-    state["client"] = FakeClient(head={ZULU_URL: {"status": 200, "headers": {}}}, use_index=False)
+    client = FakeClient(head={ZULU_URL: {"status": 200, "headers": {}}}, use_index=False)
+    # push retries take their backoff from the client: record waits instead of sleeping
+    state["sleeps"] = []
+    clock = {"t": 0.0}
+    client.clock = lambda: clock["t"]
+    client.sleep = lambda s: (state["sleeps"].append(s), clock.__setitem__("t", clock["t"] + s))
+    client.uniform = lambda low, high: high
+    client.feed_budget = None
+    state["client"] = client
     return state
 
 
@@ -309,3 +324,111 @@ def test_changed_range_maps_folders(env, monkeypatch):
     pkgs = cli.changed_packages(env["root"], mf, "0000000000000000000000000000000000000000..abc123")
     assert [p.id for p in pkgs] == ["graalvm-java17", "zulu8"]
     assert ["git", "diff", "--name-only", "abc123~1", "abc123"] in env["cmds"]
+
+
+# ----- choco push retries ------------------------------------------------------
+
+UNAVAILABLE = "Attempting to push zulu8.8.96.0.205.nupkg to https://push.chocolatey.org/\n" \
+              "Response status code does not indicate success: 503 (Service Unavailable)."
+CONFLICT = "Response status code does not indicate success: 409 (Conflict)."
+
+
+def feed_with(version, approved="false"):
+    return (f'<feed xmlns="http://www.w3.org/2005/Atom" xmlns:m="m" xmlns:d="d"><entry><content><m:properties>'
+            f'<d:Version>{version}</d:Version><d:IsApproved>{approved}</d:IsApproved>'
+            f'</m:properties></content></entry></feed>').encode()
+
+
+def push_env(env, monkeypatch, *pushes):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("CHOCO_KEY", "secret-key")
+    env["pushes"] = list(pushes)
+
+
+def test_push_retries_on_503_then_succeeds(env, monkeypatch, capsys):
+    push_env(env, monkeypatch, (1, UNAVAILABLE), (1, "connection was closed"), (0, "pushed ok"))
+    assert run(env, "--id", "zulu8") == 0
+    assert choco_cmds(env) == ["pack", "install", "uninstall", "push", "push", "push"]
+    assert env["sleeps"] == [5.0, 10.0]
+    captured = capsys.readouterr()
+    assert captured.err.splitlines() == [
+        "retry 1 for push.chocolatey.org: choco push zulu8 8.96.0.205 failed (exit 1), output mentions '503'; "
+        "waiting 5.0s (budget left 900s)",
+        "retry 2 for push.chocolatey.org: choco push zulu8 8.96.0.205 (retry 1) failed (exit 1), output mentions "
+        "'connection was closed'; waiting 10.0s (budget left 895s)",
+    ]
+    assert "::group::choco push zulu8 8.96.0.205 (retry 2)" in captured.out
+    assert "pushed zulu8 8.96.0.205\n" in captured.out
+    assert "secret-key" not in captured.out + captured.err
+
+
+def test_push_timeout_is_retried(env, monkeypatch, capsys):
+    push_env(env, monkeypatch, ("hang", "Uploading..."), (0, "pushed ok"))
+    assert run(env, "--id", "zulu8") == 0
+    assert choco_cmds(env).count("push") == 2
+    assert "retry 1 for push.chocolatey.org: choco push zulu8 8.96.0.205 timed out after 10 min" in capsys.readouterr().err
+
+
+def test_push_retry_conflict_confirmed_on_the_feed_is_success(env, monkeypatch, capsys):
+    env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.96.0.205")
+    push_env(env, monkeypatch, (1, UNAVAILABLE), (1, CONFLICT))
+    assert run(env, "--id", "zulu8") == 0
+    out = capsys.readouterr().out
+    assert ("pushed zulu8 8.96.0.205 (retry 1 got a conflict; Chocolatey lists the version, so an earlier attempt "
+            "went through)") in out
+    assert "FAIL" not in out
+
+
+def test_push_retry_conflict_confirmed_by_package_page(env, monkeypatch):
+    env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.90.0.1", "true")
+    env["client"].head_map[chocolatey.package_page("zulu8", "8.96.0.205")] = {"status": 200, "headers": {}}
+    push_env(env, monkeypatch, (1, UNAVAILABLE), (1, "The package version already exists on the feed."))
+    assert run(env, "--id", "zulu8") == 0
+
+
+def test_push_retry_conflict_not_on_the_feed_fails(env, monkeypatch, capsys):
+    env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.90.0.1", "true")
+    push_env(env, monkeypatch, (1, UNAVAILABLE), (1, CONFLICT))
+    assert run(env, "--id", "zulu8") == 1
+    assert ("FAIL  zulu8: choco push zulu8 8.96.0.205 (retry 1) failed (exit 1): Chocolatey reports a conflict but "
+            "does not list zulu8 8.96.0.205") in capsys.readouterr().out
+
+
+def test_push_conflict_on_the_first_attempt_is_not_retried(env, monkeypatch, capsys):
+    env["client"].get_map[chocolatey.feed_url("zulu8")] = feed_with("8.96.0.205")
+    push_env(env, monkeypatch, (1, CONFLICT))
+    assert run(env, "--id", "zulu8") == 1
+    assert choco_cmds(env).count("push") == 1 and env["sleeps"] == []
+    assert "FAIL  zulu8: choco push zulu8 8.96.0.205 failed (exit 1)" in capsys.readouterr().out
+
+
+def test_push_non_transient_failure_is_not_retried(env, monkeypatch, capsys):
+    push_env(env, monkeypatch, (1, "Response status code does not indicate success: 401 (Unauthorized)."))
+    assert run(env, "--id", "zulu8") == 1
+    assert choco_cmds(env).count("push") == 1 and env["sleeps"] == []
+    assert capsys.readouterr().err == ""
+
+
+def test_push_gives_up_when_the_budget_is_spent(env, monkeypatch, capsys):
+    env["client"].feed_budget = 12
+    push_env(env, monkeypatch, *[(1, UNAVAILABLE)] * 10)
+    assert run(env, "--id", "zulu8") == 1
+    assert env["sleeps"] == [5.0, 7.0]  # 5, then the 7 s left of the 12 s budget
+    assert choco_cmds(env).count("push") == 3
+    assert ("FAIL  zulu8: choco push zulu8 8.96.0.205 (retry 2) failed (exit 1); gave up after 12s of push retries"
+            in capsys.readouterr().out)
+
+
+def test_push_retry_logs_redact_the_key(env, monkeypatch, capsys):
+    push_env(env, monkeypatch, (1, "503 from proxy for key secret-key"), (0, "ok"))
+    assert run(env, "--id", "zulu8") == 0
+    captured = capsys.readouterr()
+    assert "secret-key" not in captured.out + captured.err
+    assert "503 from proxy for key ***" in captured.out and "retry 1 for push.chocolatey.org" in captured.err
+
+
+def test_push_retry_line_redacts_a_key_in_the_reason(monkeypatch):
+    # The reason is choco's step line plus the matched text; redaction covers both CHOCO_KEY and -k.
+    monkeypatch.delenv("CHOCO_KEY", raising=False)
+    assert cli._redact("retry 1 for push.chocolatey.org: k-abc503; waiting 5.0s", ["choco", "push", "x", "-k", "k-abc503"]) \
+        == "retry 1 for push.chocolatey.org: ***; waiting 5.0s"

@@ -19,15 +19,18 @@ import argparse
 import dataclasses
 import json
 import os
+import random
+import re
 import secrets
 import shutil
 import subprocess
 import sys
+import time
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import __version__, checks, chocolatey, installscript, manifest, nuspec, sources, syncpr, versioning
+from . import __version__, checks, chocolatey, http, installscript, manifest, nuspec, sources, syncpr, versioning
 from .http import Client, HttpError, default_client
 from .manifest import Manifest, ManifestError, Package
 
@@ -40,6 +43,15 @@ INSTALL_SCRIPT = "tools/chocolateyinstall.ps1"
 PUSH_SOURCE = "https://push.chocolatey.org/"
 # Seconds each choco subcommand may run before run_choco kills it and fails the package.
 CHOCO_TIMEOUTS = {"pack": 10 * 60, "install": 30 * 60, "uninstall": 15 * 60, "push": 10 * 60}
+# choco push output that marks a failure worth retrying (feed overloaded or unreachable).
+PUSH_TRANSIENT = re.compile(
+    r"\b(?:429|500|502|503|504)\b|too many requests|internal server error|bad gateway|service unavailable"
+    r"|gateway time-?out|timed? ?out|unable to connect|could not connect|connection (?:was )?(?:closed|reset"
+    r"|refused|aborted)|forcibly closed|actively refused|remote name could not be resolved|no such host",
+    re.IGNORECASE,
+)
+# choco push output saying the version is already on the feed.
+PUSH_CONFLICT = re.compile(r"\b409\b|\bconflict\b|already exists", re.IGNORECASE)
 ZERO_SHA = "0" * 40
 # Vendors whose scripts carry a version-bearing install-directory token.
 # vendor -> quoted script variable holding the token ($graalvmDir is the full zip root)
@@ -134,6 +146,15 @@ def _redact(text: str, cmd: list[str]) -> str:
     return text
 
 
+class ChocoError(RuntimeError):
+    """A choco command failed or timed out; ``output`` is its redacted output."""
+
+    def __init__(self, message: str, output: str = "", timed_out: bool = False):
+        super().__init__(message)
+        self.output = output
+        self.timed_out = timed_out
+
+
 def _text(value) -> str:
     """Captured output as text (``TimeoutExpired`` may carry bytes)."""
     if isinstance(value, bytes):
@@ -152,8 +173,9 @@ def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subproc
 
     Each subcommand has a timeout (``CHOCO_TIMEOUTS``); on expiry the process
     tree is killed and the output captured so far is printed in the same block.
-    A non-zero exit or a timeout raises a one-line RuntimeError (step and exit
-    code, or the timeout); choco's output is printed once, above it.
+    A non-zero exit or a timeout raises a one-line ``ChocoError`` (a RuntimeError:
+    step and exit code, or the timeout); choco's output is printed once, above
+    it, and kept (redacted) on the exception.
     """
     in_ci = os.environ.get("GITHUB_ACTIONS") == "true"
     timeout = CHOCO_TIMEOUTS[cmd[1]]
@@ -183,7 +205,7 @@ def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subproc
     if in_ci:
         out("::endgroup::")
     if problem:
-        raise RuntimeError(problem)
+        raise ChocoError(problem, output, timed_out=proc is None)
     return proc
 
 
@@ -546,6 +568,45 @@ def tree_problems(root: Path, pkgs: list[Package]) -> list[str]:
     return problems
 
 
+def push(root: Path, pkg: Package, version: str, nupkg: Path, key: str, client: Client) -> str:
+    """``choco push`` with the Chocolatey feed's retry policy; returns the success line.
+
+    A failed push whose output shows a transient problem (``PUSH_TRANSIENT``: 429/5xx,
+    timeout, connection failure) or that choco timed out is retried with backoff
+    until the feed's retry budget is spent. If a retry gets a conflict
+    (``PUSH_CONFLICT``: the version already exists), an earlier attempt probably
+    went through: that counts as success only when the feed or the package page
+    shows ``<id> <version>``. Anything else fails at once.
+    """
+    cmd = ["choco", "push", str(nupkg), "--source", PUSH_SOURCE, "-k", key]
+    title = f"choco push {pkg.id} {version}"
+    host = urllib.parse.urlsplit(PUSH_SOURCE).hostname or ""
+    policy = http.retry_policy(host, getattr(client, "feed_budget", None))
+    backoff = http.Backoff(policy, clock=getattr(client, "clock", time.monotonic),
+                           uniform=getattr(client, "uniform", random.uniform))
+    sleep = getattr(client, "sleep", time.sleep)
+    while True:
+        retry = backoff.retries
+        try:
+            run_choco(cmd, title if not retry else f"{title} (retry {retry})", cwd=root)
+            return f"pushed {pkg.id} {version}"
+        except ChocoError as exc:
+            if retry and PUSH_CONFLICT.search(exc.output):
+                if chocolatey.has_version(pkg.id, version, client):
+                    return (f"pushed {pkg.id} {version} (retry {retry} got a conflict; Chocolatey lists the version, "
+                            "so an earlier attempt went through)")
+                raise RuntimeError(f"{exc}: Chocolatey reports a conflict but does not list {pkg.id} {version}") from exc
+            transient = PUSH_TRANSIENT.search(exc.output)
+            if not (exc.timed_out or transient):
+                raise
+            wait = backoff.next_wait()
+            if wait is None:
+                raise RuntimeError(f"{exc}; gave up after {http.duration(policy.budget or 0)} of push retries") from exc
+            reason = str(exc) if transient is None else f"{exc}, output mentions {transient.group(0)!r}"
+            err(_redact(backoff.line(host, reason, wait), cmd))
+            sleep(wait)
+
+
 def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
     selected = select(root, mf, args)
     pkgs = [p for p in selected if not p.frozen]
@@ -593,10 +654,9 @@ def cmd_publish(args, root: Path, mf: Manifest, client: Client) -> int:
             if args.dry_run:
                 out(f"dry-run {pkg.id} {version}: not pushed")
                 continue
-            cmd = ["choco", "push", str(nupkg), "--source", PUSH_SOURCE, "-k", key]
-            run_choco(cmd, f"choco push {pkg.id} {version}", cwd=root)
-            out(f"pushed {pkg.id} {version}")
-        except (RuntimeError, ManifestError, nuspec.NuspecError, chocolatey.ChocolateyError, OSError) as exc:
+            out(push(root, pkg, version, nupkg, key, client))
+        except (RuntimeError, ManifestError, nuspec.NuspecError, chocolatey.ChocolateyError, HttpError,
+                OSError) as exc:
             out(f"FAIL  {pkg.id}: {exc}")
             failed += 1
     return EXIT_FAILED if failed else EXIT_OK

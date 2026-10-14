@@ -87,7 +87,8 @@ jobs:
     needs: check
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run)
     runs-on: windows-latest
-    # Same room as `check`: this job repeats its checks before pushing.
+    # Same room as `check` (this job repeats its checks), which also covers
+    # `choco push` retries (up to the feed's 15 min budget per package).
     timeout-minutes: 90
     # Required reviewers on this environment gate every real push.
     environment: chocolatey
