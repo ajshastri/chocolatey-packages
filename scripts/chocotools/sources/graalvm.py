@@ -3,6 +3,9 @@
 - Version: ``GET https://api.foojay.io/disco/v3.0/packages?version=<m>&distribution=graalvm_community&architecture=amd64&archive_type=zip&operating_system=windows&package_type=jdk&latest=available``;
   the max ``java_version`` (4-part, e.g. ``25.3.4.1``) and its ``filename``.
   foojay is used for the version only; its URLs never reach package files.
+  The GitHub tag can have a 5th part (``graal-25.4.4.1.1``, asset
+  ``25i4-25.0.4.1.1``); ``java_version`` is then its first four (``25.4.4.1``),
+  and ``versioning.graalvm_tag`` checks the URL the same way.
 - Download: the asset with exactly that filename in
   ``GET https://api.github.com/repos/graalvm/graalvm-ce-builds/releases?per_page=40``;
   ``browser_download_url`` (github.com) and ``digest``. No asset -> fail.

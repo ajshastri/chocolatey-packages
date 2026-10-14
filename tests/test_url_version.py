@@ -33,6 +33,8 @@ REAL = [
     ("mvnd", "https://github.com/apache/maven-mvnd/releases/download/1.0.6/maven-mvnd-1.0.6-windows-amd64.zip", "1.0.6"),
     ("wildfly", "https://github.com/wildfly/wildfly/releases/download/41.0.1.Final/wildfly-41.0.1.Final.zip", "41.0.1"),
     ("lmc", "https://download.bell-sw.com/lmc/8.3.0/bellsoft-lmc8.3.0-windows-amd64.zip", "8.3.0"),
+    # GraalVM 25i4: 5-part tag, package version = foojay java_version (first four parts)
+    ("graalvm", "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip", "25.4.4.1"),
 ]
 
 
@@ -52,6 +54,7 @@ def test_url_version_real_urls(vendor, url, version):
         ("liberica", "21.0.12.1+1", liberica.normalize, REAL[10][1]),
         ("sapmachine", "sapmachine-21.0.12.1", sapmachine.normalize, REAL[12][1]),
         ("graalvm", "25.3.4.1", graalvm.normalize, REAL[13][1]),
+        ("graalvm", "25.4.4.1", graalvm.normalize, REAL[20][1]),
         ("openjdk", "27", openjdk.normalize, REAL[15][1]),
         ("jmc", "9.1.2-ga", jmc.normalize, REAL[16][1]),
         ("mvnd", "1.0.6", mvnd.normalize, REAL[17][1]),
@@ -158,3 +161,55 @@ def test_graalvm_java17_exception_is_pinned_to_its_version(tmp_path):
     bump_nuspec(tmp_path / "GraalVM-17", b"<version>22.3.3</version>", b"<version>22.3.4</version>")
     assert any("is for version 17.0.9 but the nuspec expects 22.3.4" in e
                for e in checks.validate_package(tmp_path, p).errors)
+
+
+# ----- GraalVM 25 tags: graal-25.3.4.1 (4 parts) and graal-25.4.4.1.1 (5 parts) ------------
+
+GRAAL = "https://github.com/graalvm/graalvm-ce-builds/releases/download/"
+GRAAL_25_0_2 = GRAAL + "jdk-25.0.2/graalvm-community-jdk-25.0.2_windows-x64_bin.zip"  # in the fixture
+GRAAL_25I3 = GRAAL + "graal-25.3.4.1/graalvm-community-jdk-25i3-25.0.4.1_windows-x64_bin.zip"
+GRAAL_25I4 = GRAAL + "graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip"
+
+
+def graalvm_folder(tmp_path, version: str, url: str):
+    shutil.copytree(PKG_FIXTURES / "GraalVM", tmp_path / "GraalVM")
+    script = tmp_path / "GraalVM/tools/chocolateyinstall.ps1"
+    data = script.read_bytes()
+    assert GRAAL_25_0_2.encode() in data
+    script.write_bytes(data.replace(GRAAL_25_0_2.encode(), url.encode()))
+    bump_nuspec(tmp_path / "GraalVM", b"<version>25.0.2</version>", f"<version>{version}</version>".encode())
+    return pkg(id="graalvm", folder="GraalVM", vendor="graalvm", major=25)
+
+
+@pytest.mark.parametrize(("version", "url"), [("25.3.4.1", GRAAL_25I3), ("25.4.4.1", GRAAL_25I4)])
+def test_graalvm25_tag_layouts_validate(tmp_path, version, url):
+    assert checks.validate_package(tmp_path, graalvm_folder(tmp_path, version, url)).errors == []
+
+
+@pytest.mark.parametrize(
+    ("version", "url", "found"),
+    [
+        ("25.4.4.1", GRAAL_25I3, "25.3.4.1"),  # nuspec bumped by hand, URL left on 25i3
+        ("25.3.4.1", GRAAL_25I4, "25.4.4.1"),  # URL bumped, nuspec left behind
+        ("25.4.4.2", GRAAL_25I4, "25.4.4.1"),  # nuspec ahead of the 5-part tag's version
+        ("25.4.4.1", GRAAL_25_0_2, "25.0.2"),  # the pre-25i jdk- layout
+    ],
+)
+def test_graalvm25_stale_url_fails(tmp_path, version, url, found):
+    errors = checks.validate_package(tmp_path, graalvm_folder(tmp_path, version, url)).errors
+    assert url_errors(errors) == [f"x64 URL is for version {found} but the nuspec expects {version}: {url}"]
+
+
+@pytest.mark.parametrize(
+    ("path", "message"),
+    [
+        ("graal-25.4.4.1.1/graalvm-community-jdk-25i3-25.0.4.1.1_windows-x64_bin.zip", "does not match asset"),
+        ("graal-25.4.4.1.2/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip", "does not match asset"),
+        ("graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.1.4.1.1_windows-x64_bin.zip", "is not 25i4-25.0.<update>"),
+        ("graal-25.4.4.1.1.1/graalvm-community-jdk-25i4-25.0.4.1.1.1_windows-x64_bin.zip", "more than 5 parts"),
+        ("graal-25.4.4.1.1/graalvm-community-jdk-25.0.4.1.1_windows-x64_bin.zip", "more than 4 parts"),
+    ],
+)
+def test_graalvm_tag_and_asset_must_agree(path, message):
+    with pytest.raises(versioning.VersionError, match=re.escape(message)):
+        versioning.url_version("graalvm", GRAAL + path)
