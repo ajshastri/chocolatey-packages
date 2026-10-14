@@ -29,6 +29,9 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # Room for one Chocolatey feed outage (chocotools waits up to 15 min per
+    # request, then fails the rest fast) on top of a normal run.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

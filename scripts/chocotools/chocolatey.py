@@ -3,8 +3,9 @@
 Query: ``https://community.chocolatey.org/api/v2/FindPackagesById()?id='<id>'``,
 following ``<link rel="next">`` pages. Returns the highest NuGet version whose
 ``d:IsApproved`` is ``true``. Rejected versions are not listed by the feed.
-Requests go through ``http.Client`` (>= 1.1 s apart for this host, retries on
-429/5xx).
+Requests go through ``http.Client`` (>= 1.1 s apart for this host; 429/5xx,
+timeouts and connection errors are retried with backoff for up to
+``http.FEED_RETRY_BUDGET`` per request, then the client stops asking the feed).
 """
 
 from __future__ import annotations
