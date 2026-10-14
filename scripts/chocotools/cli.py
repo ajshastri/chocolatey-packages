@@ -337,12 +337,23 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
                 # The nuspec already left the fix's line (hand edit): nothing is written, so say so.
                 notes = [f"package_fix {pkg.package_fix} is stale (declared for {pkg.package_fix_line}); "
                          "remove package_fix and package_fix_line from packages.toml"]
+            if release.pending:
+                # A newer release is announced but not served yet: wait for it, unless it has waited too long.
+                notes.insert(0, release.pending.message())
+                if release.pending.escalated(sources.utcnow()):
+                    notes.insert(1, f"still not served after more than {sources.PENDING_ESCALATION_DAYS} days")
+                    row.status, row.message = "failed", "; ".join(notes)
+                else:
+                    row.status, row.message = "pending", "; ".join(notes)
+                return row
             row.status, row.message = "up-to-date", "; ".join(notes)
             return row
         if cmp < 0:
             row.status = "failed"
             row.message = f"upstream {target} is lower than repo {current}"
             return row
+    if release.pending:
+        notes.append(f"newer release pending: {release.pending.message()}")
     try:
         approved = chocolatey.approved_version(pkg.id, client)
     except chocolatey.ChocolateyError as exc:
@@ -392,13 +403,18 @@ def sync_report(rows: list[SyncRow], dry_run: bool) -> str:
         [[r.id, r.current, r.new, r.status, r.urls, r.checksum_source, r.message] for r in rows],
     )
     changed = [r for r in rows if r.status in ("updated", "would update")]
+    pending = [r for r in rows if r.status == "pending"]
     failed = [r for r in rows if r.failed]
     title = "chocotools sync (dry run)" if dry_run else "chocotools sync"
     lines = [f"## {title}", "", table, ""]
-    lines.append(f"{len(changed)} changed, {len(failed)} failed, {len(rows)} checked.")
+    lines.append(f"{len(changed)} changed, {len(pending)} pending, {len(failed)} failed, {len(rows)} checked.")
     if failed:
         lines += ["", "### Failures", ""]
         lines += [f"- {r.id}: {r.message}" for r in failed]
+    if pending:
+        # Not failures: upstream announced a release its download site does not serve yet.
+        lines += ["", "### Pending", ""]
+        lines += [f"- pending {r.id}: {r.message}" for r in pending]
     return "\n".join(lines) + "\n"
 
 
@@ -623,8 +639,14 @@ def compare_row(root: Path, pkg: Package, client: Client) -> dict:
             return row
         cmp = versioning.compare_nuget(row["repo"], target)
         row["status"] = "in-sync" if cmp == 0 else ("behind" if cmp < 0 else "ahead")
-        if keep_fix:
-            row["note"] = f"package fix {pkg.package_fix}: {row['source']} -> {target}"
+        notes = [f"package fix {pkg.package_fix}: {row['source']} -> {target}"] if keep_fix else []
+        if release.pending:
+            if cmp == 0:
+                row["status"] = "pending upstream"
+            notes.append(release.pending.message())
+            if release.pending.escalated(sources.utcnow()):
+                notes.append(f"pending for more than {sources.PENDING_ESCALATION_DAYS} days (sync fails it)")
+        row["note"] = "; ".join(notes)
     return row
 
 
