@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 import time
@@ -246,10 +247,15 @@ def test_pack_timeout_fails_the_package_outside_ci(env, capsys):
     env["hang"].add("pack")
     assert run(env, "--id", "zulu8", "--dry-run") == 1
     out = capsys.readouterr().out
-    assert "FAIL  zulu8: choco pack zulu8 8.96.0.205 timed out after 10 min" in out
+    # pack printed nothing before it hung, so the FAIL line does not point at output above
+    assert "FAIL  zulu8: choco pack zulu8 8.96.0.205 timed out after 10 min and was stopped\n" in out
+    assert "output so far" not in out
     assert "::group::" not in out  # plain output outside CI
 
 
+# _kill_tree uses taskkill /T on Windows; elsewhere it only kills the direct child,
+# so the grandchild here would hold the pipes for its full 60 s. Publish runs on Windows.
+@pytest.mark.skipif(os.name != "nt", reason="tree kill via taskkill is Windows-only")
 def test_run_kills_a_hung_process_and_keeps_its_output():
     # Like choco starting msiexec: a grandchild inherits the pipes and outlives a plain kill.
     script = ("import subprocess, sys, time; "

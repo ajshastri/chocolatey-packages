@@ -165,8 +165,10 @@ def run_choco(cmd: list[str], title: str, *, cwd: Path | None = None) -> subproc
     except subprocess.TimeoutExpired as exc:
         proc = None
         stdout, stderr = _text(exc.stdout), _text(exc.stderr)
-        problem = f"{title} timed out after {timeout // 60} min and was stopped (its output so far is above)"
+        problem = f"{title} timed out after {timeout // 60} min and was stopped"
     output = _redact("\n".join(s.rstrip() for s in (stdout, stderr) if s and s.strip()), cmd)
+    if proc is None and output:
+        problem += " (its output so far is above)"
     if in_ci:
         out(f"::group::{title}")
     out(f"$ {_display(cmd)}")
