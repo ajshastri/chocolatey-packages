@@ -10,6 +10,12 @@ Each vendor module exposes:
 - optionally ``resolve_extras(pkg, release, client) -> dict``: values that need
   extra network work (zip root directory) and are only computed when sync is
   about to write a new version.
+
+A vendor that sees a newer release announced (e.g. a GitHub tag) than its
+download site serves returns the served build with ``Release.pending`` set.
+``sync`` then reports the package as pending, not failed, while the served build
+is the repo version, and fails it once the announcement is older than
+``PENDING_ESCALATION_DAYS``.
 """
 
 from __future__ import annotations
@@ -18,6 +24,7 @@ import importlib
 import re
 import urllib.parse
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
 from types import ModuleType
 
 from ..http import Client, HttpError, default_client
@@ -38,6 +45,9 @@ VENDOR_MODULES = (
     "lmc",
 )
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
+# A release announced upstream but still not served by the download site is
+# "pending" for this many days; after that sync reports it as a failure.
+PENDING_ESCALATION_DAYS = 90
 
 
 class SourceError(Exception):
@@ -46,6 +56,38 @@ class SourceError(Exception):
 
 class SourceUnsupported(SourceError):
     """There is no machine-readable source for this package."""
+
+
+def utcnow() -> datetime:
+    """Current UTC time (tests replace this to pin the pending escalation)."""
+    return datetime.now(timezone.utc)
+
+
+def parse_timestamp(value, what: str) -> datetime:
+    """An ISO 8601 timestamp such as GitHub's ``published_at`` as an aware UTC datetime."""
+    text = str(require(value, what)).strip()
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise SourceError(f"{what} is not a timestamp: {value!r}") from exc
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+
+@dataclass
+class Pending:
+    """A newer upstream release that the download site does not serve yet."""
+
+    version_raw: str  # the announced version, as published upstream
+    published_at: datetime  # when it was announced (aware, UTC)
+    detail: str  # why it is not used, e.g. "corretto.aws latest still serves 21.0.12.12.1 (...)"
+    announced_by: str = "GitHub"
+
+    def message(self) -> str:
+        return f"{self.announced_by} {self.version_raw} released {self.published_at:%Y-%m-%d}, {self.detail}"
+
+    def escalated(self, now: datetime) -> bool:
+        """True once the announcement is more than ``PENDING_ESCALATION_DAYS`` old."""
+        return now - self.published_at > timedelta(days=PENDING_ESCALATION_DAYS)
 
 
 @dataclass
@@ -57,6 +99,8 @@ class Release:
     checksum_source: str  # where the checksum came from
     extras: dict[str, str] = field(default_factory=dict)  # e.g. dir_version
     raw: object = None
+    pending: Pending | None = None  # a newer announced release this one stands in for
+    notes: list[str] = field(default_factory=list)  # remarks for the sync/compare note, e.g. a lagging hint
 
 
 def module(vendor: str) -> ModuleType:

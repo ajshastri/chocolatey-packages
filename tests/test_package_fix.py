@@ -210,7 +210,7 @@ def test_sync_applies_fix_then_reports_no_change(repo, capsys):
     out = capsys.readouterr().out
     assert "| Temurin21 | 21.0.12.101 | 21.0.12.101 | up-to-date |" in out
     assert "package fix 1 (upstream 21.0.12.1)" in out
-    assert "0 changed, 0 failed, 1 checked." in out
+    assert "0 changed, 0 pending, 0 failed, 1 checked." in out
     assert run(root, "validate") == 0
 
 

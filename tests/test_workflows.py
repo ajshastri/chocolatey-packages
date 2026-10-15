@@ -54,6 +54,14 @@ def test_publish_check_job_has_no_key_and_no_environment():
     ]
 
 
+def test_jobs_have_room_for_a_chocolatey_feed_outage():
+    """chocotools waits up to http.FEED_RETRY_BUDGET (15 min) for the feed; the job timeout must cover it."""
+    expected = {("publish.yaml", "check"): 90, ("publish.yaml", "publish"): 90, ("sync.yaml", "sync"): 45}
+    for (name, job), minutes in expected.items():
+        block = jobs(WORKFLOWS / name)[job]
+        assert re.search(rf"^    timeout-minutes: {minutes}$", block, re.M), (name, job)
+
+
 def test_publish_has_no_concurrency_group():
     """A shared group would cancel pending runs while one waits for approval."""
     assert "concurrency:" not in (WORKFLOWS / "publish.yaml").read_text(encoding="utf-8")

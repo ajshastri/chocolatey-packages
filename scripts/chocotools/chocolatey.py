@@ -3,8 +3,9 @@
 Query: ``https://community.chocolatey.org/api/v2/FindPackagesById()?id='<id>'``,
 following ``<link rel="next">`` pages. Returns the highest NuGet version whose
 ``d:IsApproved`` is ``true``. Rejected versions are not listed by the feed.
-Requests go through ``http.Client`` (>= 1.1 s apart for this host, retries on
-429/5xx).
+Requests go through ``http.Client`` (>= 1.1 s apart for this host; 429/5xx,
+timeouts and connection errors are retried with backoff for up to
+``http.FEED_RETRY_BUDGET`` per request, then the client stops asking the feed).
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ from . import versioning
 from .http import Client, HttpError, default_client
 
 FEED = "https://community.chocolatey.org/api/v2/"
+PACKAGES = "https://community.chocolatey.org/packages/"
 MAX_PAGES = 50
 
 
@@ -55,20 +57,46 @@ def parse_page(data: bytes) -> tuple[list[tuple[str, bool]], str | None]:
     return entries, next_url
 
 
-def versions(package_id: str, client: Client | None = None) -> list[tuple[str, bool]]:
+def package_page(package_id: str, version: str) -> str:
+    return f"{PACKAGES}{urllib.parse.quote(package_id)}/{urllib.parse.quote(version)}"
+
+
+def versions(package_id: str, client: Client | None = None, *, fresh: bool = False) -> list[tuple[str, bool]]:
+    """Every listed (version, approved) pair. ``fresh`` skips this run's cached pages."""
     client = client or default_client()
     url: str | None = feed_url(package_id)
     out: list[tuple[str, bool]] = []
+    # The memo/disk cache is keyed by URL and headers, so a different header set reads the feed again.
+    headers = {"Cache-Control": "no-cache"} if fresh else None
     for _ in range(MAX_PAGES):
         if url is None:
             return out
         try:
-            data = client.get_bytes(url)
+            data = client.get_bytes(url, headers=headers)
         except HttpError as exc:
             raise ChocolateyError(f"Chocolatey feed unreachable for {package_id}: {exc}") from exc
         page, url = parse_page(data)
         out.extend(page)
     raise ChocolateyError(f"Chocolatey feed for {package_id} has more than {MAX_PAGES} pages")
+
+
+def has_version(package_id: str, version: str, client: Client | None = None) -> bool:
+    """True if the feed lists ``package_id`` ``version`` (approved or not) or its package page exists.
+
+    Used after a push retry hit a conflict, to confirm an earlier attempt went through.
+    """
+    client = client or default_client()
+    try:
+        if any(versioning.is_valid(v) and versioning.compare_nuget(v, version) == 0
+               for v, _ in versions(package_id, client, fresh=True)):
+            return True
+    except ChocolateyError:
+        pass  # fall back to the package page
+    try:
+        # No redirects: a redirect to another version's page must not count.
+        return client.head(package_page(package_id, version), follow_redirects=False).status == 200
+    except HttpError:
+        return False
 
 
 def approved_version(package_id: str, client: Client | None = None) -> str | None:

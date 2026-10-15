@@ -1,8 +1,18 @@
 """HTTP helpers: GET/HEAD/download with timeouts, retries, rate limits and a cache.
 
 - User-Agent ``chocotools/<ver> (+https://github.com/ajshastri/chocolatey-packages)``.
-- 30 s timeout; up to 3 retries with exponential backoff on 429/5xx and
-  connection errors, honoring ``Retry-After``.
+- 30 s timeout. Retries on 429/500/502/503/504, timeouts and connection errors
+  with exponential backoff and full jitter (wait ``n`` is uniform in
+  ``[0, min(cap, base * 2**(n-1))]``), honoring ``Retry-After`` up to the cap.
+  Other statuses (400/401/403/404, ...) fail at once.
+  - Chocolatey (``FEED_HOSTS``): base 5 s, cap 120 s, retried until 15 min
+    (``FEED_RETRY_BUDGET``, env ``CHOCOTOOLS_FEED_RETRY_BUDGET`` in seconds) have
+    passed since the request started. A request that uses up the budget opens
+    a circuit breaker: later requests to that host from the same ``Client``
+    fail at once instead of waiting another budget each.
+  - Every other host: base 2 s, cap 30 s, at most 4 retries.
+  Each retry logs one line to stderr:
+  ``retry <n> for <host>: <reason>; waiting <s>s (budget left <s>s)``.
 - Per-host minimum interval between requests: community.chocolatey.org 1.1 s,
   everything else 0.2 s.
 - ``Authorization: Bearer $GITHUB_TOKEN`` (or ``$GH_TOKEN``) is sent only to
@@ -19,7 +29,9 @@ import email.utils
 import hashlib
 import json
 import os
+import random
 import struct
+import sys
 import tempfile
 import threading
 import time
@@ -34,8 +46,17 @@ from . import __version__
 
 USER_AGENT = f"chocotools/{__version__} (+https://github.com/ajshastri/chocolatey-packages)"
 TIMEOUT = 30
-RETRIES = 3
 GITHUB_API_HOST = "api.github.com"
+# Chocolatey community feed and push endpoint: outages last minutes, so wait them out.
+FEED_HOSTS = frozenset({"community.chocolatey.org", "push.chocolatey.org"})
+FEED_RETRY_BASE = 5.0  # seconds, first wait's upper bound
+FEED_RETRY_CAP = 120.0  # seconds, longest single wait (also caps Retry-After)
+FEED_RETRY_BUDGET = 15 * 60  # seconds per request, from its first attempt
+FEED_RETRY_BUDGET_ENV = "CHOCOTOOLS_FEED_RETRY_BUDGET"
+# Everything else (vendor APIs and CDNs).
+DEFAULT_RETRY_BASE = 2.0
+DEFAULT_RETRY_CAP = 30.0
+DEFAULT_RETRIES = 4
 _MIN_INTERVAL = {"community.chocolatey.org": 1.1}
 _DEFAULT_INTERVAL = 0.2
 _RETRY_STATUS = {429, 500, 502, 503, 504}
@@ -97,6 +118,105 @@ def github_token() -> str | None:
     return os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or None
 
 
+# ----- retry policy ----------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class RetryPolicy:
+    label: str  # used in give-up messages, e.g. "Chocolatey feed"
+    base: float  # seconds; wait n is uniform in [0, min(cap, base * 2**(n-1))]
+    cap: float  # seconds; longest single wait, also caps Retry-After
+    max_retries: int | None = None  # None: until the budget is spent
+    budget: float | None = None  # seconds per request since its first attempt; None: no budget
+    circuit_breaker: bool = False  # after a spent budget, fail later requests to the host at once
+
+
+def feed_retry_budget() -> float:
+    """``FEED_RETRY_BUDGET``, or ``$CHOCOTOOLS_FEED_RETRY_BUDGET`` seconds when set."""
+    text = os.environ.get(FEED_RETRY_BUDGET_ENV, "").strip()
+    if not text:
+        return float(FEED_RETRY_BUDGET)
+    try:
+        value = float(text)
+    except ValueError:
+        value = -1.0
+    if value < 0:
+        raise HttpError(f"{FEED_RETRY_BUDGET_ENV} must be a number of seconds >= 0, got {text!r}")
+    return value
+
+
+def retry_policy(host: str, feed_budget: float | None = None) -> RetryPolicy:
+    """The retry policy for ``host`` (``feed_budget`` overrides the feed's budget)."""
+    if host in FEED_HOSTS:
+        budget = feed_retry_budget() if feed_budget is None else feed_budget
+        return RetryPolicy("Chocolatey feed", FEED_RETRY_BASE, FEED_RETRY_CAP, budget=budget, circuit_breaker=True)
+    return RetryPolicy(host, DEFAULT_RETRY_BASE, DEFAULT_RETRY_CAP, max_retries=DEFAULT_RETRIES)
+
+
+class Backoff:
+    """Waits for one request's retries under a ``RetryPolicy``."""
+
+    def __init__(self, policy: RetryPolicy, *, clock=time.monotonic, uniform=random.uniform):
+        self.policy = policy
+        self.clock = clock
+        self.uniform = uniform
+        self.start = clock()
+        self.retries = 0
+
+    def budget_left(self) -> float | None:
+        if self.policy.budget is None:
+            return None
+        return max(0.0, self.policy.budget - (self.clock() - self.start))
+
+    def next_wait(self, retry_after: float | None = None) -> float | None:
+        """Seconds to wait before the next attempt, or None when out of retries or budget."""
+        p = self.policy
+        if p.max_retries is not None and self.retries >= p.max_retries:
+            return None
+        left = self.budget_left()
+        if left is not None and left <= 0:
+            return None
+        if retry_after is not None:
+            wait = min(retry_after, p.cap)
+        else:
+            wait = self.uniform(0.0, min(p.cap, p.base * 2**self.retries))
+        if left is not None:
+            wait = min(wait, left)
+        self.retries += 1
+        return wait
+
+    def line(self, host: str, reason: str, wait: float) -> str:
+        """The log line for the retry ``next_wait`` just granted."""
+        left = self.budget_left()
+        if left is not None:
+            tail = f"budget left {left:.0f}s"
+        else:
+            tail = f"{self.policy.max_retries - self.retries} of {self.policy.max_retries} retries left"
+        return f"retry {self.retries} for {host}: {reason}; waiting {wait:.1f}s ({tail})"
+
+
+def duration(seconds: float) -> str:
+    """``900`` -> ``15 min``, ``90`` -> ``90s``."""
+    if seconds >= 60 and seconds % 60 == 0:
+        return f"{seconds / 60:.0f} min"
+    return f"{seconds:.0f}s"
+
+
+def circuit_open_message(policy: RetryPolicy, spent: float) -> str:
+    """Why a request to a host whose circuit breaker is open fails at once."""
+    return f"{policy.label} unavailable (gave up after {duration(spent)} of retries earlier in this run)"
+
+
+def redact(text: str) -> str:
+    """Hide ``$CHOCO_KEY`` (the Chocolatey API key) in a log line."""
+    key = os.environ.get("CHOCO_KEY", "")
+    return text.replace(key, "***") if key else text
+
+
+def log_stderr(line: str) -> None:
+    print(redact(line), file=sys.stderr, flush=True)
+
+
 @dataclass
 class Client:
     """Small urllib-based HTTP client. One shared instance via ``default_client()``."""
@@ -105,9 +225,14 @@ class Client:
     cache_ttl: int = 21600
     sleep: object = time.sleep
     clock: object = time.monotonic
+    uniform: object = random.uniform  # jitter source, (low, high) -> float
+    log: object = log_stderr  # one line per retry
+    feed_budget: float | None = None  # None: FEED_RETRY_BUDGET or $CHOCOTOOLS_FEED_RETRY_BUDGET
     _last: dict[str, float] = field(default_factory=dict)
     _memo: dict[str, bytes] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
+    # host -> budget it used up (circuit open); publish's choco push retries share it for push.chocolatey.org
+    gave_up: dict[str, float] = field(default_factory=dict)
 
     @classmethod
     def from_env(cls) -> "Client":
@@ -166,9 +291,14 @@ class Client:
         response object when ``stream=True``; caller must close it).
 
         3xx responses are returned (not raised) when ``follow_redirects`` is False.
+        Retries follow ``retry_policy(host)`` (see the module docstring).
         """
-        last_error: Exception | None = None
-        for attempt in range(RETRIES + 1):
+        host = _host(url)
+        policy = retry_policy(host, self.feed_budget)
+        if policy.circuit_breaker and host in self.gave_up:
+            raise HttpError(circuit_open_message(policy, self.gave_up[host]), None, url)
+        backoff = Backoff(policy, clock=self.clock, uniform=self.uniform)
+        while True:
             self._throttle(url)
             req = urllib.request.Request(url, method=method, headers=self._headers(url, headers))
             try:
@@ -186,19 +316,24 @@ class Client:
             except urllib.error.HTTPError as exc:
                 if not follow_redirects and 300 <= exc.code < 400:
                     return Response(exc.code, {k.lower(): v for k, v in exc.headers.items()}, b"", url)
-                if exc.code in _RETRY_STATUS and attempt < RETRIES:
-                    delay = self._retry_after(exc.headers)
-                    self.sleep(delay if delay is not None else 2**attempt)
-                    last_error = exc
-                    continue
-                raise HttpError(f"HTTP {exc.code} for {url}", exc.code, url) from exc
+                if exc.code not in _RETRY_STATUS:
+                    raise HttpError(f"HTTP {exc.code} for {url}", exc.code, url) from exc
+                error, status, reason = exc, exc.code, f"HTTP {exc.code}"
+                retry_after = self._retry_after(exc.headers)
+                message = f"HTTP {exc.code} for {url}"
             except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
-                if attempt < RETRIES:
-                    self.sleep(2**attempt)
-                    last_error = exc
-                    continue
-                raise HttpError(f"request failed for {url}: {exc}", None, url) from exc
-        raise HttpError(f"request failed for {url}: {last_error}", None, url)
+                error, status, reason, retry_after = exc, None, str(exc) or type(exc).__name__, None
+                message = f"request failed for {url}: {exc}"
+            wait = backoff.next_wait(retry_after)
+            if wait is None:
+                if policy.budget is None:
+                    raise HttpError(message, status, url) from error
+                if policy.circuit_breaker:
+                    self.gave_up[host] = policy.budget
+                raise HttpError(f"{policy.label} unavailable: gave up after {duration(policy.budget)} of retries; "
+                                f"last error: {message}", status, url) from error
+            self.log(backoff.line(host, reason, wait))
+            self.sleep(wait)
 
     # ----- cache ------------------------------------------------------
     def _cache_path(self, key: str) -> Path | None:
