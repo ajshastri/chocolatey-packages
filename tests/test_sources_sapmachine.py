@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from chocotools import sources
@@ -44,17 +46,28 @@ def test_candidate_rules():
     assert not sapmachine._candidate(p, {"tag_name": "sapmachine-17.0.13", "prerelease": False, "assets": [asset]})
 
 
-def test_five_part_winner_fails_instead_of_picking_older():
-    p = pkg(vendor="sapmachine", major=21, image="jdk")
-    rels = [
-        {"tag_name": t, "prerelease": False,
-         "assets": [{"name": f"sapmachine-jdk-{t[11:]}_windows-x64_bin.msi", "digest": "sha256:" + "d" * 64,
-                     "browser_download_url": f"https://github.com/SAP/SapMachine/releases/download/{t}/x.msi"}]}
-        for t in ("sapmachine-21.0.12.1", "sapmachine-21.0.12.1.1")
-    ]
-    import json
+def releases_client(*tags: str) -> FakeClient:
+    rels = []
+    for t in tags:
+        name = f"sapmachine-jdk-{t[len('sapmachine-'):]}_windows-x64_bin.msi"
+        rels.append({"tag_name": t, "prerelease": False,
+                     "assets": [{"name": name, "digest": "sha256:" + "d" * 64,
+                                 "browser_download_url": f"https://github.com/SAP/SapMachine/releases/download/{t}/{name}"}]})
+    return FakeClient(get={"https://api.github.com/repos/SAP/SapMachine/releases?per_page=100&page=1": json.dumps(rels)},
+                      use_index=False)
 
-    client = FakeClient(get={"https://api.github.com/repos/SAP/SapMachine/releases?per_page=100&page=1": json.dumps(rels)},
-                        use_index=False)
-    with pytest.raises(sources.SourceError, match="more than 4 parts"):
-        sources.fetch(p, client=client)
+
+def test_five_part_release_wins_and_maps_to_four_parts():
+    # GitHub on 2026-10-23: sapmachine-21.0.13.0.2 supersedes sapmachine-21.0.13
+    client = releases_client("sapmachine-21.0.13.0.2", "sapmachine-21.0.13", "sapmachine-21.0.12.1")
+    r = sources.fetch(pkg(vendor="sapmachine", major=21, image="jdk"), client=client)
+    assert r.version == "21.0.13.2"
+    assert r.version_raw == "sapmachine-21.0.13.0.2"
+    assert r.urls["x64"] == ("https://github.com/SAP/SapMachine/releases/download/sapmachine-21.0.13.0.2/"
+                             "sapmachine-jdk-21.0.13.0.2_windows-x64_bin.msi")
+
+
+def test_unmappable_winner_fails_instead_of_picking_older():
+    client = releases_client("sapmachine-21.0.13.0.2", "sapmachine-21.0.13.0.100")
+    with pytest.raises(sources.SourceError, match="5th part 100"):
+        sources.fetch(pkg(vendor="sapmachine", major=21, image="jdk"), client=client)

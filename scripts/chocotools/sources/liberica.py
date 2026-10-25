@@ -19,6 +19,7 @@ from __future__ import annotations
 import re
 import urllib.parse
 
+from .. import versioning
 from ..http import Client
 from ..manifest import Package
 from . import (
@@ -46,13 +47,19 @@ _VN = re.compile(r"^(\d+(?:\.\d+)*)\+\d+$")
 
 
 def normalize(version: str) -> str:
-    """``8u504+1`` -> ``8.0.504.1``; ``21.0.12.1+1`` -> ``21.0.12.1``."""
+    """``8u504+1`` -> ``8.0.504.1``; ``21.0.12.1+1`` -> ``21.0.12.1``; ``21.0.13.0.2+5`` -> ``21.0.13.2``.
+
+    The build is dropped; a 5-part version maps with ``versioning.jdk_five_part``.
+    """
     m = _V8.match(version)
     if m:
         return formatted(f"8.0.{int(m[1])}.{int(m[2])}", "Liberica version")
     m = _VN.match(version)
     if m:
-        return formatted(m[1], "Liberica version")
+        try:
+            return versioning.jdk_five_part(m[1])
+        except versioning.VersionError as exc:
+            raise SourceError(f"Liberica version {m[1]!r}: {exc}") from exc
     raise SourceError(f"unrecognized Liberica version {version!r}")
 
 

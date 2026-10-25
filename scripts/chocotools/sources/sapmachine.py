@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import re
 
+from .. import versioning
 from ..http import Client
 from ..manifest import Package
 from . import (
@@ -23,7 +24,6 @@ from . import (
     SourceError,
     asset_sha256,
     find_asset,
-    formatted,
     github_api,
     github_release_by_tag,
     require,
@@ -35,11 +35,17 @@ _TAG = re.compile(r"^sapmachine-(\d+(?:\.\d+)*)(?:\+\d+)?$")
 
 
 def normalize(tag: str) -> str:
-    """``sapmachine-21.0.12.1`` -> ``21.0.12.1``."""
+    """``sapmachine-21.0.12.1`` -> ``21.0.12.1``; ``sapmachine-21.0.13.0.2`` -> ``21.0.13.2``.
+
+    A 5-part version maps with ``versioning.jdk_five_part``.
+    """
     m = _TAG.match(tag)
     if not m:
         raise SourceError(f"unrecognized SapMachine tag {tag!r}")
-    return formatted(m[1], "SapMachine version")
+    try:
+        return versioning.jdk_five_part(m[1])
+    except versioning.VersionError as exc:
+        raise SourceError(f"SapMachine version {m[1]!r}: {exc}") from exc
 
 
 def asset_name(pkg: Package, tag: str) -> str:
@@ -88,8 +94,9 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
             break
     if not found:
         raise SourceError(f"no SapMachine {pkg.major} {pkg.image} Windows MSI release found")
-    # Order on the raw tag numbers (any length); the winner must then normalize
-    # to <= 4 parts, otherwise the package fails rather than picking an older one.
+    # Order on the raw tag numbers (any length); the winner must then map to a
+    # package version (versioning.jdk_five_part), otherwise the package fails
+    # rather than picking an older one.
     best = max(found, key=lambda r: _raw_key(r["tag_name"]))
     return _release(pkg, best, client)
 

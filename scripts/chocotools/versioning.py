@@ -60,6 +60,8 @@ __all__ = [
     "strip_build",
     "join_parts",
     "corretto_tag",
+    "jdk_five_part",
+    "FIVE_PART_FACTOR",
     "graalvm_tag",
     "FIX_FACTOR",
     "apply_package_fix",
@@ -72,6 +74,7 @@ __all__ = [
 MAX_PARTS = 4
 FIX_FACTOR = 100
 MAX_PACKAGE_FIX = FIX_FACTOR - 1
+FIVE_PART_FACTOR = 100  # jdk_five_part: A.B.C.P.E -> A.B.C.(P*100+E)
 _NUMERIC = re.compile(r"^\d+(\.\d+)*$")
 
 
@@ -203,6 +206,44 @@ def corretto_tag(tag: str) -> str:
     elif len(parts) != 4:
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     return format(".".join(parts))
+
+
+def jdk_five_part(version: str) -> str:
+    """Map a Liberica, SapMachine or OpenJDK version of up to 5 parts to a package version.
+
+    5 parts ``A.B.C.P.E`` become ``A.B.C.(P*100+E)``, i.e. ``P`` and ``E`` joined
+    with ``E`` written as two digits, so the order holds for any ``E`` up to 99:
+
+    =================  ================  ================================================
+    upstream           package version   note
+    =================  ================  ================================================
+    ``21.0.13.0.2``    ``21.0.13.2``     Liberica/SapMachine 21, Oct 2026
+    ``27.0.1.0.3``     ``27.0.1.3``      OpenJDK 27 respin; ``27.0.1.0.2`` -> ``27.0.1.2``
+    ``21.0.10.0.1``    ``21.0.10.1``     SapMachine 21, Feb 2026
+    ``21.0.13.1.1``    ``21.0.13.101``   ``P`` = 1: ``1`` + ``01``
+    ``21.0.13.0.100``  ``VersionError``  ``E`` >= 100 cannot be written in two digits
+    =================  ================  ================================================
+
+    4 parts and fewer pass through ``format`` unchanged (``21.0.12.1``, ``27`` ->
+    ``27.0.0``). Non-numeric parts or more than 5 parts raise ``VersionError``.
+    Known limit: a 4-part version after a 5-part one on the same ``A.B.C``
+    (``21.0.13.0.2`` -> ``21.0.13.2``, then ``21.0.13.1``) sorts lower; sync
+    fails closed on that (``upstream ... is lower than repo``) and
+    ``package_fix`` resolves it.
+    """
+    text = version.strip() if isinstance(version, str) else ""
+    if not text or not _NUMERIC.match(text):
+        raise VersionError(f"not a numeric dotted version: {version!r}")
+    parts = [int(p) for p in text.split(".")]
+    if len(parts) > MAX_PARTS + 1:
+        raise VersionError(f"more than {MAX_PARTS + 1} parts: {version!r}")
+    if len(parts) == MAX_PARTS + 1:
+        p, e = parts[3], parts[4]
+        if e >= FIVE_PART_FACTOR:
+            raise VersionError(f"5th part {e} of {version!r} is {FIVE_PART_FACTOR} or more; "
+                               f"A.B.C.P.E -> A.B.C.(P*{FIVE_PART_FACTOR}+E) needs E <= {FIVE_PART_FACTOR - 1}")
+        parts = parts[:3] + [p * FIVE_PART_FACTOR + e]
+    return format(parts)
 
 
 # ----- package fix versions --------------------------------------------------
