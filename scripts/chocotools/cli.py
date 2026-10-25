@@ -322,6 +322,12 @@ def write_files(folder: Path, files: dict[str, bytes]) -> None:
                 tmp.unlink()
 
 
+def script_urls(folder: Path, pkg: Package) -> dict[str, str | None]:
+    """The download URL per arch in the package's install script (None if absent)."""
+    script = installscript.read((folder / INSTALL_SCRIPT).read_bytes())
+    return {arch: script.get(installscript.ARCH_FIELDS[arch][0]) for arch in pkg.arch}
+
+
 def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> SyncRow:
     folder = Path(root) / pkg.folder
     try:
@@ -359,6 +365,22 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
     if current:
         cmp = versioning.compare_nuget(target, current)
         if cmp == 0:
+            # Same version but another download: a version-mapping collision or a rebuilt
+            # upstream build (e.g. Liberica +5 -> +6). Writing nothing would hide it.
+            try:
+                repo_urls = script_urls(folder, pkg)
+            except (installscript.ScriptError, OSError) as exc:
+                row.status, row.message = "failed", f"install script: {exc}"
+                return row
+            moved = [a for a in pkg.arch if a in release.urls and release.urls[a] != repo_urls.get(a)]
+            if moved:
+                row.status = "failed"
+                row.message = (
+                    f"upstream build changed ({' '.join(release.urls[a] for a in moved)}) but maps to the existing "
+                    f"version {current}; refusing to treat as up-to-date (install script has "
+                    f"{' '.join(repo_urls.get(a) or '(no URL)' for a in moved)})"
+                )
+                return row
             if clear_fix:
                 # The nuspec already left the fix's line (hand edit): nothing is written, so say so.
                 notes = [*release.notes, f"package_fix {pkg.package_fix} is stale (declared for "

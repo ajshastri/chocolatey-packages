@@ -181,12 +181,28 @@ def test_upstream_lower_than_repo_fails(repo, capsys):
     assert "lower than repo" in capsys.readouterr().out
 
 
+ZULU8_URL = "https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64.msi"  # in the zulu-8 fixture
+
+
 def test_equal_version_is_up_to_date(repo, capsys):
-    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": "https://cdn.azul.com/a.msi"}, {"x64": SHA}, "t")
+    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": ZULU8_URL}, {"x64": SHA}, "t")
     before = snapshot(repo["root"])
     assert run(repo["root"], "sync", "--id", "zulu8") == 0
     assert snapshot(repo["root"]) == before
-    assert "up-to-date" in capsys.readouterr().out
+    assert "| zulu8 | 8.96.0.205 | 8.96.0.205 | up-to-date |" in capsys.readouterr().out
+
+
+def test_equal_version_with_another_url_fails(repo, capsys):
+    # e.g. a rebuilt upstream build, or two upstream versions mapping to one package version
+    new_url = "https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64-rebuild.msi"
+    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": new_url}, {"x64": SHA}, "t")
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8") == 1
+    assert snapshot(repo["root"]) == before
+    out = capsys.readouterr().out
+    assert "| zulu8 | 8.96.0.205 | 8.96.0.205 | failed |" in out
+    assert (f"- zulu8: upstream build changed ({new_url}) but maps to the existing version 8.96.0.205; "
+            f"refusing to treat as up-to-date (install script has {ZULU8_URL})") in out
 
 
 def test_dir_version_tokens(repo):
