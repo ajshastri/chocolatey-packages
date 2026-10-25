@@ -4,9 +4,10 @@ Query: ``GET https://api.bell-sw.com/v1/liberica/releases?version-feature=<major
 with ``bt`` from (image, variant): jdk std ``jdk``, jdk full ``jdk-full``,
 jdk lite ``jdk-lite``, jre std ``jre``, jre full ``jre-full``.
 
-Keeps ``GA == true`` entries and picks the max of (feature, interim, update,
-patch, build); the API lists both the PSU (``21.0.12+10``) and the CSPU
-(``21.0.12.1+1``), and the CSPU wins. URL is ``downloadUrl`` (github.com/bell-sw).
+Keeps ``GA == true`` entries and picks the max of (every numeric part of
+``version``, build); the API lists both the PSU (``21.0.12+10``) and the CSPU
+(``21.0.12.1+1``), and the CSPU wins; ``21.0.13.0.2+5`` beats ``21.0.13+11``.
+URL is ``downloadUrl`` (github.com/bell-sw).
 
 Checksum: BellSoft publishes sha1 only, so sha256 comes from the GitHub
 release asset ``digest`` (``repos/bell-sw/Liberica/releases/tags/<tag>``,
@@ -63,11 +64,20 @@ def normalize(version: str) -> str:
     raise SourceError(f"unrecognized Liberica version {version!r}")
 
 
-def _key(entry: dict) -> tuple[int, ...]:
-    return tuple(
-        int(entry.get(k) or 0)
-        for k in ("featureVersion", "interimVersion", "updateVersion", "patchVersion", "buildVersion")
-    )
+def _key(entry: dict) -> tuple[tuple[int, ...], int]:
+    """Every numeric part of ``version``, then the build.
+
+    The API has no field for a 5th part (``21.0.13.0.2+5`` has ``patchVersion``
+    0 and ``buildVersion`` 5), so ordering on the fields would put ``21.0.13+11``
+    above it. ``8u…`` versions use (feature, interim, update, patch).
+    """
+    m = _VN.match(str(entry.get("version") or ""))
+    if m:
+        parts = [int(p) for p in m[1].split(".")]
+    else:
+        parts = [int(entry.get(k) or 0) for k in ("featureVersion", "interimVersion", "updateVersion", "patchVersion")]
+    parts += [0] * (5 - len(parts))
+    return tuple(parts), int(entry.get("buildVersion") or 0)
 
 
 def bundle_type(pkg: Package) -> str:
