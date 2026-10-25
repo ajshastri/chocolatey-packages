@@ -11,6 +11,21 @@ Output form (``format``):
 
 Comparison pads with zeros, so ``21.52.203.0`` equals ``21.52.203``.
 
+5-part upstream versions (NuGet allows 4)
+-----------------------------------------
+- Corretto (``corretto_tag``): ``A.B.C.D.E`` -> ``A.B.C.<D><E>``, the digits
+  joined (``21.0.12.12.1`` -> ``21.0.12.121``, ``21.0.13.0.10`` -> ``21.0.13.10``).
+  Published versions depend on it. A tag with ``D >= 1`` and ``E >= 10`` fails,
+  because joining is ambiguous there (``1.10`` and ``11.0`` both give ``110``).
+- Liberica, SapMachine, OpenJDK (``jdk_five_part``): ``A.B.C.P.E`` ->
+  ``A.B.C.(P*100+E)`` (``21.0.13.0.2`` -> ``21.0.13.2``, ``21.0.13.1.1`` ->
+  ``21.0.13.101``); ``E >= 100`` fails.
+- The vendor ``normalize`` and the ``_URL_RULES`` entry use the same mapping,
+  so ``validate`` compares the URL in the form sync writes.
+- ``sync`` fails a package whose mapped version equals the repo version while
+  its download URL differs from the install script's, so a mapping collision
+  (or a rebuilt upstream build) is never reported as up-to-date.
+
 Package fix versions (``package_fix = N`` in ``packages.toml``, 1 <= N <= 99)
 ------------------------------------------------------------------------------
 Needed when a version can never be pushed again (Chocolatey rejected it, and
