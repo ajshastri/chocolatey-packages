@@ -176,15 +176,30 @@ def join_parts(parts: Iterable[int | str]) -> str:
 def corretto_tag(tag: str) -> str:
     """Map a Corretto tag to a package version.
 
-    5 parts ``A.B.C.D.E`` become ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``).
+    5 parts ``A.B.C.D.E`` become ``A.B.C.<D><E>``, the digits of ``int(D)`` and
+    ``int(E)`` joined (published Corretto versions depend on this mapping):
+
+    - old-style tags: ``21.0.12.12.1`` -> ``21.0.12.121``, ``25.0.4.10.1`` -> ``25.0.4.101``
+    - new-style tags (``D`` is 0): ``21.0.13.0.10`` -> ``21.0.13.10``, ``11.0.33.0.9`` -> ``11.0.33.9``
+
     4-part tags (Corretto 8, e.g. ``8.504.04.1``) are kept as-is. Leading zeros
     are dropped by ``format``.
+
+    Fails closed (``VersionError``) on a 5-part tag with ``D >= 1`` and ``E >= 10``:
+    joining is ambiguous there (``21.0.13.1.10`` and ``21.0.13.11.0`` both give
+    ``110``; ``11.0.9.9.10`` gives ``910``, above ``11.0.9.10.1`` = ``101``).
     """
     parts = tag.strip().split(".")
     if not all(p.isdigit() for p in parts):
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     if len(parts) == 5:
-        parts = parts[:3] + [str(int(parts[3])) + str(int(parts[4]))]
+        d, e = int(parts[3]), int(parts[4])
+        if d >= 1 and e >= 10:
+            raise VersionError(
+                f"ambiguous Corretto tag {tag!r}: joining 4th part {d} and two-digit 5th part {e} "
+                f"into {d}{e} can collide with or sort out of order against other tags"
+            )
+        parts = parts[:3] + [f"{d}{e}"]
     elif len(parts) != 4:
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     return format(".".join(parts))

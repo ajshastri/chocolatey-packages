@@ -104,6 +104,12 @@ def test_liberica(raw, expected):
         ("21.0.12.8.1", "21.0.12.81"),
         ("8.504.04.1", "8.504.4.1"),
         ("8.502.07.1", "8.502.7.1"),
+        ("8.512.08.1", "8.512.8.1"),
+        # new-style tags (4th part 0, 1-2 digit 5th part)
+        ("21.0.13.0.10", "21.0.13.10"),
+        ("17.0.21.0.10", "17.0.21.10"),
+        ("11.0.33.0.9", "11.0.33.9"),
+        ("25.0.5.0.9", "25.0.5.9"),
     ],
 )
 def test_corretto(raw, expected):
@@ -113,6 +119,15 @@ def test_corretto(raw, expected):
 def test_corretto_rejects_odd_tags():
     with pytest.raises(SourceError):
         corretto.normalize("21.0.12")
+
+
+@pytest.mark.parametrize("tag", ["21.0.13.1.10", "11.0.9.9.10"])
+def test_corretto_rejects_ambiguous_concat(tag):
+    # 21.0.13.1.10 and 21.0.13.11.0 would both give 21.0.13.110; 11.0.9.9.10 (910) would sort above 11.0.9.10.1 (101)
+    with pytest.raises(versioning.VersionError, match="ambiguous Corretto tag"):
+        versioning.corretto_tag(tag)
+    with pytest.raises(SourceError, match="ambiguous Corretto tag"):
+        corretto.normalize(tag)
 
 
 def test_zulu():

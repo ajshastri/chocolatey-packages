@@ -14,7 +14,9 @@
   GitHub tags can be fixes for other platforms that never get a Windows MSI, so
   ``sync`` waits instead of failing (see ``sources.PENDING_ESCALATION_DAYS``).
   Older than the served tag: the served build is used, with a note.
-- Version mapping: ``A.B.C.D.E`` -> ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``).
+- Version mapping: ``A.B.C.D.E`` -> ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``,
+  ``21.0.13.0.10`` -> ``21.0.13.10``); a tag with ``D >= 1`` and ``E >= 10`` fails as
+  ambiguous (see ``versioning.corretto_tag``).
 """
 
 from __future__ import annotations

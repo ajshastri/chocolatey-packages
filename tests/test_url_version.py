@@ -35,6 +35,10 @@ REAL = [
     ("lmc", "https://download.bell-sw.com/lmc/8.3.0/bellsoft-lmc8.3.0-windows-amd64.zip", "8.3.0"),
     # GraalVM 25i4: 5-part tag, package version = foojay java_version (first four parts)
     ("graalvm", "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip", "25.4.4.1"),
+    # corretto.aws latest on 2026-10-25: new-style Corretto tags (4th part 0) and Corretto 8
+    ("corretto", "https://corretto.aws/downloads/resources/21.0.13.0.10/amazon-corretto-21.0.13.0.10-windows-x64.msi", "21.0.13.10"),
+    ("corretto", "https://corretto.aws/downloads/resources/11.0.33.0.9/amazon-corretto-11.0.33.0.9-windows-x64.msi", "11.0.33.9"),
+    ("corretto", "https://corretto.aws/downloads/resources/8.512.08.1/amazon-corretto-8.512.08.1-windows-x64-jdk.msi", "8.512.8.1"),
 ]
 
 
@@ -64,6 +68,12 @@ def test_url_version_real_urls(vendor, url, version):
 def test_url_version_agrees_with_vendor_normalize(vendor, raw, normalize, url):
     """The URL rule gives the same version sync derives from the upstream tag."""
     assert versioning.url_version(vendor, url) == normalize(raw)
+
+
+def test_url_version_corretto_ambiguous_tag_fails():
+    url = "https://corretto.aws/downloads/resources/21.0.13.1.10/amazon-corretto-21.0.13.1.10-windows-x64.msi"
+    with pytest.raises(versioning.VersionError, match="ambiguous Corretto tag"):
+        versioning.url_version("corretto", url)
 
 
 def test_url_version_zulu_uses_distro_not_java_version():
