@@ -23,6 +23,7 @@ import random
 import re
 import secrets
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -314,6 +315,9 @@ def write_files(folder: Path, files: dict[str, bytes]) -> None:
             tmp = target.with_name(target.name + ".chocotools-tmp")
             tmp.write_bytes(data)
             tmp_paths.append((tmp, target))
+            if target.exists():
+                # keep the target's mode (e.g. 0755), otherwise os.replace leaves the temp file's default
+                os.chmod(tmp, stat.S_IMODE(target.stat().st_mode))
         for tmp, target in tmp_paths:
             os.replace(tmp, target)
     finally:

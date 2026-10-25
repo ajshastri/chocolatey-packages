@@ -1,3 +1,5 @@
+import os
+import stat
 from pathlib import Path
 
 import pytest
@@ -291,6 +293,20 @@ def test_report_and_frozen_skip(repo, tmp_path):
     assert code == 0
     text = report.read_text(encoding="utf-8")
     assert "| graalvm-java17 |  |  | skipped |" in text and "would update" in text
+
+
+@pytest.mark.skipif(os.name == "nt", reason="Windows has no POSIX mode bits (os.chmod only sets read-only)")
+def test_write_files_keeps_the_target_mode(tmp_path):
+    # OpenJDK/ files are 100755 in git; sync used to commit them as 100644
+    script = tmp_path / "tools" / "chocolateyinstall.ps1"
+    script.parent.mkdir()
+    script.write_bytes(b"old")
+    script.chmod(0o755)
+    cli.write_files(tmp_path, {"tools/chocolateyinstall.ps1": b"new", "tools/new.ps1": b"created"})
+    assert script.read_bytes() == b"new"
+    assert stat.S_IMODE(script.stat().st_mode) == 0o755
+    assert (tmp_path / "tools" / "new.ps1").read_bytes() == b"created"
+    assert not list(tmp_path.rglob("*.chocotools-tmp"))
 
 
 def test_unknown_id_is_usage_error(repo):
