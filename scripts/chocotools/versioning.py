@@ -355,9 +355,11 @@ _URL_RULES = {
     "zulu": [(re.compile(rf"/zulu{_V}-ca-"), lambda m: m[1])],
     "liberica": [
         (re.compile(r"/download/8u(\d+)\+(\d+)/"), lambda m: f"8.0.{int(m[1])}.{int(m[2])}"),
-        (re.compile(rf"/download/{_V}\+\d+/"), lambda m: m[1]),
+        # 21.0.12.1+1 -> 21.0.12.1; 21.0.13.0.2+5 -> 21.0.13.2 (jdk_five_part)
+        (re.compile(rf"/download/{_V}\+\d+/"), lambda m: jdk_five_part(m[1])),
     ],
-    "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: m[1])],
+    # sapmachine-21.0.12.1 -> 21.0.12.1; sapmachine-21.0.13.0.2 -> 21.0.13.2 (jdk_five_part)
+    "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: jdk_five_part(m[1]))],
     "graalvm": [
         # graal-<tag>/graalvm-community-jdk-<M>i<I>-<M>.0.<rest>_: see graalvm_tag
         (re.compile(rf"/download/graal-{_V}/graalvm-community-jdk-(\d+)i(\d+)-{_V}_"), graalvm_tag),
@@ -366,8 +368,8 @@ _URL_RULES = {
         # jdk-21.0.2 for the old CE builds
         (re.compile(rf"/download/jdk-{_V}/"), lambda m: m[1]),
     ],
-    # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2
-    "openjdk": [(re.compile(rf"/openjdk-{_V}_windows"), lambda m: m[1])],
+    # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2, openjdk-27.0.1.0.3_windows -> 27.0.1.3
+    "openjdk": [(re.compile(rf"/openjdk-{_V}_windows"), lambda m: jdk_five_part(m[1]))],
     "jmc": [(re.compile(rf"/jmc-{_V}_windows"), lambda m: m[1])],
     "mvnd": [(re.compile(rf"/download/v?{_V}/maven-mvnd-"), lambda m: m[1])],
     "wildfly": [(re.compile(rf"/download/{_V}\.Final/"), lambda m: m[1])],
