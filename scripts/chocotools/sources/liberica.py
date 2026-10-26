@@ -4,9 +4,10 @@ Query: ``GET https://api.bell-sw.com/v1/liberica/releases?version-feature=<major
 with ``bt`` from (image, variant): jdk std ``jdk``, jdk full ``jdk-full``,
 jdk lite ``jdk-lite``, jre std ``jre``, jre full ``jre-full``.
 
-Keeps ``GA == true`` entries and picks the max of (feature, interim, update,
-patch, build); the API lists both the PSU (``21.0.12+10``) and the CSPU
-(``21.0.12.1+1``), and the CSPU wins. URL is ``downloadUrl`` (github.com/bell-sw).
+Keeps ``GA == true`` entries and picks the max of (every numeric part of
+``version``, build); the API lists both the PSU (``21.0.12+10``) and the CSPU
+(``21.0.12.1+1``), and the CSPU wins; ``21.0.13.0.2+5`` beats ``21.0.13+11``.
+URL is ``downloadUrl`` (github.com/bell-sw).
 
 Checksum: BellSoft publishes sha1 only, so sha256 comes from the GitHub
 release asset ``digest`` (``repos/bell-sw/Liberica/releases/tags/<tag>``,
@@ -19,6 +20,7 @@ from __future__ import annotations
 import re
 import urllib.parse
 
+from .. import versioning
 from ..http import Client
 from ..manifest import Package
 from . import (
@@ -46,21 +48,36 @@ _VN = re.compile(r"^(\d+(?:\.\d+)*)\+\d+$")
 
 
 def normalize(version: str) -> str:
-    """``8u504+1`` -> ``8.0.504.1``; ``21.0.12.1+1`` -> ``21.0.12.1``."""
+    """``8u504+1`` -> ``8.0.504.1``; ``21.0.12.1+1`` -> ``21.0.12.1``; ``21.0.13.0.2+5`` -> ``21.0.13.2``.
+
+    The build is dropped; a 5-part version maps with ``versioning.jdk_five_part``.
+    """
     m = _V8.match(version)
     if m:
         return formatted(f"8.0.{int(m[1])}.{int(m[2])}", "Liberica version")
     m = _VN.match(version)
     if m:
-        return formatted(m[1], "Liberica version")
+        try:
+            return versioning.jdk_five_part(m[1])
+        except versioning.VersionError as exc:
+            raise SourceError(f"Liberica version {m[1]!r}: {exc}") from exc
     raise SourceError(f"unrecognized Liberica version {version!r}")
 
 
-def _key(entry: dict) -> tuple[int, ...]:
-    return tuple(
-        int(entry.get(k) or 0)
-        for k in ("featureVersion", "interimVersion", "updateVersion", "patchVersion", "buildVersion")
-    )
+def _key(entry: dict) -> tuple[tuple[int, ...], int]:
+    """Every numeric part of ``version``, then the build.
+
+    The API has no field for a 5th part (``21.0.13.0.2+5`` has ``patchVersion``
+    0 and ``buildVersion`` 5), so ordering on the fields would put ``21.0.13+11``
+    above it. ``8u…`` versions use (feature, interim, update, patch).
+    """
+    m = _VN.match(str(entry.get("version") or ""))
+    if m:
+        parts = [int(p) for p in m[1].split(".")]
+    else:
+        parts = [int(entry.get(k) or 0) for k in ("featureVersion", "interimVersion", "updateVersion", "patchVersion")]
+    parts += [0] * (5 - len(parts))
+    return tuple(parts), int(entry.get("buildVersion") or 0)
 
 
 def bundle_type(pkg: Package) -> str:

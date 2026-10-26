@@ -35,6 +35,10 @@ REAL = [
     ("lmc", "https://download.bell-sw.com/lmc/8.3.0/bellsoft-lmc8.3.0-windows-amd64.zip", "8.3.0"),
     # GraalVM 25i4: 5-part tag, package version = foojay java_version (first four parts)
     ("graalvm", "https://github.com/graalvm/graalvm-ce-builds/releases/download/graal-25.4.4.1.1/graalvm-community-jdk-25i4-25.0.4.1.1_windows-x64_bin.zip", "25.4.4.1"),
+    # corretto.aws latest on 2026-10-25: new-style Corretto tags (4th part 0) and Corretto 8
+    ("corretto", "https://corretto.aws/downloads/resources/21.0.13.0.10/amazon-corretto-21.0.13.0.10-windows-x64.msi", "21.0.13.10"),
+    ("corretto", "https://corretto.aws/downloads/resources/11.0.33.0.9/amazon-corretto-11.0.33.0.9-windows-x64.msi", "11.0.33.9"),
+    ("corretto", "https://corretto.aws/downloads/resources/8.512.08.1/amazon-corretto-8.512.08.1-windows-x64-jdk.msi", "8.512.8.1"),
 ]
 
 
@@ -64,6 +68,12 @@ def test_url_version_real_urls(vendor, url, version):
 def test_url_version_agrees_with_vendor_normalize(vendor, raw, normalize, url):
     """The URL rule gives the same version sync derives from the upstream tag."""
     assert versioning.url_version(vendor, url) == normalize(raw)
+
+
+def test_url_version_corretto_ambiguous_tag_fails():
+    url = "https://corretto.aws/downloads/resources/21.0.13.1.10/amazon-corretto-21.0.13.1.10-windows-x64.msi"
+    with pytest.raises(versioning.VersionError, match="ambiguous Corretto tag"):
+        versioning.url_version("corretto", url)
 
 
 def test_url_version_zulu_uses_distro_not_java_version():
@@ -213,3 +223,59 @@ def test_graalvm25_stale_url_fails(tmp_path, version, url, found):
 def test_graalvm_tag_and_asset_must_agree(path, message):
     with pytest.raises(versioning.VersionError, match=re.escape(message)):
         versioning.url_version("graalvm", GRAAL + path)
+
+
+# ----- 5-part Liberica / SapMachine / OpenJDK versions (A.B.C.P.E -> A.B.C.(P*100+E)) ------------
+
+LIBERICA = "https://github.com/bell-sw/Liberica/releases/download/"
+SAPMACHINE = "https://github.com/SAP/SapMachine/releases/download/"
+# (vendor, URL served upstream on 2026-10-25, raw upstream version, vendor normalize, package version)
+FIVE_PART = [
+    ("liberica", LIBERICA + "21.0.13.0.2+5/bellsoft-jdk21.0.13.0.2+5-windows-amd64.msi", "21.0.13.0.2+5",
+     liberica.normalize, "21.0.13.2"),
+    ("liberica", LIBERICA + "21.0.13.0.2+5/bellsoft-jdk21.0.13.0.2+5-windows-amd64-lite.msi", "21.0.13.0.2+5",
+     liberica.normalize, "21.0.13.2"),
+    ("liberica", LIBERICA + "11.0.33.0.2+5/bellsoft-jdk11.0.33.0.2+5-windows-amd64.msi", "11.0.33.0.2+5",
+     liberica.normalize, "11.0.33.2"),
+    ("liberica", LIBERICA + "17.0.21.0.2+5/bellsoft-jre17.0.21.0.2+5-windows-amd64-full.msi", "17.0.21.0.2+5",
+     liberica.normalize, "17.0.21.2"),
+    ("sapmachine", SAPMACHINE + "sapmachine-21.0.13.0.2/sapmachine-jdk-21.0.13.0.2_windows-x64_bin.msi",
+     "sapmachine-21.0.13.0.2", sapmachine.normalize, "21.0.13.2"),
+    ("sapmachine", SAPMACHINE + "sapmachine-17.0.21.0.2/sapmachine-jre-17.0.21.0.2_windows-x64_bin.msi",
+     "sapmachine-17.0.21.0.2", sapmachine.normalize, "17.0.21.2"),
+    ("openjdk", "https://download.java.net/java/GA/jdk27.0.1.0.3/b14170c9b2de463d9b89442c6db3e384/1/GPL/"
+     "openjdk-27.0.1.0.3_windows-x64_bin.zip", "27.0.1.0.3", openjdk.normalize, "27.0.1.3"),
+]
+
+
+@pytest.mark.parametrize(("vendor", "url", "raw", "normalize", "version"), FIVE_PART)
+def test_five_part_url_version_agrees_with_vendor_normalize(vendor, url, raw, normalize, version):
+    assert versioning.url_version(vendor, url) == normalize(raw) == version
+    assert checks.check_url_version(pkg(id="p", vendor=vendor), version, url, "x64 URL") == []
+
+
+@pytest.mark.parametrize(
+    ("vendor", "version", "url", "found"),
+    [
+        # nuspec bumped by hand, URL left on the previous release
+        ("liberica", "21.0.13.2", LIBERICA + "21.0.12.1+1/bellsoft-jdk21.0.12.1+1-windows-amd64.msi", "21.0.12.1"),
+        ("sapmachine", "21.0.13.2", SAPMACHINE + "sapmachine-21.0.13/sapmachine-jdk-21.0.13_windows-x64_bin.msi",
+         "21.0.13"),
+        ("openjdk", "27.0.1.3", "https://download.java.net/java/GA/jdk27.0.1.0.2/x/1/GPL/"
+         "openjdk-27.0.1.0.2_windows-x64_bin.zip", "27.0.1.2"),
+        # URL bumped, nuspec left behind
+        ("liberica", "21.0.12.1", LIBERICA + "21.0.13.0.2+5/bellsoft-jdk21.0.13.0.2+5-windows-amd64.msi", "21.0.13.2"),
+        ("openjdk", "27.0.0", "https://download.java.net/java/GA/jdk27.0.1.0.3/x/1/GPL/"
+         "openjdk-27.0.1.0.3_windows-x64_bin.zip", "27.0.1.3"),
+    ],
+)
+def test_five_part_stale_url_fails(vendor, version, url, found):
+    assert checks.check_url_version(pkg(id="p", vendor=vendor), version, url, "x64 URL") == [
+        f"x64 URL is for version {found} but the nuspec expects {version}: {url}"
+    ]
+
+
+def test_five_part_url_with_fifth_part_of_100_fails():
+    url = SAPMACHINE + "sapmachine-21.0.13.0.100/sapmachine-jdk-21.0.13.0.100_windows-x64_bin.msi"
+    with pytest.raises(versioning.VersionError, match="5th part 100"):
+        versioning.url_version("sapmachine", url)

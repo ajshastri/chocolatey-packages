@@ -5,7 +5,8 @@
 - sha256: ``<href>.sha256``.
 - ``dir_version`` (``resolve_extras``): zip root minus ``jdk-``, used by
   ``$version`` in the install, uninstall and beforeModify scripts.
-- Version mapping: ``27`` -> ``27.0.0``; ``26.0.2.1`` stays.
+- Version mapping: ``27`` -> ``27.0.0``; ``26.0.2.1`` stays; 5 parts map with
+  ``versioning.jdk_five_part`` (``27.0.1.0.3`` -> ``27.0.1.3``).
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ def _href(major: int) -> re.Pattern:
 
 def normalize(version: str) -> str:
     try:
-        return versioning.format(versioning.strip_build(version.strip()))
+        return versioning.jdk_five_part(versioning.strip_build(version.strip()))
     except versioning.VersionError as exc:
         raise SourceError(f"OpenJDK version {version!r}: {exc}") from exc
 
