@@ -70,15 +70,18 @@ def push_paths(path: Path) -> list[str]:
     return re.findall(r'^      - "([^"]+)"$', items, re.M)
 
 
-def test_publish_push_trigger_ignores_test_fixtures():
-    """tests/fixtures/pkg/*/ has nuspecs and tools/ folders; test-only merges must not start a publish run.
+def test_publish_push_trigger_ignores_tests_and_scripts():
+    """Test-only and chocotools-only merges must not start a publish run.
 
-    GitHub evaluates ``paths`` in order and a later ``!`` pattern excludes, so the negation must come last.
+    tests/fixtures/pkg/*/ has nuspecs and tools/ folders, and GitHub matched ``**/tools/**`` against
+    scripts/chocotools/ (PR #30). GitHub evaluates ``paths`` in order and a later ``!`` pattern
+    excludes, so the negations must come after every positive pattern.
     """
     paths = push_paths(WORKFLOWS / "publish.yaml")
-    assert paths == ["**/*.nuspec", "**/tools/**", "!tests/**"]
+    assert paths == ["**/*.nuspec", "**/tools/**", "!tests/**", "!scripts/**"]
     positive = [i for i, p in enumerate(paths) if not p.startswith("!")]
-    assert paths.index("!tests/**") > max(positive)
+    for negation in ("!tests/**", "!scripts/**"):
+        assert paths.index(negation) > max(positive), negation
 
 
 def test_publish_has_no_concurrency_group():
