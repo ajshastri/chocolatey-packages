@@ -1,7 +1,7 @@
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\OpenJDK"
 
-$version = '27'
+$version = '27.0.1.0.3'
 
 $pathToUnInstall = "$installDir\jdk-$version\bin"
 
