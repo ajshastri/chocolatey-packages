@@ -11,6 +11,21 @@ Output form (``format``):
 
 Comparison pads with zeros, so ``21.52.203.0`` equals ``21.52.203``.
 
+5-part upstream versions (NuGet allows 4)
+-----------------------------------------
+- Corretto (``corretto_tag``): ``A.B.C.D.E`` -> ``A.B.C.<D><E>``, the digits
+  joined (``21.0.12.12.1`` -> ``21.0.12.121``, ``21.0.13.0.10`` -> ``21.0.13.10``).
+  Published versions depend on it. A tag with ``D >= 1`` and ``E >= 10`` fails,
+  because joining is ambiguous there (``1.10`` and ``11.0`` both give ``110``).
+- Liberica, SapMachine, OpenJDK (``jdk_five_part``): ``A.B.C.P.E`` ->
+  ``A.B.C.(P*100+E)`` (``21.0.13.0.2`` -> ``21.0.13.2``, ``21.0.13.1.1`` ->
+  ``21.0.13.101``); ``E >= 100`` fails.
+- The vendor ``normalize`` and the ``_URL_RULES`` entry use the same mapping,
+  so ``validate`` compares the URL in the form sync writes.
+- ``sync`` fails a package whose mapped version equals the repo version while
+  its download URL differs from the install script's, so a mapping collision
+  (or a rebuilt upstream build) is never reported as up-to-date.
+
 Package fix versions (``package_fix = N`` in ``packages.toml``, 1 <= N <= 99)
 ------------------------------------------------------------------------------
 Needed when a version can never be pushed again (Chocolatey rejected it, and
@@ -60,6 +75,8 @@ __all__ = [
     "strip_build",
     "join_parts",
     "corretto_tag",
+    "jdk_five_part",
+    "FIVE_PART_FACTOR",
     "graalvm_tag",
     "FIX_FACTOR",
     "apply_package_fix",
@@ -72,6 +89,7 @@ __all__ = [
 MAX_PARTS = 4
 FIX_FACTOR = 100
 MAX_PACKAGE_FIX = FIX_FACTOR - 1
+FIVE_PART_FACTOR = 100  # jdk_five_part: A.B.C.P.E -> A.B.C.(P*100+E)
 _NUMERIC = re.compile(r"^\d+(\.\d+)*$")
 
 
@@ -176,18 +194,71 @@ def join_parts(parts: Iterable[int | str]) -> str:
 def corretto_tag(tag: str) -> str:
     """Map a Corretto tag to a package version.
 
-    5 parts ``A.B.C.D.E`` become ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``).
+    5 parts ``A.B.C.D.E`` become ``A.B.C.<D><E>``, the digits of ``int(D)`` and
+    ``int(E)`` joined (published Corretto versions depend on this mapping):
+
+    - old-style tags: ``21.0.12.12.1`` -> ``21.0.12.121``, ``25.0.4.10.1`` -> ``25.0.4.101``
+    - new-style tags (``D`` is 0): ``21.0.13.0.10`` -> ``21.0.13.10``, ``11.0.33.0.9`` -> ``11.0.33.9``
+
     4-part tags (Corretto 8, e.g. ``8.504.04.1``) are kept as-is. Leading zeros
     are dropped by ``format``.
+
+    Fails closed (``VersionError``) on a 5-part tag with ``D >= 1`` and ``E >= 10``:
+    joining is ambiguous there (``21.0.13.1.10`` and ``21.0.13.11.0`` both give
+    ``110``; ``11.0.9.9.10`` gives ``910``, above ``11.0.9.10.1`` = ``101``).
     """
     parts = tag.strip().split(".")
     if not all(p.isdigit() for p in parts):
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     if len(parts) == 5:
-        parts = parts[:3] + [str(int(parts[3])) + str(int(parts[4]))]
+        d, e = int(parts[3]), int(parts[4])
+        if d >= 1 and e >= 10:
+            raise VersionError(
+                f"ambiguous Corretto tag {tag!r}: joining 4th part {d} and two-digit 5th part {e} "
+                f"into {d}{e} can collide with or sort out of order against other tags"
+            )
+        parts = parts[:3] + [f"{d}{e}"]
     elif len(parts) != 4:
         raise VersionError(f"unexpected Corretto tag: {tag!r}")
     return format(".".join(parts))
+
+
+def jdk_five_part(version: str) -> str:
+    """Map a Liberica, SapMachine or OpenJDK version of up to 5 parts to a package version.
+
+    5 parts ``A.B.C.P.E`` become ``A.B.C.(P*100+E)``, i.e. ``P`` and ``E`` joined
+    with ``E`` written as two digits, so the order holds for any ``E`` up to 99:
+
+    =================  ================  ================================================
+    upstream           package version   note
+    =================  ================  ================================================
+    ``21.0.13.0.2``    ``21.0.13.2``     Liberica/SapMachine 21, Oct 2026
+    ``27.0.1.0.3``     ``27.0.1.3``      OpenJDK 27 respin; ``27.0.1.0.2`` -> ``27.0.1.2``
+    ``21.0.10.0.1``    ``21.0.10.1``     SapMachine 21, Feb 2026
+    ``21.0.13.1.1``    ``21.0.13.101``   ``P`` = 1: ``1`` + ``01``
+    ``21.0.13.0.100``  ``VersionError``  ``E`` >= 100 cannot be written in two digits
+    =================  ================  ================================================
+
+    4 parts and fewer pass through ``format`` unchanged (``21.0.12.1``, ``27`` ->
+    ``27.0.0``). Non-numeric parts or more than 5 parts raise ``VersionError``.
+    Known limit: a 4-part version after a 5-part one on the same ``A.B.C``
+    (``21.0.13.0.2`` -> ``21.0.13.2``, then ``21.0.13.1``) sorts lower; sync
+    fails closed on that (``upstream ... is lower than repo``) and
+    ``package_fix`` resolves it.
+    """
+    text = version.strip() if isinstance(version, str) else ""
+    if not text or not _NUMERIC.match(text):
+        raise VersionError(f"not a numeric dotted version: {version!r}")
+    parts = [int(p) for p in text.split(".")]
+    if len(parts) > MAX_PARTS + 1:
+        raise VersionError(f"more than {MAX_PARTS + 1} parts: {version!r}")
+    if len(parts) == MAX_PARTS + 1:
+        p, e = parts[3], parts[4]
+        if e >= FIVE_PART_FACTOR:
+            raise VersionError(f"5th part {e} of {version!r} is {FIVE_PART_FACTOR} or more; "
+                               f"A.B.C.P.E -> A.B.C.(P*{FIVE_PART_FACTOR}+E) needs E <= {FIVE_PART_FACTOR - 1}")
+        parts = parts[:3] + [p * FIVE_PART_FACTOR + e]
+    return format(parts)
 
 
 # ----- package fix versions --------------------------------------------------
@@ -299,9 +370,11 @@ _URL_RULES = {
     "zulu": [(re.compile(rf"/zulu{_V}-ca-"), lambda m: m[1])],
     "liberica": [
         (re.compile(r"/download/8u(\d+)\+(\d+)/"), lambda m: f"8.0.{int(m[1])}.{int(m[2])}"),
-        (re.compile(rf"/download/{_V}\+\d+/"), lambda m: m[1]),
+        # 21.0.12.1+1 -> 21.0.12.1; 21.0.13.0.2+5 -> 21.0.13.2 (jdk_five_part)
+        (re.compile(rf"/download/{_V}\+\d+/"), lambda m: jdk_five_part(m[1])),
     ],
-    "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: m[1])],
+    # sapmachine-21.0.12.1 -> 21.0.12.1; sapmachine-21.0.13.0.2 -> 21.0.13.2 (jdk_five_part)
+    "sapmachine": [(re.compile(rf"/download/sapmachine-{_V}/"), lambda m: jdk_five_part(m[1]))],
     "graalvm": [
         # graal-<tag>/graalvm-community-jdk-<M>i<I>-<M>.0.<rest>_: see graalvm_tag
         (re.compile(rf"/download/graal-{_V}/graalvm-community-jdk-(\d+)i(\d+)-{_V}_"), graalvm_tag),
@@ -310,8 +383,8 @@ _URL_RULES = {
         # jdk-21.0.2 for the old CE builds
         (re.compile(rf"/download/jdk-{_V}/"), lambda m: m[1]),
     ],
-    # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2
-    "openjdk": [(re.compile(rf"/openjdk-{_V}_windows"), lambda m: m[1])],
+    # openjdk-27_windows -> 27.0.0, openjdk-26.0.2_windows -> 26.0.2, openjdk-27.0.1.0.3_windows -> 27.0.1.3
+    "openjdk": [(re.compile(rf"/openjdk-{_V}_windows"), lambda m: jdk_five_part(m[1]))],
     "jmc": [(re.compile(rf"/jmc-{_V}_windows"), lambda m: m[1])],
     "mvnd": [(re.compile(rf"/download/v?{_V}/maven-mvnd-"), lambda m: m[1])],
     "wildfly": [(re.compile(rf"/download/{_V}\.Final/"), lambda m: m[1])],

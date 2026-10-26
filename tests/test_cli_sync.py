@@ -1,3 +1,5 @@
+import os
+import stat
 from pathlib import Path
 
 import pytest
@@ -181,12 +183,28 @@ def test_upstream_lower_than_repo_fails(repo, capsys):
     assert "lower than repo" in capsys.readouterr().out
 
 
+ZULU8_URL = "https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64.msi"  # in the zulu-8 fixture
+
+
 def test_equal_version_is_up_to_date(repo, capsys):
-    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": "https://cdn.azul.com/a.msi"}, {"x64": SHA}, "t")
+    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": ZULU8_URL}, {"x64": SHA}, "t")
     before = snapshot(repo["root"])
     assert run(repo["root"], "sync", "--id", "zulu8") == 0
     assert snapshot(repo["root"]) == before
-    assert "up-to-date" in capsys.readouterr().out
+    assert "| zulu8 | 8.96.0.205 | 8.96.0.205 | up-to-date |" in capsys.readouterr().out
+
+
+def test_equal_version_with_another_url_fails(repo, capsys):
+    # e.g. a rebuilt upstream build, or two upstream versions mapping to one package version
+    new_url = "https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64-rebuild.msi"
+    repo["releases"]["zulu8"] = Release("8.96.0.205", "8.96.0.205", {"x64": new_url}, {"x64": SHA}, "t")
+    before = snapshot(repo["root"])
+    assert run(repo["root"], "sync", "--id", "zulu8") == 1
+    assert snapshot(repo["root"]) == before
+    out = capsys.readouterr().out
+    assert "| zulu8 | 8.96.0.205 | 8.96.0.205 | failed |" in out
+    assert (f"- zulu8: upstream build changed ({new_url}) but maps to the existing version 8.96.0.205; "
+            f"refusing to treat as up-to-date (install script has {ZULU8_URL})") in out
 
 
 def test_dir_version_tokens(repo):
@@ -244,6 +262,24 @@ def test_graalvm_five_part_tag_syncs_to_four_part_version(repo, monkeypatch, cap
     assert b"<version>25.4.4.1</version>" in (root / "GraalVM/graalvm.nuspec").read_bytes()
 
 
+OPENJDK_27_0_1_0_3 = ("https://download.java.net/java/GA/jdk27.0.1.0.3/b14170c9b2de463d9b89442c6db3e384/1/GPL/"
+                      "openjdk-27.0.1.0.3_windows-x64_bin.zip")
+
+
+def test_openjdk_five_part_version_syncs_to_mapped_version(repo, monkeypatch, capsys):
+    # 27.0.1.0.3 used to fail with "source: OpenJDK version '27.0.1.0.3': more than 4 parts"
+    root = repo["root"]
+    repo["releases"]["openjdk"] = Release("27.0.1.3", "27.0.1.0.3", {"x64": OPENJDK_27_0_1_0_3}, {"x64": SHA},
+                                          "jdk.java.net .sha256")
+    monkeypatch.setitem(EXTRAS, "openjdk", "27.0.1.0.3")
+    assert run(root, "sync", "--id", "openjdk") == 0, capsys.readouterr().out
+    assert b"<version>27.0.1.3</version>" in (root / "OpenJDK/openjdk.nuspec").read_bytes()
+    assert OPENJDK_27_0_1_0_3.encode() in (root / "OpenJDK/tools/chocolateyinstall.ps1").read_bytes()
+    for name in ("chocolateyinstall.ps1", "chocolateyuninstall.ps1", "chocolateyBeforeModify.ps1"):
+        data = (root / "OpenJDK/tools" / name).read_bytes()
+        assert b'$version = "27.0.1.0.3"' in data or b"$version = '27.0.1.0.3'" in data, name
+
+
 def test_post_update_validation_failure_writes_nothing(repo, capsys):
     before = snapshot(repo["root"])
     assert run(repo["root"], "sync", "--id", "Temurin8") == 1  # x86 Url still present
@@ -257,6 +293,20 @@ def test_report_and_frozen_skip(repo, tmp_path):
     assert code == 0
     text = report.read_text(encoding="utf-8")
     assert "| graalvm-java17 |  |  | skipped |" in text and "would update" in text
+
+
+@pytest.mark.skipif(os.name == "nt", reason="Windows has no POSIX mode bits (os.chmod only sets read-only)")
+def test_write_files_keeps_the_target_mode(tmp_path):
+    # OpenJDK/ files are 100755 in git; sync used to commit them as 100644
+    script = tmp_path / "tools" / "chocolateyinstall.ps1"
+    script.parent.mkdir()
+    script.write_bytes(b"old")
+    script.chmod(0o755)
+    cli.write_files(tmp_path, {"tools/chocolateyinstall.ps1": b"new", "tools/new.ps1": b"created"})
+    assert script.read_bytes() == b"new"
+    assert stat.S_IMODE(script.stat().st_mode) == 0o755
+    assert (tmp_path / "tools" / "new.ps1").read_bytes() == b"created"
+    assert not list(tmp_path.rglob("*.chocotools-tmp"))
 
 
 def test_unknown_id_is_usage_error(repo):

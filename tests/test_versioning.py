@@ -47,6 +47,63 @@ def test_trailing_zero_equality_and_order():
     assert versioning.compare_nuget("11.0.32.121", "11.0.32.102") > 0
 
 
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        # real 5-part versions (Liberica, SapMachine, OpenJDK, Oct 2026): P = 0
+        ("21.0.13.0.2", "21.0.13.2"),
+        ("17.0.21.0.2", "17.0.21.2"),
+        ("11.0.33.0.2", "11.0.33.2"),
+        ("25.0.5.0.2", "25.0.5.2"),
+        ("27.0.1.0.2", "27.0.1.2"),
+        ("27.0.1.0.3", "27.0.1.3"),
+        ("21.0.10.0.1", "21.0.10.1"),
+        # P >= 1: E is padded to two digits
+        ("21.0.13.1.1", "21.0.13.101"),
+        ("21.0.13.1.10", "21.0.13.110"),
+        ("21.0.13.0.99", "21.0.13.99"),
+        # 4 parts and fewer pass through format
+        ("21.0.12.1", "21.0.12.1"),
+        ("21.0.13", "21.0.13"),
+        ("27", "27.0.0"),
+        ("21.0.12.0.0", "21.0.12"),
+    ],
+)
+def test_jdk_five_part(raw, expected):
+    assert versioning.jdk_five_part(raw) == expected
+
+
+@pytest.mark.parametrize(
+    "bad, message",
+    [
+        ("21.0.13.0.100", "5th part 100"),
+        ("21.0.13.0.2.1", "more than 5 parts"),
+        ("21.0.13.0.x", "not a numeric dotted version"),
+        ("", "not a numeric dotted version"),
+    ],
+)
+def test_jdk_five_part_fails_closed(bad, message):
+    with pytest.raises(versioning.VersionError, match=message):
+        versioning.jdk_five_part(bad)
+
+
+@pytest.mark.parametrize(
+    "repo, upstream",
+    [
+        ("21.0.12.1", "21.0.13.0.2"),  # liberica21jdk, sapmachine21
+        ("17.0.20.1", "17.0.21.0.2"),
+        ("11.0.32.1", "11.0.33.0.2"),
+        ("27.0.0", "27.0.1.0.3"),  # openjdk
+        ("27.0.1.2", "27.0.1.0.3"),  # respin 27.0.1.0.2 -> 27.0.1.0.3
+        ("27.0.1", "27.0.1.0.2"),
+        ("21.0.13", "21.0.13.0.2"),
+        ("21.0.13.99", "21.0.13.1.0"),
+    ],
+)
+def test_jdk_five_part_moves_up_from_repo_version(repo, upstream):
+    assert versioning.compare_nuget(versioning.jdk_five_part(upstream), repo) > 0
+
+
 def test_strip_helpers():
     assert versioning.strip_v("v1.0.6") == "1.0.6"
     assert versioning.strip_v("1.0.6") == "1.0.6"
@@ -88,10 +145,19 @@ def test_temurin_rejects_unknown():
         ("17.0.20.1+1", "17.0.20.1"),
         ("11.0.32.1+1", "11.0.32.1"),
         ("21.0.12+10", "21.0.12"),
+        ("21.0.13.0.2+5", "21.0.13.2"),
+        ("17.0.21.0.2+5", "17.0.21.2"),
+        ("11.0.33.0.2+5", "11.0.33.2"),
+        ("25.0.5.0.2+5", "25.0.5.2"),
     ],
 )
 def test_liberica(raw, expected):
     assert liberica.normalize(raw) == expected
+
+
+def test_liberica_rejects_fifth_part_of_100():
+    with pytest.raises(SourceError, match=r"Liberica version '21\.0\.13\.0\.100'"):
+        liberica.normalize("21.0.13.0.100+1")
 
 
 @pytest.mark.parametrize(
@@ -104,6 +170,12 @@ def test_liberica(raw, expected):
         ("21.0.12.8.1", "21.0.12.81"),
         ("8.504.04.1", "8.504.4.1"),
         ("8.502.07.1", "8.502.7.1"),
+        ("8.512.08.1", "8.512.8.1"),
+        # new-style tags (4th part 0, 1-2 digit 5th part)
+        ("21.0.13.0.10", "21.0.13.10"),
+        ("17.0.21.0.10", "17.0.21.10"),
+        ("11.0.33.0.9", "11.0.33.9"),
+        ("25.0.5.0.9", "25.0.5.9"),
     ],
 )
 def test_corretto(raw, expected):
@@ -113,6 +185,15 @@ def test_corretto(raw, expected):
 def test_corretto_rejects_odd_tags():
     with pytest.raises(SourceError):
         corretto.normalize("21.0.12")
+
+
+@pytest.mark.parametrize("tag", ["21.0.13.1.10", "11.0.9.9.10"])
+def test_corretto_rejects_ambiguous_concat(tag):
+    # 21.0.13.1.10 and 21.0.13.11.0 would both give 21.0.13.110; 11.0.9.9.10 (910) would sort above 11.0.9.10.1 (101)
+    with pytest.raises(versioning.VersionError, match="ambiguous Corretto tag"):
+        versioning.corretto_tag(tag)
+    with pytest.raises(SourceError, match="ambiguous Corretto tag"):
+        corretto.normalize(tag)
 
 
 def test_zulu():
@@ -125,8 +206,11 @@ def test_sapmachine():
     assert sapmachine.normalize("sapmachine-21.0.12.1") == "21.0.12.1"
     assert sapmachine.normalize("sapmachine-11.0.25") == "11.0.25"
     assert sapmachine.normalize("sapmachine-21") == "21.0.0"
-    with pytest.raises(SourceError):
-        sapmachine.normalize("sapmachine-21.0.10.0.1")
+    assert sapmachine.normalize("sapmachine-21.0.10.0.1") == "21.0.10.1"
+    assert sapmachine.normalize("sapmachine-21.0.13.0.2") == "21.0.13.2"
+    assert sapmachine.normalize("sapmachine-17.0.21.0.2") == "17.0.21.2"
+    with pytest.raises(SourceError, match="SapMachine version"):
+        sapmachine.normalize("sapmachine-21.0.13.0.100")
 
 
 def test_graalvm():
@@ -142,6 +226,10 @@ def test_graalvm():
 def test_openjdk():
     assert openjdk.normalize("27") == "27.0.0"
     assert openjdk.normalize("26.0.2.1") == "26.0.2.1"
+    assert openjdk.normalize("27.0.1.0.2") == "27.0.1.2"
+    assert openjdk.normalize("27.0.1.0.3") == "27.0.1.3"
+    with pytest.raises(SourceError, match="OpenJDK version"):
+        openjdk.normalize("27.0.1.0.100")
 
 
 def test_wildfly_mvnd_jmc():
