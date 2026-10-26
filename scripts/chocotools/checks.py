@@ -24,6 +24,12 @@
   not this repo's folder (CPMR0040), any ``http://`` *Url, a releaseNotes URL
   that is not https, tags with commas, uppercase or "chocolatey" (CPMR0014),
   and a description under 30 characters.
+- Side-by-side uninstall: a ``tools/chocolateyuninstall.ps1`` that pins a quoted
+  ``$major`` must match the manifest major, its ``$softwareName`` must be the
+  vendor MSI's product name (``uninstall_display_name``), and
+  ``tools/.skipAutoUninstall`` must exist, so uninstalling one major never
+  removes another major of the same vendor. Each failure is an error, so a
+  manifest major bump fails until the script is updated.
 """
 
 from __future__ import annotations
@@ -62,6 +68,9 @@ REPO_TREE = "https://github.com/ajshastri/chocolatey-packages/tree/master/"
 RECOMMENDED_FIELDS = ("projectSourceUrl", "docsUrl", "bugTrackerUrl", "iconUrl", "licenseUrl", "projectUrl",
                       "summary", "authors")
 MIN_DESCRIPTION = 30
+UNINSTALL_SCRIPT = "tools/chocolateyuninstall.ps1"
+SKIP_AUTO_UNINSTALL = "tools/.skipAutoUninstall"
+_LIBERICA_SUFFIX = {None: "", "std": "", "full": " Full", "lite": " Lite"}
 
 
 @dataclass
@@ -222,6 +231,45 @@ def check_metadata(pkg: Package, meta: dict[str, str]) -> Result:
     return res
 
 
+def uninstall_display_name(pkg: Package) -> str | None:
+    """The vendor MSI's product name (ARP DisplayName) for ``pkg``, or None if not pinned.
+
+    Corretto uses one name for every major, so its uninstall script tells the
+    majors apart by DisplayVersion only.
+    """
+    if pkg.vendor == "sapmachine" and pkg.image:
+        return f"SapMachine {pkg.major} {pkg.image.upper()}"
+    if pkg.vendor == "liberica" and pkg.image:
+        return f"Liberica {pkg.image.upper()} {pkg.major}{_LIBERICA_SUFFIX[pkg.variant]} (64-bit)"
+    if pkg.vendor == "corretto":
+        return "Amazon Corretto (x64)"
+    return None
+
+
+def check_uninstall(pkg: Package, files: dict[str, bytes]) -> list[str]:
+    """Side-by-side rule for a ``tools/chocolateyuninstall.ps1`` that pins ``$major``."""
+    data = files.get(UNINSTALL_SCRIPT)
+    if data is None:
+        return []
+    try:
+        majors = installscript.get_variable(data, "major")
+        names = installscript.get_variable(data, "softwareName")
+    except installscript.ScriptError as exc:
+        return [f"{UNINSTALL_SCRIPT}: {exc}"]
+    if not majors:
+        return []
+    errors = []
+    if majors != [str(pkg.major)]:
+        errors.append(f"{UNINSTALL_SCRIPT}: $major is {majors}, manifest major is {pkg.major}")
+    expected = uninstall_display_name(pkg)
+    if expected is not None and names != [expected]:
+        errors.append(f"{UNINSTALL_SCRIPT}: $softwareName is {names}, expected {expected!r}")
+    if SKIP_AUTO_UNINSTALL not in files:
+        errors.append(f"{SKIP_AUTO_UNINSTALL} is missing (Chocolatey's auto-uninstaller could remove "
+                      f"another major's build)")
+    return errors
+
+
 def _read_files(folder: Path, overrides: dict[str, bytes]) -> dict[str, bytes]:
     files: dict[str, bytes] = {}
     if folder.is_dir():
@@ -260,6 +308,7 @@ def validate_package(root: Path, pkg: Package, overrides: dict[str, bytes] | Non
         denied = find_denied(data.decode("utf-8", errors="ignore"))
         if denied:
             res.errors.append(f"{name} mentions denied host(s): {', '.join(denied)}")
+    res.errors += check_uninstall(pkg, files)
 
     script_name = "tools/chocolateyinstall.ps1"
     if script_name not in files:

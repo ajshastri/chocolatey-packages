@@ -194,6 +194,80 @@ def test_online_check_warns_on_unreachable_release_notes(tmp_path, capsys):
     assert cli.online_check(tmp_path, p, moved).warnings == [f"releaseNotes URL answered HTTP 410: {notes}"]
 
 
+def uninstall_script(name: str, major: str) -> bytes:
+    return (
+        "$ErrorActionPreference = 'Stop'\r\n"
+        f"$softwareName = '{name}'\r\n"
+        f"$major        = '{major}'\r\n"
+        "[array]$keys = Get-UninstallRegistryKey -SoftwareName $softwareName |\r\n"
+        "  Where-Object { $_.DisplayVersion -like \"$major.*\" }\r\n"
+    ).encode()
+
+
+@pytest.mark.parametrize(
+    "kw, name",
+    [
+        (dict(vendor="sapmachine", major=25, image="jdk"), "SapMachine 25 JDK"),
+        (dict(vendor="sapmachine", major=25, image="jre"), "SapMachine 25 JRE"),
+        (dict(vendor="liberica", major=25, image="jdk", variant="std"), "Liberica JDK 25 (64-bit)"),
+        (dict(vendor="liberica", major=25, image="jdk", variant="full"), "Liberica JDK 25 Full (64-bit)"),
+        (dict(vendor="liberica", major=25, image="jdk", variant="lite"), "Liberica JDK 25 Lite (64-bit)"),
+        (dict(vendor="liberica", major=25, image="jre", variant="std"), "Liberica JRE 25 (64-bit)"),
+        (dict(vendor="liberica", major=25, image="jre", variant="full"), "Liberica JRE 25 Full (64-bit)"),
+        (dict(vendor="corretto", major=25, image="jdk"), "Amazon Corretto (x64)"),
+        (dict(vendor="temurin", major=25, image="jdk"), None),
+    ],
+)
+def test_uninstall_display_name(kw, name):
+    assert checks.uninstall_display_name(pkg(**kw)) == name
+
+
+SAP25 = pkg(id="sapmachine", folder="sapmachine-jdk", vendor="sapmachine", major=25, image="jdk")
+SKIP = {checks.SKIP_AUTO_UNINSTALL: b""}
+
+
+def test_uninstall_rule_matching_script_passes():
+    files = {checks.UNINSTALL_SCRIPT: uninstall_script("SapMachine 25 JDK", "25"), **SKIP}
+    assert checks.check_uninstall(SAP25, files) == []
+
+
+def test_uninstall_rule_ignores_scripts_without_major():
+    assert checks.check_uninstall(SAP25, {}) == []
+    assert checks.check_uninstall(SAP25, {checks.UNINSTALL_SCRIPT: b"Uninstall-ChocolateyPackage @args\r\n"}) == []
+
+
+def test_uninstall_rule_wrong_major_fails():
+    files = {checks.UNINSTALL_SCRIPT: uninstall_script("SapMachine 25 JDK", "21"), **SKIP}
+    assert checks.check_uninstall(SAP25, files) == [
+        "tools/chocolateyuninstall.ps1: $major is ['21'], manifest major is 25"]
+
+
+def test_uninstall_rule_wrong_name_fails():
+    files = {checks.UNINSTALL_SCRIPT: uninstall_script("SapMachine 21 JDK", "25"), **SKIP}
+    assert checks.check_uninstall(SAP25, files) == [
+        "tools/chocolateyuninstall.ps1: $softwareName is ['SapMachine 21 JDK'], expected 'SapMachine 25 JDK'"]
+
+
+def test_uninstall_rule_missing_skip_file_fails():
+    files = {checks.UNINSTALL_SCRIPT: uninstall_script("SapMachine 25 JDK", "25")}
+    errors = checks.check_uninstall(SAP25, files)
+    assert len(errors) == 1 and errors[0].startswith("tools/.skipAutoUninstall is missing")
+
+
+def test_validate_package_runs_uninstall_rule(tmp_path):
+    shutil.copytree(PKG_FIXTURES / "zulu-8", tmp_path / "zulu-8")
+    p = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=8)
+    tools = tmp_path / "zulu-8/tools"
+    (tools / "chocolateyuninstall.ps1").write_bytes(uninstall_script("Zulu 8", "8"))
+    assert checks.validate_package(tmp_path, p).errors == [
+        "tools/.skipAutoUninstall is missing (Chocolatey's auto-uninstaller could remove another major's build)"]
+    (tools / ".skipAutoUninstall").write_bytes(b"")
+    assert checks.validate_package(tmp_path, p).errors == []  # zulu: no pinned product name
+    moved = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=25)
+    assert "tools/chocolateyuninstall.ps1: $major is ['8'], manifest major is 25" in checks.validate_package(
+        tmp_path, moved).errors
+
+
 def test_validate_package_denylist_and_overrides(tmp_path):
     shutil.copytree(PKG_FIXTURES / "zulu-8", tmp_path / "zulu-8")
     p = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=8)
