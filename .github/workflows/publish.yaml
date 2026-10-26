@@ -5,7 +5,8 @@
 #   check    Every run. `publish --dry-run`: validate, pack and test-install,
 #            never push. No environment, no CHOCO_KEY, no approval wait. For a
 #            dispatched run with dry_run=true this is the whole run.
-#   publish  Pushes to master that touch package files, and dispatched runs
+#   publish  Pushes to master that touch package files (not tests/, see
+#            `paths` below), and dispatched runs
 #            with dry_run=false, once `check` has passed. Runs in the
 #            `chocolatey` environment, so it waits until a required reviewer
 #            approves it, and only then receives CHOCO_KEY. It repeats the
@@ -33,9 +34,15 @@ name: publish
 on:
   push:
     branches: [master]
+    # Package files: a nuspec or anything under a tools/ folder. Patterns are
+    # evaluated in order and a later `!` pattern excludes, so the negation must
+    # stay after the positive patterns. tests/fixtures/pkg/*/ holds nuspecs and
+    # tools/ folders, and a push that only changes tests would otherwise start
+    # an empty publish run that still waits for approval.
     paths:
       - "**/*.nuspec"
       - "**/tools/**"
+      - "!tests/**"
   workflow_dispatch:
     inputs:
       ids:
