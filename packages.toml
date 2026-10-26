@@ -594,6 +594,26 @@ frozen = false
 notes = ""
 
 [[package]]
+id = "sapmachine25"
+folder = "sapmachine-25-jdk"
+vendor = "sapmachine"
+major = 25
+image = "jdk"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "sapmachine25jre"
+folder = "sapmachine-25-jre"
+vendor = "sapmachine"
+major = 25
+image = "jre"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
 id = "sapmachine"
 folder = "sapmachine-jdk"
 vendor = "sapmachine"
