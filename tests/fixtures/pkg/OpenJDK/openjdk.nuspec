@@ -16,5 +16,6 @@
     <tags>openjdk java jvm</tags>
     <summary>OpenJDK is an open source Java Development Kit provided by Oracle</summary>
     <description>OpenJDK is an open source Java Development Kit provided by Oracle</description>
+    <releaseNotes>https://jdk.java.net/27/release-notes</releaseNotes>
   </metadata>
 </package>

@@ -17,6 +17,13 @@
   a stale fix. Frozen packages are checked too. ``URL_VERSION_EXCEPTIONS``
   pins the one known historical mismatch to its exact version, so a later
   hand edit of that package still fails.
+- Nuspec metadata (Chocolatey package validator rules): an empty or missing
+  ``<releaseNotes>`` is an error (CPMR0042; sync writes it with each version).
+  Warnings: empty projectSourceUrl/docsUrl/bugTrackerUrl/iconUrl/licenseUrl/
+  projectUrl/summary/authors (CPMR0057/0033/0047), a packageSourceUrl that is
+  not this repo's folder (CPMR0040), any ``http://`` *Url, a releaseNotes URL
+  that is not https, tags with commas, uppercase or "chocolatey" (CPMR0014),
+  and a description under 30 characters.
 """
 
 from __future__ import annotations
@@ -51,6 +58,10 @@ _HEX = re.compile(r"^[0-9a-fA-F]+$")
 URL_VERSION_EXCEPTIONS = {("graalvm-java17", "22.3.3"): "17.0.9"}
 CHECKSUM_LENGTHS = {"sha256": 64, "sha1": 40, "md5": 32}
 WEAK_TYPES = {"sha1", "md5"}
+REPO_TREE = "https://github.com/ajshastri/chocolatey-packages/tree/master/"
+RECOMMENDED_FIELDS = ("projectSourceUrl", "docsUrl", "bugTrackerUrl", "iconUrl", "licenseUrl", "projectUrl",
+                      "summary", "authors")
+MIN_DESCRIPTION = 30
 
 
 @dataclass
@@ -181,6 +192,36 @@ def check_url_version(pkg: Package, version: str, url: str, label: str = "URL") 
     return []
 
 
+def check_metadata(pkg: Package, meta: dict[str, str]) -> Result:
+    """Chocolatey guideline checks on the nuspec metadata (``nuspec.metadata``)."""
+    res = Result()
+    notes = meta.get("releaseNotes", "")
+    if not notes:
+        res.errors.append("<releaseNotes> is missing or empty (run sync, or add the release-notes URL)")
+    else:
+        if "://" in notes and not notes.lower().startswith("https://"):
+            res.warnings.append(f"<releaseNotes> URL is not https: {notes}")
+    for name in RECOMMENDED_FIELDS:
+        if not meta.get(name):
+            res.warnings.append(f"<{name}> is missing or empty")
+    expected = REPO_TREE + pkg.folder
+    if meta.get("packageSourceUrl") != expected:
+        res.warnings.append(f"<packageSourceUrl> is {meta.get('packageSourceUrl')!r}, expected {expected}")
+    for name, value in sorted(meta.items()):
+        if name.endswith("Url") and value.lower().startswith("http://"):
+            res.warnings.append(f"<{name}> is not https: {value}")
+    tags = meta.get("tags", "")
+    if "," in tags:
+        res.warnings.append(f"<tags> must be space separated, not comma separated: {tags!r}")
+    if tags != tags.lower():
+        res.warnings.append(f"<tags> should be lowercase: {tags!r}")
+    if "chocolatey" in tags.lower().replace(",", " ").split():
+        res.warnings.append(f"<tags> should not contain 'chocolatey': {tags!r}")
+    if len(meta.get("description", "")) < MIN_DESCRIPTION:
+        res.warnings.append(f"<description> is shorter than {MIN_DESCRIPTION} characters")
+    return res
+
+
 def _read_files(folder: Path, overrides: dict[str, bytes]) -> dict[str, bytes]:
     files: dict[str, bytes] = {}
     if folder.is_dir():
@@ -206,12 +247,14 @@ def validate_package(root: Path, pkg: Package, overrides: dict[str, bytes] | Non
         return res
     try:
         info = nuspec.read(files[nuspecs[0]])
+        meta = nuspec.metadata(files[nuspecs[0]])
     except nuspec.NuspecError as exc:
         res.errors.append(str(exc))
         return res
     if info.id != pkg.id:
         res.errors.append(f"nuspec <id> is {info.id!r}, manifest id is {pkg.id!r}")
     res.errors += check_version(info.version, "nuspec version")
+    res.extend(check_metadata(pkg, meta))
 
     for name, data in files.items():
         denied = find_denied(data.decode("utf-8", errors="ignore"))

@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from chocotools import nuspec
@@ -50,13 +52,22 @@ def test_set_version_refuses_bad_values(bad):
 
 
 NOTES = "https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.9"
+_NOTES_LINE = re.compile(rb"[ \t]*<releaseNotes>[^<]*</releaseNotes>\r?\n")
+
+
+def graalvm17_without_notes() -> bytes:
+    """The GraalVM-17 fixture (UTF-8 BOM, CRLF) with its <releaseNotes> line removed."""
+    data, count = _NOTES_LINE.subn(b"", pkg_bytes("GraalVM-17", "graalvm-java17.nuspec"))
+    assert count == 1
+    return data
 
 
 def test_metadata_first_occurrence_namespace_agnostic():
     meta = nuspec.metadata(pkg_bytes("GraalVM-17", "graalvm-java17.nuspec"))
     assert meta["id"] == "graalvm-java17"
     assert meta["projectUrl"] == "https://www.graalvm.org/"
-    assert "releaseNotes" not in meta
+    assert meta["releaseNotes"] == NOTES
+    assert "releaseNotes" not in nuspec.metadata(graalvm17_without_notes())
     assert nuspec.metadata(pkg_bytes("zulu-8", "zulu-8.nuspec"))["releaseNotes"] == "https://docs.azul.com/core/release-notes"
 
 
@@ -75,8 +86,9 @@ def test_set_element_fills_self_closing_element():
 
 
 def test_set_element_inserts_into_crlf_bom_file():
-    old = pkg_bytes("GraalVM-17", "graalvm-java17.nuspec")
+    old = graalvm17_without_notes()
     new = nuspec.set_release_notes(old, NOTES)
+    assert new == pkg_bytes("GraalVM-17", "graalvm-java17.nuspec")  # the fixture line was written this way
     assert new.startswith(nuspec.BOM)
     line = f"    <releaseNotes>{NOTES}</releaseNotes>\r\n".encode()
     assert new == old.replace(b"  </metadata>", line + b"  </metadata>")
@@ -86,7 +98,7 @@ def test_set_element_inserts_into_crlf_bom_file():
 
 
 def test_set_element_inserts_into_lf_file():
-    old = pkg_bytes("GraalVM-17", "graalvm-java17.nuspec").replace(b"\r\n", b"\n")
+    old = graalvm17_without_notes().replace(b"\r\n", b"\n")
     new = nuspec.set_release_notes(old, NOTES)
     assert new == old.replace(b"  </metadata>", f"    <releaseNotes>{NOTES}</releaseNotes>\n  </metadata>".encode())
     assert b"\r" not in new
@@ -99,7 +111,9 @@ def test_set_element_changes_only_metadata_bytes():
     assert new[:head] == old[:head]
     assert new.endswith(old[tail:])
     meta_old, meta_new = nuspec.metadata(old), nuspec.metadata(new)
-    assert {k: v for k, v in meta_new.items() if k not in ("releaseNotes", "docsUrl")} == meta_old
+    assert (meta_new["releaseNotes"], meta_new["docsUrl"]) == (NOTES, "https://adoptium.net/docs/")
+    skip = ("releaseNotes", "docsUrl")
+    assert {k: v for k, v in meta_new.items() if k not in skip} == {k: v for k, v in meta_old.items() if k not in skip}
 
 
 def test_set_element_escapes_and_round_trips():

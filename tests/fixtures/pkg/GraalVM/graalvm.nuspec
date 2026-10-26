@@ -16,5 +16,6 @@
     <tags>openjdk java jvm graalvm graalvm-ce</tags>
     <summary>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</summary>
     <description>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</description>
+    <releaseNotes>https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-25.0.2</releaseNotes>
   </metadata>
 </package>

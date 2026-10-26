@@ -2,9 +2,9 @@ import shutil
 
 import pytest
 
-from chocotools import checks
+from chocotools import checks, cli
 from chocotools.sources import Release
-from conftest import PKG_FIXTURES, pkg
+from conftest import PKG_FIXTURES, FakeClient, pkg
 
 SHA = "b" * 64
 
@@ -83,6 +83,115 @@ def test_validate_package_real_files(tmp_path):
     errors = checks.validate_package(tmp_path, t).errors
     assert any("present but manifest arch" in e for e in errors)
     assert "x86 URL equals the x64 URL" in errors
+
+
+GOOD_META = {
+    "id": "x",
+    "version": "1.0.0",
+    "authors": "Vendor",
+    "packageSourceUrl": checks.REPO_TREE + "x",
+    "projectUrl": "https://vendor.example/",
+    "projectSourceUrl": "https://github.com/vendor/x",
+    "docsUrl": "https://vendor.example/docs/",
+    "bugTrackerUrl": "https://github.com/vendor/x/issues",
+    "iconUrl": "https://cdn.jsdelivr.net/gh/ajshastri/chocolatey-packages@0123456/icons/x.png",
+    "licenseUrl": "https://vendor.example/license",
+    "mailingListUrl": "https://vendor.example/lists",
+    "summary": "A short summary",
+    "description": "A description that is long enough for Chocolatey.",
+    "tags": "x java jvm",
+    "releaseNotes": "https://github.com/vendor/x/releases/tag/1.0.0",
+}
+
+
+def metadata_result(**changes):
+    meta = {k: v for k, v in {**GOOD_META, **changes}.items() if v is not None}
+    return checks.check_metadata(pkg(id="x", folder="x"), meta)
+
+
+def test_metadata_complete_is_clean():
+    res = metadata_result()
+    assert (res.errors, res.warnings) == ([], [])
+
+
+@pytest.mark.parametrize("value", [None, ""])
+def test_release_notes_missing_is_an_error(value):
+    res = metadata_result(releaseNotes=value)
+    assert res.errors == ["<releaseNotes> is missing or empty (run sync, or add the release-notes URL)"]
+
+
+def test_release_notes_text_is_accepted_and_http_warns():
+    assert metadata_result(releaseNotes="Bug fixes, see the vendor site.").warnings == []
+    assert metadata_result(releaseNotes="http://vendor.example/notes").warnings == [
+        "<releaseNotes> URL is not https: http://vendor.example/notes"]
+
+
+@pytest.mark.parametrize("name", checks.RECOMMENDED_FIELDS)
+@pytest.mark.parametrize("value", [None, ""])
+def test_missing_recommended_field_warns(name, value):
+    res = metadata_result(**{name: value})
+    assert res.errors == []
+    assert f"<{name}> is missing or empty" in res.warnings
+
+
+@pytest.mark.parametrize("value", [None, "https://github.com/ajshastri/chocolatey-packages",
+                                   "https://github.com/johanjanssen/ChocolateyPackages/tree/master/x"])
+def test_package_source_url_must_be_the_repo_folder(value):
+    res = metadata_result(packageSourceUrl=value)
+    assert res.errors == []
+    assert res.warnings == [f"<packageSourceUrl> is {value!r}, expected {checks.REPO_TREE}x"]
+
+
+def test_http_url_warns():
+    res = metadata_result(mailingListUrl="http://mail.openjdk.java.net/mailman/listinfo", docsUrl="HTTP://a.example/")
+    assert res.warnings == ["<docsUrl> is not https: HTTP://a.example/",
+                            "<mailingListUrl> is not https: http://mail.openjdk.java.net/mailman/listinfo"]
+
+
+@pytest.mark.parametrize(
+    "tags, fragment",
+    [("x,java", "space separated"), ("x Java", "lowercase"), ("x chocolatey java", "'chocolatey'")],
+)
+def test_bad_tags_warn(tags, fragment):
+    res = metadata_result(tags=tags)
+    assert res.errors == [] and len(res.warnings) == 1 and fragment in res.warnings[0]
+
+
+def test_short_description_warns():
+    assert metadata_result(description="Too short").warnings == ["<description> is shorter than 30 characters"]
+
+
+def test_validate_package_requires_release_notes(tmp_path):
+    shutil.copytree(PKG_FIXTURES / "zulu-8", tmp_path / "zulu-8")
+    p = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=8)
+    res = checks.validate_package(tmp_path, p)
+    assert res.errors == []
+    # zulu has no public source repository or bug tracker
+    assert set(res.warnings) == {"<projectSourceUrl> is missing or empty", "<bugTrackerUrl> is missing or empty"}
+    nuspec_file = tmp_path / "zulu-8/zulu-8.nuspec"
+    data = nuspec_file.read_bytes()
+    line = b"    <releaseNotes>https://docs.azul.com/core/release-notes</releaseNotes>\r\n"
+    assert data.count(line) == 1
+    nuspec_file.write_bytes(data.replace(line, b""))
+    assert checks.validate_package(tmp_path, p).errors == [
+        "<releaseNotes> is missing or empty (run sync, or add the release-notes URL)"]
+
+
+def test_online_check_warns_on_unreachable_release_notes(tmp_path, capsys):
+    shutil.copytree(PKG_FIXTURES / "zulu-8", tmp_path / "zulu-8")
+    p = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=8)
+    msi = "https://cdn.azul.com/zulu/bin/zulu8.96.0.205-ca-fx-jdk8.0.504-win_x64.msi"
+    notes = "https://docs.azul.com/core/release-notes"
+    ok = FakeClient(use_index=False, head={msi: {"status": 200}, notes: {"status": 200}})
+    res = cli.online_check(tmp_path, p, ok)
+    assert (res.errors, res.warnings) == ([], [])
+    assert "HEAD " + notes in ok.calls
+    gone = FakeClient(use_index=False, head={msi: {"status": 200}})  # release notes: HttpError 404
+    res = cli.online_check(tmp_path, p, gone)
+    assert res.errors == []
+    assert res.warnings == [f"releaseNotes URL unreachable: HTTP 404 for {notes}"]
+    moved = FakeClient(use_index=False, head={msi: {"status": 200}, notes: {"status": 410}})
+    assert cli.online_check(tmp_path, p, moved).warnings == [f"releaseNotes URL answered HTTP 410: {notes}"]
 
 
 def test_validate_package_denylist_and_overrides(tmp_path):

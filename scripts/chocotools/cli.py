@@ -514,6 +514,19 @@ def online_check(root: Path, pkg: Package, client: Client) -> checks.Result:
         else:
             final_host = urllib.parse.urlsplit(resp.url or url).hostname
             out(f"ok    {pkg.id}: {arch} URL HTTP {resp.status} (final host {final_host})")
+    # releaseNotes is a guideline: an unreachable page is a warning, so a docs outage never blocks publish.
+    try:
+        notes = nuspec.metadata(manifest.nuspec_path(root, pkg).read_bytes()).get("releaseNotes", "")
+    except (ManifestError, nuspec.NuspecError, OSError):
+        notes = ""  # reported offline
+    if notes.startswith("https://"):
+        try:
+            resp = client.head(notes)
+        except HttpError as exc:
+            res.warnings.append(f"releaseNotes URL unreachable: {exc}")
+        else:
+            if resp.status not in (200, 206):
+                res.warnings.append(f"releaseNotes URL answered HTTP {resp.status}: {notes}")
     return res
 
 

@@ -162,29 +162,31 @@ def test_increase_writes_sha256_and_type(repo):
     assert (root / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n") == (PKG_FIXTURES / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n")
 
 
-def test_version_bump_writes_release_notes(repo):
+MVND_NOTES = b"<releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/{}</releaseNotes>"
+
+
+def test_version_bump_replaces_release_notes(repo):
     root = repo["root"]
     old = (root / "mvndaemon/mvndaemon.nuspec").read_bytes()
-    assert b"<releaseNotes>" not in old
     assert run(root, "sync", "--id", "mvndaemon") == 0
-    notes = b"    <releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/1.0.7</releaseNotes>\r\n"
     assert (root / "mvndaemon/mvndaemon.nuspec").read_bytes() == (
         old.replace(b"<version>1.0.6</version>", b"<version>1.0.7</version>")
-        .replace(b"  </metadata>", notes + b"  </metadata>")
+        .replace(MVND_NOTES.replace(b"{}", b"1.0.6"), MVND_NOTES.replace(b"{}", b"1.0.7"))
     )
 
 
-def test_version_bump_replaces_release_notes(repo, monkeypatch):
+def test_version_bump_inserts_missing_release_notes(repo):
     root = repo["root"]
+    path = root / "mvndaemon/mvndaemon.nuspec"
+    line = b"    " + MVND_NOTES.replace(b"{}", b"1.0.6") + b"\r\n"
+    old = path.read_bytes()
+    assert old.count(line) == 1
+    path.write_bytes(old.replace(line, b""))
     assert run(root, "sync", "--id", "mvndaemon") == 0
-    repo["releases"]["mvndaemon"] = Release(
-        "1.0.8", "1.0.8", {"x64": "https://github.com/apache/maven-mvnd/releases/download/1.0.8/maven-mvnd-1.0.8-windows-amd64.zip"},
-        {"x64": SHA}, "github asset digest")
-    monkeypatch.setitem(EXTRAS, "mvndaemon", "maven-mvnd-1.0.8-windows-amd64")
-    assert run(root, "sync", "--id", "mvndaemon") == 0
-    data = (root / "mvndaemon/mvndaemon.nuspec").read_bytes()
-    assert data.count(b"<releaseNotes>") == 1
-    assert b"<releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/1.0.8</releaseNotes>" in data
+    assert path.read_bytes() == (
+        old.replace(b"<version>1.0.6</version>", b"<version>1.0.7</version>")
+        .replace(MVND_NOTES.replace(b"{}", b"1.0.6"), MVND_NOTES.replace(b"{}", b"1.0.7"))
+    )
 
 
 def test_release_override_wins_over_derived_notes(repo):
