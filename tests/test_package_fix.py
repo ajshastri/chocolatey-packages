@@ -202,7 +202,11 @@ def test_sync_applies_fix_then_reports_no_change(repo, capsys):
     assert run(root, "sync", "--dry-run") == 0
     assert "| Temurin21 | 21.0.12.1 | 21.0.12.101 | would update |" in capsys.readouterr().out
     assert run(root, "sync") == 0
-    assert nuspec_version(root) == nuspec_before.replace(b"<version>21.0.12.1</version>", b"<version>21.0.12.101</version>")
+    notes = b"    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-21.0.12.1%2B1</releaseNotes>\r\n"
+    assert nuspec_version(root) == (
+        nuspec_before.replace(b"<version>21.0.12.1</version>", b"<version>21.0.12.101</version>")
+        .replace(b"  </metadata>", notes + b"  </metadata>")
+    )
     assert (root / "temurin-21-jdk/tools/chocolateyinstall.ps1").read_bytes() == script_before  # same binary
     assert (root / "packages.toml").read_bytes() == ONE_PACKAGE.encode("utf-8")  # fix stays
     capsys.readouterr()

@@ -31,7 +31,8 @@ import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import __version__, checks, chocolatey, http, installscript, manifest, nuspec, sources, syncpr, versioning
+from . import __version__, checks, chocolatey, http, installscript, manifest, nuspec, releasenotes, sources, syncpr
+from . import versioning
 from .http import Client, HttpError, default_client
 from .manifest import Manifest, ManifestError, Package
 
@@ -273,13 +274,14 @@ def compute_changes(root: Path, pkg: Package, release: sources.Release, version:
     """New bytes for every file that changes (folder-relative posix paths).
 
     ``version`` is the nuspec version to write (default ``release.version``;
-    differs when a package fix applies).
+    differs when a package fix applies). The nuspec ``<releaseNotes>`` gets
+    ``release.release_notes_url`` or the URL derived from the download URL.
     """
     folder = Path(root) / pkg.folder
     nuspec_file = manifest.nuspec_path(root, pkg)
-    changes: dict[str, bytes] = {
-        nuspec_file.name: nuspec.set_version(nuspec_file.read_bytes(), version or release.version)
-    }
+    nuspec_data = nuspec.set_version(nuspec_file.read_bytes(), version or release.version)
+    notes_url = release.release_notes_url or releasenotes.url_for(pkg, release.urls[pkg.arch[0]])
+    changes: dict[str, bytes] = {nuspec_file.name: nuspec.set_release_notes(nuspec_data, notes_url)}
     fields: dict[str, str] = {}
     for arch in pkg.arch:
         fields.update(installscript.arch_changes(arch, release.urls[arch], release.sha256[arch]))
@@ -422,7 +424,8 @@ def sync_package(root: Path, pkg: Package, client: Client, dry_run: bool) -> Syn
         if clear_fix:
             manifest_file = Path(root) / manifest.MANIFEST_NAME
             new_manifest = manifest.clear_package_fix(manifest_file.read_bytes().decode("utf-8"), pkg.id)
-    except (sources.SourceError, installscript.ScriptError, nuspec.NuspecError, ManifestError, OSError) as exc:
+    except (sources.SourceError, installscript.ScriptError, nuspec.NuspecError, releasenotes.ReleaseNotesError,
+            ManifestError, OSError) as exc:
         row.status, row.message = "failed", str(exc)
         return row
     checked_pkg = dataclasses.replace(pkg, package_fix=None, package_fix_line=None) if clear_fix else pkg

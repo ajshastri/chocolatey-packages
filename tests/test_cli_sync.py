@@ -95,7 +95,8 @@ def repo(tmp_path, monkeypatch):
         if pkg.id in state["fail"]:
             raise sources.SourceError("upstream returned nothing")
         r = state["releases"][pkg.id]
-        return Release(r.version, r.version_raw, dict(r.urls), dict(r.sha256), r.checksum_source)
+        return Release(r.version, r.version_raw, dict(r.urls), dict(r.sha256), r.checksum_source,
+                       release_notes_url=r.release_notes_url)
 
     def fake_extras(pkg, release, client=None):
         return {"dir_version": EXTRAS[pkg.id]} if pkg.id in EXTRAS else {}
@@ -159,6 +160,41 @@ def test_increase_writes_sha256_and_type(repo):
     assert after == expected
     assert b"<version>8.98.0.1</version>" in (root / "zulu-8/zulu-8.nuspec").read_bytes()
     assert (root / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n") == (PKG_FIXTURES / "zulu-8/zulu-8.nuspec").read_bytes().count(b"\r\n")
+
+
+def test_version_bump_writes_release_notes(repo):
+    root = repo["root"]
+    old = (root / "mvndaemon/mvndaemon.nuspec").read_bytes()
+    assert b"<releaseNotes>" not in old
+    assert run(root, "sync", "--id", "mvndaemon") == 0
+    notes = b"    <releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/1.0.7</releaseNotes>\r\n"
+    assert (root / "mvndaemon/mvndaemon.nuspec").read_bytes() == (
+        old.replace(b"<version>1.0.6</version>", b"<version>1.0.7</version>")
+        .replace(b"  </metadata>", notes + b"  </metadata>")
+    )
+
+
+def test_version_bump_replaces_release_notes(repo, monkeypatch):
+    root = repo["root"]
+    assert run(root, "sync", "--id", "mvndaemon") == 0
+    repo["releases"]["mvndaemon"] = Release(
+        "1.0.8", "1.0.8", {"x64": "https://github.com/apache/maven-mvnd/releases/download/1.0.8/maven-mvnd-1.0.8-windows-amd64.zip"},
+        {"x64": SHA}, "github asset digest")
+    monkeypatch.setitem(EXTRAS, "mvndaemon", "maven-mvnd-1.0.8-windows-amd64")
+    assert run(root, "sync", "--id", "mvndaemon") == 0
+    data = (root / "mvndaemon/mvndaemon.nuspec").read_bytes()
+    assert data.count(b"<releaseNotes>") == 1
+    assert b"<releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/1.0.8</releaseNotes>" in data
+
+
+def test_release_override_wins_over_derived_notes(repo):
+    root = repo["root"]
+    changelog = "https://github.com/graalvm/graalvm-ce-builds/blob/main/CHANGELOG.md"
+    r = repo["releases"]["graalvm"]
+    repo["releases"]["graalvm"] = Release(r.version, r.version_raw, r.urls, r.sha256, r.checksum_source,
+                                          release_notes_url=changelog)
+    assert run(root, "sync", "--id", "graalvm") == 0
+    assert f"<releaseNotes>{changelog}</releaseNotes>".encode() in (root / "GraalVM/graalvm.nuspec").read_bytes()
 
 
 def test_approved_at_or_above_new_fails(repo, capsys):

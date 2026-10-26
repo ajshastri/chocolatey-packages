@@ -16,6 +16,9 @@ download site serves returns the served build with ``Release.pending`` set.
 ``sync`` then reports the package as pending, not failed, while the served build
 is the repo version, and fails it once the announcement is older than
 ``PENDING_ESCALATION_DAYS``.
+
+``Release.release_notes_url`` overrides the nuspec ``<releaseNotes>`` URL that
+sync otherwise derives from the download URL (``releasenotes.url_for``).
 """
 
 from __future__ import annotations
@@ -101,6 +104,8 @@ class Release:
     raw: object = None
     pending: Pending | None = None  # a newer announced release this one stands in for
     notes: list[str] = field(default_factory=list)  # remarks for the sync/compare note, e.g. a lagging hint
+    # nuspec <releaseNotes> to write; empty means sync derives it (releasenotes.url_for)
+    release_notes_url: str = ""
 
 
 def module(vendor: str) -> ModuleType:
