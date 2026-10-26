@@ -14,11 +14,11 @@ ignore = ["FreeDownloadManager"]
 id = "correttojdk"
 folder = "corretto-jdk"
 vendor = "corretto"
-major = 21
+major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "corretto8jdk"
@@ -472,56 +472,56 @@ notes = ""
 id = "libericajdk"
 folder = "liberica-jdk"
 vendor = "liberica"
-major = 21
+major = 25
 image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "libericajdkfull"
 folder = "liberica-jdkfull"
 vendor = "liberica"
-major = 21
+major = 25
 image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "libericajdklite"
 folder = "liberica-jdklite"
 vendor = "liberica"
-major = 21
+major = 25
 image = "jdk"
 variant = "lite"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "libericajre"
 folder = "liberica-jre"
 vendor = "liberica"
-major = 21
+major = 25
 image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "libericajrefull"
 folder = "liberica-jrefull"
 vendor = "liberica"
-major = 21
+major = 25
 image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "liberica-mission-control"
@@ -597,21 +597,21 @@ notes = ""
 id = "sapmachine"
 folder = "sapmachine-jdk"
 vendor = "sapmachine"
-major = 21
+major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "sapmachinejre"
 folder = "sapmachine-jre"
 vendor = "sapmachine"
-major = 21
+major = 25
 image = "jre"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 # ----- GraalVM Community --------------------------------------------------------
 
