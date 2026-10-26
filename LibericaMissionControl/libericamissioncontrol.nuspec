@@ -3,8 +3,8 @@
   <metadata>
     <id>liberica-mission-control</id>
     <version>8.3.0</version>
-    <packageSourceUrl>https://github.com/johanjanssen/ChocolateyPackages/tree/master/LibericaMissionControl</packageSourceUrl>
-    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/bell_sw_logo.png</iconUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/LibericaMissionControl</packageSourceUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/ajshastri/chocolatey-packages@a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/bell_sw_logo.png</iconUrl>
     <title>Liberica Mission Control 64 bit only</title>
     <authors>BellSoft</authors>
     <owners>JohanJanssen</owners>
@@ -15,5 +15,6 @@
     <tags>liberica mission control profiler java jvm</tags>
     <summary>Liberica Mission Control is a low-overhead Java profiler built from OpenJDK JMC project provided by BellSoft.</summary>
     <description>Liberica Mission Control is a low-overhead Java profiler built from OpenJDK JMC project provided by BellSoft. 64 bit only</description>
+    <releaseNotes>https://bell-sw.com/liberica-mission-control/</releaseNotes>
   </metadata>
 </package>

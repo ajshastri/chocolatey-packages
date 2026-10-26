@@ -7,9 +7,9 @@
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/adoptium/jdk25/blob/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/adoptium/jdk25u/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://adoptium.net/</projectUrl>
-    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/temurin-light.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/ajshastri/chocolatey-packages@a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/temurin-light.png</iconUrl>
     <description>## Temurin
  
  The Temurin25jre package uses OpenJDK_HotSpot VM from Temurin using the msi file format.
@@ -48,7 +48,11 @@ This will install both the 32 bit and 64 bit versions of the desired package by 
 Example: `choco install Temurin25jre --params="/both"`</description>
     <summary>Adoptium provides prebuilt OpenJDK build binaries. This one uses OpenJDK_HotSpot.</summary>
     <tags>openjdk java jvm</tags>
-    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/temurin-25-jre</packageSourceUrl>
+    <projectSourceUrl>https://github.com/adoptium/jdk25u</projectSourceUrl>
+    <docsUrl>https://adoptium.net/docs/</docsUrl>
+    <bugTrackerUrl>https://github.com/adoptium/adoptium-support/issues</bugTrackerUrl>
+    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-25.0.4.1%2B1</releaseNotes>
   </metadata>
 </package>
 

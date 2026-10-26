@@ -10,11 +10,12 @@
     <licenseUrl>https://github.com/oracle/graal/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://www.graalvm.org/</projectUrl>
     <docsUrl>https://www.graalvm.org/docs/introduction</docsUrl>
-    <mailingListUrl>http://mail.openjdk.java.net/mailman/listinfo/graal-dev</mailingListUrl>
+    <mailingListUrl>https://mail.openjdk.org/mail/lists/graal-dev.openjdk.org/</mailingListUrl>
     <bugTrackerUrl>https://github.com/oracle/graal/issues</bugTrackerUrl>
     <projectSourceUrl>https://github.com/oracle/graal</projectSourceUrl>
     <tags>openjdk java jvm graalvm graalvm-ce</tags>
     <summary>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</summary>
     <description>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</description>
+    <releaseNotes>https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.4.4.1.1</releaseNotes>
   </metadata>
 </package>

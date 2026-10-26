@@ -7,14 +7,15 @@
     <title>OpenJDK</title>
     <authors>Oracle</authors>
     <owners>linearreg</owners>
-    <licenseUrl>http://openjdk.java.net/legal/</licenseUrl>
+    <licenseUrl>https://openjdk.org/legal/</licenseUrl>
     <projectUrl>https://jdk.java.net/</projectUrl>
-    <docsUrl>http://openjdk.java.net/</docsUrl>
-    <mailingListUrl>http://mail.openjdk.java.net/mailman/listinfo</mailingListUrl>
-    <bugTrackerUrl>https://bugs.openjdk.java.net</bugTrackerUrl>
-    <projectSourceUrl>https://github.com/openjdk/</projectSourceUrl>
+    <docsUrl>https://openjdk.org/</docsUrl>
+    <mailingListUrl>https://mail.openjdk.org/mail/lists/</mailingListUrl>
+    <bugTrackerUrl>https://bugs.openjdk.org/</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/openjdk/jdk</projectSourceUrl>
     <tags>openjdk java jvm</tags>
     <summary>OpenJDK is an open source Java Development Kit provided by Oracle</summary>
     <description>OpenJDK is an open source Java Development Kit provided by Oracle</description>
+    <releaseNotes>https://jdk.java.net/27/release-notes</releaseNotes>
   </metadata>
 </package>

@@ -16,5 +16,6 @@
     <tags>maven mvn daemon graalvm</tags>
     <summary>The Maven (mvn) Daemon is based on GraalVM and allows for faster Maven builds</summary>
     <description>The Maven (mvn) Daemon is based on GraalVM and allows for faster Maven builds. Needs a properly configured JAVA_HOME environment variable.</description>
+    <releaseNotes>https://github.com/apache/maven-mvnd/releases/tag/1.0.6</releaseNotes>
   </metadata>
 </package>
