@@ -62,6 +62,28 @@ def test_jobs_have_room_for_a_chocolatey_feed_outage():
         assert re.search(rf"^    timeout-minutes: {minutes}$", block, re.M), (name, job)
 
 
+def push_paths(path: Path) -> list[str]:
+    """The ``on.push.paths`` list, in order (quoted ``- "..."`` items)."""
+    text = path.read_text(encoding="utf-8")
+    push = re.search(r"^  push:\n(.*?)(?=^  \S)", text, re.M | re.S).group(1)
+    items = re.search(r"^    paths:\n((?:      - .*\n)+)", push, re.M).group(1)
+    return re.findall(r'^      - "([^"]+)"$', items, re.M)
+
+
+def test_publish_push_trigger_ignores_tests_and_scripts():
+    """Test-only and chocotools-only merges must not start a publish run.
+
+    tests/fixtures/pkg/*/ has nuspecs and tools/ folders, and GitHub matched ``**/tools/**`` against
+    scripts/chocotools/ (PR #30). GitHub evaluates ``paths`` in order and a later ``!`` pattern
+    excludes, so the negations must come after every positive pattern.
+    """
+    paths = push_paths(WORKFLOWS / "publish.yaml")
+    assert paths == ["**/*.nuspec", "**/tools/**", "!tests/**", "!scripts/**"]
+    positive = [i for i, p in enumerate(paths) if not p.startswith("!")]
+    for negation in ("!tests/**", "!scripts/**"):
+        assert paths.index(negation) > max(positive), negation
+
+
 def test_publish_has_no_concurrency_group():
     """A shared group would cancel pending runs while one waits for approval."""
     assert "concurrency:" not in (WORKFLOWS / "publish.yaml").read_text(encoding="utf-8")
