@@ -13,7 +13,10 @@
   ``pending`` (GitHub tag, ``published_at``, HTTP status of the tag's MSI URL);
   GitHub tags can be fixes for other platforms that never get a Windows MSI, so
   ``sync`` waits instead of failing (see ``sources.PENDING_ESCALATION_DAYS``).
-  Older than the served tag: the served build is used, with a note.
+  Older than the served tag: the served build is used, with a note, and
+  ``Release.release_notes_url`` is the repo's ``CHANGELOG.md``, because GitHub
+  may have no release page for the served tag yet (otherwise sync writes the
+  GitHub release tag URL, see ``releasenotes``).
 - Version mapping: ``A.B.C.D.E`` -> ``A.B.C.<D><E>`` (``21.0.12.12.1`` -> ``21.0.12.121``,
   ``21.0.13.0.10`` -> ``21.0.13.10``); a tag with ``D >= 1`` and ``E >= 10`` fails as
   ambiguous (see ``versioning.corretto_tag``).
@@ -23,7 +26,7 @@ from __future__ import annotations
 
 import urllib.parse
 
-from .. import versioning
+from .. import releasenotes, versioning
 from ..http import Client, HttpError
 from ..manifest import Package
 from . import (
@@ -91,9 +94,12 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
         raise SourceError(f"corretto.aws latest points to {location}, not a {pkg.image} MSI under {RESOURCES}")
     pending = None
     notes = []
+    release_notes_url = ""
     if tag != github_tag and versioning.compare_nuget(normalize(github_tag), normalize(tag)) <= 0:
         # GitHub is only a hint: a release it has not caught up with is still the served build.
         notes.append(f"GitHub latest tag {github_tag} is behind corretto.aws latest {tag}")
+        # The served tag may have no GitHub release page yet; the changelog always exists.
+        release_notes_url = releasenotes.CORRETTO_CHANGELOG.format(major=pkg.major)
     elif tag != github_tag:
         # GitHub is ahead of corretto.aws: wait for the latest link (which may never move,
         # if the tag only fixes another platform).
@@ -113,4 +119,5 @@ def fetch(pkg: Package, *, version: str | None = None, client: Client) -> Releas
         raw={"github_tag": github_tag, "served_tag": tag, "location": location},
         pending=pending,
         notes=notes,
+        release_notes_url=release_notes_url,
     )

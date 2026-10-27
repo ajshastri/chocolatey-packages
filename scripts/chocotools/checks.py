@@ -17,6 +17,19 @@
   a stale fix. Frozen packages are checked too. ``URL_VERSION_EXCEPTIONS``
   pins the one known historical mismatch to its exact version, so a later
   hand edit of that package still fails.
+- Nuspec metadata (Chocolatey package validator rules): an empty or missing
+  ``<releaseNotes>`` is an error (CPMR0042; sync writes it with each version).
+  Warnings: empty projectSourceUrl/docsUrl/bugTrackerUrl/iconUrl/licenseUrl/
+  projectUrl/summary/authors (CPMR0057/0033/0047), a packageSourceUrl that is
+  not this repo's folder (CPMR0040), any ``http://`` *Url, a releaseNotes URL
+  that is not https, tags with commas, uppercase or "chocolatey" (CPMR0014),
+  and a description under 30 characters.
+- Side-by-side uninstall: a ``tools/chocolateyuninstall.ps1`` that pins a quoted
+  ``$major`` must match the manifest major, its ``$softwareName`` must be the
+  vendor MSI's product name (``uninstall_display_name``), and
+  ``tools/.skipAutoUninstall`` must exist, so uninstalling one major never
+  removes another major of the same vendor. Each failure is an error, so a
+  manifest major bump fails until the script is updated.
 """
 
 from __future__ import annotations
@@ -51,6 +64,13 @@ _HEX = re.compile(r"^[0-9a-fA-F]+$")
 URL_VERSION_EXCEPTIONS = {("graalvm-java17", "22.3.3"): "17.0.9"}
 CHECKSUM_LENGTHS = {"sha256": 64, "sha1": 40, "md5": 32}
 WEAK_TYPES = {"sha1", "md5"}
+REPO_TREE = "https://github.com/ajshastri/chocolatey-packages/tree/master/"
+RECOMMENDED_FIELDS = ("projectSourceUrl", "docsUrl", "bugTrackerUrl", "iconUrl", "licenseUrl", "projectUrl",
+                      "summary", "authors")
+MIN_DESCRIPTION = 30
+UNINSTALL_SCRIPT = "tools/chocolateyuninstall.ps1"
+SKIP_AUTO_UNINSTALL = "tools/.skipAutoUninstall"
+_LIBERICA_SUFFIX = {None: "", "std": "", "full": " Full", "lite": " Lite"}
 
 
 @dataclass
@@ -181,6 +201,75 @@ def check_url_version(pkg: Package, version: str, url: str, label: str = "URL") 
     return []
 
 
+def check_metadata(pkg: Package, meta: dict[str, str]) -> Result:
+    """Chocolatey guideline checks on the nuspec metadata (``nuspec.metadata``)."""
+    res = Result()
+    notes = meta.get("releaseNotes", "")
+    if not notes:
+        res.errors.append("<releaseNotes> is missing or empty (run sync, or add the release-notes URL)")
+    else:
+        if "://" in notes and not notes.lower().startswith("https://"):
+            res.warnings.append(f"<releaseNotes> URL is not https: {notes}")
+    for name in RECOMMENDED_FIELDS:
+        if not meta.get(name):
+            res.warnings.append(f"<{name}> is missing or empty")
+    expected = REPO_TREE + pkg.folder
+    if meta.get("packageSourceUrl") != expected:
+        res.warnings.append(f"<packageSourceUrl> is {meta.get('packageSourceUrl')!r}, expected {expected}")
+    for name, value in sorted(meta.items()):
+        if name.endswith("Url") and value.lower().startswith("http://"):
+            res.warnings.append(f"<{name}> is not https: {value}")
+    tags = meta.get("tags", "")
+    if "," in tags:
+        res.warnings.append(f"<tags> must be space separated, not comma separated: {tags!r}")
+    if tags != tags.lower():
+        res.warnings.append(f"<tags> should be lowercase: {tags!r}")
+    if "chocolatey" in tags.lower().replace(",", " ").split():
+        res.warnings.append(f"<tags> should not contain 'chocolatey': {tags!r}")
+    if len(meta.get("description", "")) < MIN_DESCRIPTION:
+        res.warnings.append(f"<description> is shorter than {MIN_DESCRIPTION} characters")
+    return res
+
+
+def uninstall_display_name(pkg: Package) -> str | None:
+    """The vendor MSI's product name (ARP DisplayName) for ``pkg``, or None if not pinned.
+
+    Corretto uses one name for every major, so its uninstall script tells the
+    majors apart by DisplayVersion only.
+    """
+    if pkg.vendor == "sapmachine" and pkg.image:
+        return f"SapMachine {pkg.major} {pkg.image.upper()}"
+    if pkg.vendor == "liberica" and pkg.image:
+        return f"Liberica {pkg.image.upper()} {pkg.major}{_LIBERICA_SUFFIX[pkg.variant]} (64-bit)"
+    if pkg.vendor == "corretto":
+        return "Amazon Corretto (x64)"
+    return None
+
+
+def check_uninstall(pkg: Package, files: dict[str, bytes]) -> list[str]:
+    """Side-by-side rule for a ``tools/chocolateyuninstall.ps1`` that pins ``$major``."""
+    data = files.get(UNINSTALL_SCRIPT)
+    if data is None:
+        return []
+    try:
+        majors = installscript.get_variable(data, "major")
+        names = installscript.get_variable(data, "softwareName")
+    except installscript.ScriptError as exc:
+        return [f"{UNINSTALL_SCRIPT}: {exc}"]
+    if not majors:
+        return []
+    errors = []
+    if majors != [str(pkg.major)]:
+        errors.append(f"{UNINSTALL_SCRIPT}: $major is {majors}, manifest major is {pkg.major}")
+    expected = uninstall_display_name(pkg)
+    if expected is not None and names != [expected]:
+        errors.append(f"{UNINSTALL_SCRIPT}: $softwareName is {names}, expected {expected!r}")
+    if SKIP_AUTO_UNINSTALL not in files:
+        errors.append(f"{SKIP_AUTO_UNINSTALL} is missing (Chocolatey's auto-uninstaller could remove "
+                      f"another major's build)")
+    return errors
+
+
 def _read_files(folder: Path, overrides: dict[str, bytes]) -> dict[str, bytes]:
     files: dict[str, bytes] = {}
     if folder.is_dir():
@@ -206,17 +295,20 @@ def validate_package(root: Path, pkg: Package, overrides: dict[str, bytes] | Non
         return res
     try:
         info = nuspec.read(files[nuspecs[0]])
+        meta = nuspec.metadata(files[nuspecs[0]])
     except nuspec.NuspecError as exc:
         res.errors.append(str(exc))
         return res
     if info.id != pkg.id:
         res.errors.append(f"nuspec <id> is {info.id!r}, manifest id is {pkg.id!r}")
     res.errors += check_version(info.version, "nuspec version")
+    res.extend(check_metadata(pkg, meta))
 
     for name, data in files.items():
         denied = find_denied(data.decode("utf-8", errors="ignore"))
         if denied:
             res.errors.append(f"{name} mentions denied host(s): {', '.join(denied)}")
+    res.errors += check_uninstall(pkg, files)
 
     script_name = "tools/chocolateyinstall.ps1"
     if script_name not in files:

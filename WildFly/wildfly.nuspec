@@ -8,13 +8,14 @@
     <authors>Red Hat</authors>
     <owners>linearreg</owners>
     <licenseUrl>https://github.com/wildfly/wildfly/blob/master/LICENSE.txt</licenseUrl>
-    <projectUrl>http://wildfly.org/</projectUrl>
+    <projectUrl>https://www.wildfly.org/</projectUrl>
     <docsUrl>https://docs.wildfly.org/</docsUrl>
-    <mailingListUrl>https://lists.jboss.org/mailman/listinfo/wildfly-dev</mailingListUrl>
-    <bugTrackerUrl>https://issues.jboss.org/projects/WFLY</bugTrackerUrl>
+    <mailingListUrl>https://groups.google.com/g/wildfly</mailingListUrl>
+    <bugTrackerUrl>https://issues.redhat.com/projects/WFLY</bugTrackerUrl>
     <projectSourceUrl>https://github.com/wildfly/wildfly</projectSourceUrl>
     <tags>wildfly java jvm</tags>
     <summary>WildFly is an open source Java EE application server provided by Red Hat</summary>
     <description>WildFly is an open source Java EE application server provided by Red Hat</description>
+    <releaseNotes>https://github.com/wildfly/wildfly/releases/tag/42.0.0.Final</releaseNotes>
   </metadata>
 </package>

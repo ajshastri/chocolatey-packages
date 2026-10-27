@@ -38,6 +38,15 @@ def test_github_behind_latest_link_uses_the_served_build_with_a_note(fake_client
     assert r.urls["x64"] == "https://corretto.aws/downloads/resources/21.0.13.1.1/amazon-corretto-21.0.13.1.1-windows-x64.msi"
     assert r.pending is None
     assert r.notes == ["GitHub latest tag 21.0.12.12.1 is behind corretto.aws latest 21.0.13.1.1"]
+    # GitHub may have no release page for the served tag yet: point at the changelog.
+    assert r.release_notes_url == "https://github.com/corretto/corretto-21/blob/develop/CHANGELOG.md"
+
+
+def test_release_notes_url_is_derived_when_github_matches(fake_client):
+    # Normal case: no override, so sync writes the GitHub release tag URL.
+    assert corretto.fetch(pkg(vendor="corretto", major=21), client=fake_client).release_notes_url == ""
+    github_ahead(fake_client)
+    assert corretto.fetch(pkg(vendor="corretto", major=21), client=fake_client).release_notes_url == ""
 
 
 GITHUB21 = "https://api.github.com/repos/corretto/corretto-21/releases/latest"

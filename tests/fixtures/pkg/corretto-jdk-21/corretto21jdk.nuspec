@@ -17,5 +17,6 @@
     <tags>corretto java jvm</tags>
     <summary>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</summary>
     <description>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</description>
+    <releaseNotes>https://github.com/corretto/corretto-21/releases/tag/21.0.12.12.1</releaseNotes>
   </metadata>
 </package>

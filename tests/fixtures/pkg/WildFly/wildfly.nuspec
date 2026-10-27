@@ -16,5 +16,6 @@
     <tags>wildfly java jvm</tags>
     <summary>WildFly is an open source Java EE application server provided by Red Hat</summary>
     <description>WildFly is an open source Java EE application server provided by Red Hat</description>
+    <releaseNotes>https://github.com/wildfly/wildfly/releases/tag/41.0.0.Final</releaseNotes>
   </metadata>
 </package>

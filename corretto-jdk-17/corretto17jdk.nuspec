@@ -4,7 +4,7 @@
     <id>corretto17jdk</id>
     <version>17.0.21.10</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/corretto-jdk-17</packageSourceUrl>
-    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/aws-corretto.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/ajshastri/chocolatey-packages@a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/aws-corretto.png</iconUrl>
     <title>Corretto 17 JDK</title>
     <authors>Amazon</authors>
     <owners>JohanJanssen</owners>
@@ -17,5 +17,6 @@
     <tags>corretto java jvm</tags>
     <summary>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</summary>
     <description>Amazon Corretto is a distribution of OpenJDK provided by Amazon.</description>
+    <releaseNotes>https://github.com/corretto/corretto-17/releases/tag/17.0.21.0.10</releaseNotes>
   </metadata>
 </package>

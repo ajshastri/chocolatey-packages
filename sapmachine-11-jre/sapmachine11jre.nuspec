@@ -3,8 +3,8 @@
   <metadata>
     <id>sapmachine11jre</id>
     <version>11.0.25</version>
-    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages</packageSourceUrl>
-    <iconUrl>https://rawcdn.githack.com/ajshastri/chocolatey-packages/a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/sapmachine.png</iconUrl>
+    <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/sapmachine-11-jre</packageSourceUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/ajshastri/chocolatey-packages@a698d21b3c63b9ff7e01f442f37cdb7ecf89925a/icons/sapmachine.png</iconUrl>
     <title>SapMachine 11 JRE</title>
     <authors>SAP</authors>
     <owners>JohanJanssen</owners>
@@ -17,5 +17,6 @@
     <tags>openjdk java jvm</tags>
     <summary>SapMachine is an open source Java Development Kit provided by SAP</summary>
     <description>SapMachine is an open source Java Development Kit provided by SAP</description>
+    <releaseNotes>https://github.com/SAP/SapMachine/releases/tag/sapmachine-11.0.25</releaseNotes>
   </metadata>
 </package>
