@@ -338,8 +338,9 @@ def graalvm_tag(m: re.Match) -> str:
     - ``graal-25.3.4.1``   / ``25i3-25.0.4.1``   -> ``25.3.4.1``
     - ``graal-25.4.4.1.1`` / ``25i4-25.0.4.1.1`` -> ``25.4.4.1``
 
-    The package version is foojay's ``java_version``, the tag's first four
-    parts, so a 5th tag part (a GraalVM respin) is dropped. Tag and asset must
+    The package version is the tag's first four parts, so a 5th tag part (a
+    GraalVM respin) is dropped. ``sources.graalvm.fetch`` takes the version
+    from this rule too, so sync and the URL check agree. Tag and asset must
     describe the same build, otherwise ``VersionError``.
     """
     tag, major, iteration, asset = m[1], m[2], m[3], m[4]
