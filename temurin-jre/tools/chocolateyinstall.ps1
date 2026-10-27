@@ -7,8 +7,8 @@ $parameters = (Get-PackageParameters); $pp = ( Test-PackageParamaters $parameter
 
 $packageArgs = @{
   PackageName    = 'Temurinjre'
-  Url64bit       = 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_windows_hotspot_25.0.4.1_1.msi'
-  Checksum64     = '0b3b2550b36b8997be76c70f15b6afd29a0631622ea134c973a6c8180859a56b'
+  Url64bit       = 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_x64_windows_hotspot_25.0.5_8.msi'
+  Checksum64     = '503f1c8ce75378b1dfe89485abdbc2cb1588600937cff87e8a63d70ca5873139'
   ChecksumType64 = 'sha256'
   fileType       = 'msi'
   SilentArgs     = $pp

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin25jre</id>
-    <version>25.0.4.101</version>
+    <version>25.0.5</version>
     <title>Temurin jre25 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -52,7 +52,7 @@ Example: `choco install Temurin25jre --params="/both"`</description>
     <projectSourceUrl>https://github.com/adoptium/jdk25u</projectSourceUrl>
     <docsUrl>https://adoptium.net/docs/</docsUrl>
     <bugTrackerUrl>https://github.com/adoptium/adoptium-support/issues</bugTrackerUrl>
-    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-25.0.4.1%2B1</releaseNotes>
+    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-25.0.5%2B8</releaseNotes>
   </metadata>
 </package>
 
