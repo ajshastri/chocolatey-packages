@@ -469,6 +469,61 @@ frozen = false
 notes = ""
 
 [[package]]
+id = "liberica25jdk"
+folder = "liberica-25-jdk"
+vendor = "liberica"
+major = 25
+image = "jdk"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica25jdkfull"
+folder = "liberica-25-jdkfull"
+vendor = "liberica"
+major = 25
+image = "jdk"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica25jdklite"
+folder = "liberica-25-jdklite"
+vendor = "liberica"
+major = 25
+image = "jdk"
+variant = "lite"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica25jre"
+folder = "liberica-25-jre"
+vendor = "liberica"
+major = 25
+image = "jre"
+variant = "std"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
+id = "liberica25jrefull"
+folder = "liberica-25-jrefull"
+vendor = "liberica"
+major = 25
+image = "jre"
+variant = "full"
+arch = ["x64"]
+frozen = false
+notes = ""
+
+[[package]]
 id = "libericajdk"
 folder = "liberica-jdk"
 vendor = "liberica"

@@ -32,7 +32,7 @@ def write_pkg(root: Path, folder: str, pid: str):
 
 def test_real_manifest_counts():
     mf = manifest.load(REPO)
-    assert len(mf.packages) == 65
+    assert len(mf.packages) == 70
     frozen = sorted(p.id for p in mf.packages if p.frozen)
     assert frozen == sorted(
         ["zulu7", "sapmachine11", "sapmachine11jre", "graalvm-java17", "graalvm-java21", "liberica-mission-control"]
