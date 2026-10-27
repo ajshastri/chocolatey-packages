@@ -694,7 +694,7 @@ major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
-notes = "Version is foojay's graalvm_community java_version (4-part)"
+notes = "Newest Windows zip file name from foojay graalvm_community; version from the GitHub tag/asset (graal-25.4.4.1.1 -> 25.4.4.1), not foojay java_version"
 
 [[package]]
 id = "graalvm-java17"
