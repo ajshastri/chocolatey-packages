@@ -250,8 +250,6 @@ major = 21
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
-package_fix_line = "21.0.12"
 notes = ""
 
 [[package]]
@@ -262,8 +260,6 @@ major = 21
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 21.0.12.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
-package_fix_line = "21.0.12"
 notes = ""
 
 [[package]]
