@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin21</id>
-    <version>21.0.12.101</version>
+    <version>21.0.13</version>
     <title>Temurin jdk21 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -52,7 +52,7 @@ Example: `choco install Temurin21 --params="/both"`</description>
     <projectSourceUrl>https://github.com/adoptium/jdk21u</projectSourceUrl>
     <docsUrl>https://adoptium.net/docs/</docsUrl>
     <bugTrackerUrl>https://github.com/adoptium/adoptium-support/issues</bugTrackerUrl>
-    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-21.0.12.1%2B1</releaseNotes>
+    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-21.0.13%2B9</releaseNotes>
   </metadata>
 </package>
 
