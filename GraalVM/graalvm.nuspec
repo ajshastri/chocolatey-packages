@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>graalvm</id>
-    <version>25.4.4.1</version>
+    <version>25.5.5</version>
     <packageSourceUrl>https://github.com/ajshastri/chocolatey-packages/tree/master/GraalVM</packageSourceUrl>
     <title>GraalVM Community Latest Java Version Now Java 25</title>
     <authors>Oracle</authors>
@@ -16,6 +16,6 @@
     <tags>openjdk java jvm graalvm graalvm-ce</tags>
     <summary>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</summary>
     <description>GraalVM is a virtual machine to run applications in different programming languages such as Java, Scala, Kotlin, JavaScript, Python, C, C++ and many more</description>
-    <releaseNotes>https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.4.4.1.1</releaseNotes>
+    <releaseNotes>https://github.com/graalvm/graalvm-ce-builds/releases/tag/graal-25.5.5.0.3</releaseNotes>
   </metadata>
 </package>
