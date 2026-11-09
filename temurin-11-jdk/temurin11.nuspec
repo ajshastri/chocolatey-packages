@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin11</id>
-    <version>11.0.32.101</version>
+    <version>11.0.33</version>
     <title>Temurin jdk11 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -51,7 +51,7 @@ This package is 64-bit only; Adoptium does not publish a 32-bit Windows build of
     <projectSourceUrl>https://github.com/adoptium/jdk11u</projectSourceUrl>
     <docsUrl>https://adoptium.net/docs/</docsUrl>
     <bugTrackerUrl>https://github.com/adoptium/adoptium-support/issues</bugTrackerUrl>
-    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-11.0.32.1%2B1</releaseNotes>
+    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk-11.0.33%2B10</releaseNotes>
   </metadata>
 </package>
 

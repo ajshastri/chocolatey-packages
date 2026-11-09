@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Temurin8</id>
-    <version>8.504.1</version>
+    <version>8.512.9</version>
     <title>Temurin jdk8 hotspot</title>
     <authors>Adoptium</authors>
     <owners>JohanJanssen</owners>
@@ -51,7 +51,7 @@ This package is 64-bit only; Adoptium does not publish a 32-bit Windows build of
     <projectSourceUrl>https://github.com/adoptium/jdk8u</projectSourceUrl>
     <docsUrl>https://adoptium.net/docs/</docsUrl>
     <bugTrackerUrl>https://github.com/adoptium/adoptium-support/issues</bugTrackerUrl>
-    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk8u504-b01</releaseNotes>
+    <releaseNotes>https://adoptium.net/temurin/release-notes/?version=jdk8u512-b09</releaseNotes>
   </metadata>
 </package>
 
