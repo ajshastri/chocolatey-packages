@@ -1,3 +1,6 @@
+[![publish](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/publish.yaml)
+[![sync](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml/badge.svg)](https://github.com/ajshastri/chocolatey-packages/actions/workflows/sync.yaml)
+
 ## Packages currently updated and packaged:
 | Package Name | Choco version | Source version |
 | --- | :---: | :---: |
