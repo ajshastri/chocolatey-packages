@@ -202,8 +202,6 @@ major = 11
 image = "jdk"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
-package_fix_line = "11.0.32"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
@@ -214,8 +212,6 @@ major = 11
 image = "jre"
 arch = ["x64"]
 frozen = false
-package_fix = 1  # 11.0.32.1 was rejected on Chocolatey (16 Sep 2026); sync removes both lines
-package_fix_line = "11.0.32"
 notes = "Adoptium publishes no x86 build of the current release"
 
 [[package]]
