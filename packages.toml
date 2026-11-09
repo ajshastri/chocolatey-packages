@@ -86,11 +86,11 @@ notes = ""
 id = "zulu"
 folder = "zulu"
 vendor = "zulu"
-major = 21
+major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
-notes = "latest LTS"
+notes = "latest LTS (25)"
 
 [[package]]
 id = "zulu7"
