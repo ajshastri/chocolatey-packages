@@ -26,7 +26,7 @@
   and a description under 30 characters.
 - Side-by-side uninstall: a ``tools/chocolateyuninstall.ps1`` that pins a quoted
   ``$major`` must match the manifest major, its ``$softwareName`` must be the
-  vendor MSI's product name (``uninstall_display_name``), and
+  vendor MSI's product name or, for Zulu, its name pattern (``uninstall_display_name``), and
   ``tools/.skipAutoUninstall`` must exist, so uninstalling one major never
   removes another major of the same vendor. Each failure is an error, so a
   manifest major bump fails until the script is updated.
@@ -235,7 +235,9 @@ def uninstall_display_name(pkg: Package) -> str | None:
     """The vendor MSI's product name (ARP DisplayName) for ``pkg``, or None if not pinned.
 
     Corretto uses one name for every major, so its uninstall script tells the
-    majors apart by DisplayVersion only.
+    majors apart by DisplayVersion only. Zulu's name carries the full version
+    (``Azul Zulu JDK 25.38.109 (25.0.5.0.3), 64-bit``), so its value is a
+    ``-like`` pattern for ``Get-UninstallRegistryKey``.
     """
     if pkg.vendor == "sapmachine" and pkg.image:
         return f"SapMachine {pkg.major} {pkg.image.upper()}"
@@ -243,6 +245,8 @@ def uninstall_display_name(pkg: Package) -> str | None:
         return f"Liberica {pkg.image.upper()} {pkg.major}{_LIBERICA_SUFFIX[pkg.variant]} (64-bit)"
     if pkg.vendor == "corretto":
         return "Amazon Corretto (x64)"
+    if pkg.vendor == "zulu" and pkg.image == "jdk":
+        return f"Azul Zulu JDK {pkg.major}.*, 64-bit"
     return None
 
 

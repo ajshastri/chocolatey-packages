@@ -215,6 +215,7 @@ def uninstall_script(name: str, major: str) -> bytes:
         (dict(vendor="liberica", major=25, image="jre", variant="std"), "Liberica JRE 25 (64-bit)"),
         (dict(vendor="liberica", major=25, image="jre", variant="full"), "Liberica JRE 25 Full (64-bit)"),
         (dict(vendor="corretto", major=25, image="jdk"), "Amazon Corretto (x64)"),
+        (dict(vendor="zulu", major=25, image="jdk"), "Azul Zulu JDK 25.*, 64-bit"),
         (dict(vendor="temurin", major=25, image="jdk"), None),
     ],
 )
@@ -258,14 +259,19 @@ def test_validate_package_runs_uninstall_rule(tmp_path):
     shutil.copytree(PKG_FIXTURES / "zulu-8", tmp_path / "zulu-8")
     p = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=8)
     tools = tmp_path / "zulu-8/tools"
-    (tools / "chocolateyuninstall.ps1").write_bytes(uninstall_script("Zulu 8", "8"))
+    (tools / "chocolateyuninstall.ps1").write_bytes(uninstall_script("Azul Zulu JDK 8.*, 64-bit", "8"))
     assert checks.validate_package(tmp_path, p).errors == [
         "tools/.skipAutoUninstall is missing (Chocolatey's auto-uninstaller could remove another major's build)"]
     (tools / ".skipAutoUninstall").write_bytes(b"")
-    assert checks.validate_package(tmp_path, p).errors == []  # zulu: no pinned product name
+    assert checks.validate_package(tmp_path, p).errors == []
     moved = pkg(id="zulu8", folder="zulu-8", vendor="zulu", major=25)
-    assert "tools/chocolateyuninstall.ps1: $major is ['8'], manifest major is 25" in checks.validate_package(
-        tmp_path, moved).errors
+    assert checks.validate_package(tmp_path, moved).errors == [
+        "tools/chocolateyuninstall.ps1: $major is ['8'], manifest major is 25",
+        "tools/chocolateyuninstall.ps1: $softwareName is ['Azul Zulu JDK 8.*, 64-bit'], "
+        "expected 'Azul Zulu JDK 25.*, 64-bit'"]
+    (tools / "chocolateyuninstall.ps1").write_bytes(uninstall_script("Zulu 8", "8"))
+    assert checks.validate_package(tmp_path, p).errors == [
+        "tools/chocolateyuninstall.ps1: $softwareName is ['Zulu 8'], expected 'Azul Zulu JDK 8.*, 64-bit'"]
 
 
 def test_validate_package_denylist_and_overrides(tmp_path):
