@@ -1,8 +1,8 @@
 $ErrorActionPreference  = 'Stop'
 $packageArgs = @{
   PackageName = $env:ChocolateyPackageName
-  Url64bit = 'https://github.com/bell-sw/Liberica/releases/download/21.0.13.0.3+5/bellsoft-jdk21.0.13.0.3+5-windows-amd64-lite.msi'
-  Checksum64 = 'd336d0f2fd1b53ad1650aae83d41169dce78daab3f4ab749e1fb0313dc31d973'
+  Url64bit = 'https://github.com/bell-sw/Liberica/releases/download/21.0.13.1+5/bellsoft-jdk21.0.13.1+5-windows-amd64-lite.msi'
+  Checksum64 = '4f719f98692f2d5107fea3bfc366e4212b6abf9f2e2f696a2eb50401cfcd1ca9'
   ChecksumType64 = 'sha256'
   fileType      = 'msi'
   silentArgs    = "INSTALLLEVEL=3 /quiet"

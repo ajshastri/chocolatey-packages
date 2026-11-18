@@ -307,6 +307,8 @@ image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "11.0.33"
 notes = ""
 
 [[package]]
@@ -318,6 +320,8 @@ image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "11.0.33"
 notes = ""
 
 [[package]]
@@ -329,6 +333,8 @@ image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "11.0.33"
 notes = ""
 
 [[package]]
@@ -340,6 +346,8 @@ image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "11.0.33"
 notes = ""
 
 [[package]]
@@ -351,6 +359,8 @@ image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -362,6 +372,8 @@ image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -373,6 +385,8 @@ image = "jdk"
 variant = "lite"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -384,6 +398,8 @@ image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -395,6 +411,8 @@ image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -406,6 +424,8 @@ image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -417,6 +437,8 @@ image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -428,6 +450,8 @@ image = "jdk"
 variant = "lite"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -439,6 +463,8 @@ image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -450,6 +476,8 @@ image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -461,6 +489,8 @@ image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -472,6 +502,8 @@ image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -483,6 +515,8 @@ image = "jdk"
 variant = "lite"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -494,6 +528,8 @@ image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -505,6 +541,8 @@ image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -516,6 +554,8 @@ image = "jdk"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -527,6 +567,8 @@ image = "jdk"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -538,6 +580,8 @@ image = "jdk"
 variant = "lite"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -549,6 +593,8 @@ image = "jre"
 variant = "std"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -560,6 +606,8 @@ image = "jre"
 variant = "full"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -600,6 +648,8 @@ major = 17
 image = "jdk"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -610,6 +660,8 @@ major = 17
 image = "jre"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "17.0.21"
 notes = ""
 
 [[package]]
@@ -620,6 +672,8 @@ major = 21
 image = "jdk"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -630,6 +684,8 @@ major = 21
 image = "jre"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "21.0.13"
 notes = ""
 
 [[package]]
@@ -640,6 +696,8 @@ major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -650,6 +708,8 @@ major = 25
 image = "jre"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = ""
 
 [[package]]
@@ -660,6 +720,8 @@ major = 25
 image = "jdk"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 [[package]]
@@ -670,6 +732,8 @@ major = 25
 image = "jre"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "25.0.5"
 notes = "latest LTS (25)"
 
 # ----- GraalVM Community --------------------------------------------------------
@@ -714,6 +778,8 @@ major = 27
 image = "jdk"
 arch = ["x64"]
 frozen = false
+package_fix = 1  # 4-part patch after 5-part mapped release, 2026-11; sync removes both lines
+package_fix_line = "27.0.1"
 notes = "Tracks the current GA major on jdk.java.net; moving to a new major is a manifest edit"
 
 [[package]]
