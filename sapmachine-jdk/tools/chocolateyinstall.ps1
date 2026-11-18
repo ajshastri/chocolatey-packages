@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $packageArgs = @{
   PackageName = $env:ChocolateyPackageName
-  Url64bit       = 'https://github.com/SAP/SapMachine/releases/download/sapmachine-25.0.5.0.3/sapmachine-jdk-25.0.5.0.3_windows-x64_bin.msi'
-  Checksum64     = 'adb0d58f0c3919ba713db65cec827f5ef537b14665f59d492b0d8f34d8517f1b'
+  Url64bit       = 'https://github.com/SAP/SapMachine/releases/download/sapmachine-25.0.5.1/sapmachine-jdk-25.0.5.1_windows-x64_bin.msi'
+  Checksum64     = '5e60080d4fbcd093adf204d913f21e51d0ce0d2b72239b90bc99225f4d69e49d'
   ChecksumType64 = 'sha256'
   fileType      = 'msi'
   silentArgs    = "INSTALLLEVEL=3 /quiet"
