@@ -1,6 +1,6 @@
 $programFiles = (${env:ProgramFiles}, ${env:ProgramFiles(x86)} -ne $null)[0]
 $installDir = "$programFiles\GraalVM"
-$graalvmDir = "graalvm-community-25.5.5.0.3+1.1"
+$graalvmDir = "graalvm-community-25.6.5.1+2.1"
 
 Uninstall-ChocolateyEnvironmentVariable 'JAVA_HOME' 'Machine'
 rm -r "$installDir\$graalvmDir"
